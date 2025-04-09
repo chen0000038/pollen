@@ -11,6 +11,13 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --font-size-base: 14px;
+  --spacing-base: 0.5rem;
+  --container-padding: 1rem;
+  --card-padding: 1rem;
+  --border-radius: 0.5rem;
+  --button-padding: 0.5rem 1rem;
 }
 
 a {
@@ -25,9 +32,12 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  flex-direction: column;
   min-width: 320px;
   min-height: 100vh;
+  background: #242424 url('/bg.png') no-repeat center center fixed;
+  background-size: cover;
+  font-size: var(--font-size-base);
 }
 
 h1 {
@@ -63,8 +73,84 @@ button:focus-visible {
   margin: 0;
   padding: 0;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
+/* Responsive design with media queries */
+/* Base mobile styles (mobile-first approach) */
+@media (max-width: 576px) {
+  :root {
+    --font-size-base: 14px;
+    --spacing-base: 0.5rem;
+    --container-padding: 0.75rem;
+    --card-padding: 0.75rem;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Ensure forms and cards are fully visible */
+  form, .card, .feature-card {
+    width: 100%;
+    max-width: 100%;
+    padding: var(--card-padding);
+  }
+}
+
+/* Medium devices (tablets, 577px to 768px) */
+@media (min-width: 577px) and (max-width: 768px) {
+  :root {
+    --font-size-base: 15px;
+    --spacing-base: 0.75rem;
+    --container-padding: 1rem;
+    --card-padding: 1rem;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  h2 {
+    font-size: 1.7rem;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1rem !important;
+  }
+}
+
+/* Large devices (desktops, 769px to 992px) */
+@media (min-width: 769px) and (max-width: 992px) {
+  :root {
+    --font-size-base: 16px;
+    --spacing-base: 1rem;
+    --container-padding: 1.5rem;
+    --card-padding: 1.5rem;
+  }
+}
+
+/* Extra large devices (large desktops, 993px and up) */
+@media (min-width: 993px) {
+  :root {
+    --font-size-base: 16px;
+    --spacing-base: 1.25rem;
+    --container-padding: 2rem;
+    --card-padding: 2rem;
+  }
+}
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -77,13 +163,4 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  background: #242424 url('/bg.png') no-repeat center center fixed;
-  background-size: cover;
 }
