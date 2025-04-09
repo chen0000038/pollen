@@ -30,7 +30,7 @@
   <style scoped>
   .flip-card {
     width: 100%;
-    aspect-ratio: 5 / 6; /* 调整比例 */
+    aspect-ratio: 5 / 6;
     perspective: 1000px;
     cursor: pointer;
   }

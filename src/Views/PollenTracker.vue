@@ -1,46 +1,51 @@
 <template>
     <div class="pollen-tracker-page">
       <!-- Part 1: Header -->
-      <nav class="navbar">
-        <div class="navbar-container">
-          <!-- 左侧：Logo 和标题放在一起 -->
-          <div class="navbar-left">
-            <router-link to="/" class="logo-link">
-              <img src="/logo.png" alt="Logo" class="logo" />
-              <span class="site-title">Melbourne Pollen Monitor</span>
-            </router-link>
-          </div>
-          <!-- 右侧：导航按钮 -->
-          <div class="navbar-right">
-            <router-link to="/" class="nav-btn">Home</router-link>
-            <router-link to="/pollentracker" class="nav-btn">Pollen Tracker</router-link>
-            <router-link to="/personalisation" class="nav-btn">Personalisation</router-link>
-            <router-link to="/polleninfo" class="nav-btn">Education Resources</router-link>
-            <router-link to="/game" class="nav-btn">Game</router-link>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
   
       <!-- Part 2: Pollen Overview -->
-      <section class="part2-overview">
-        <div class="pollen-card" v-for="(pollen, index) in overviewPollenData" :key="index">
-          <div class="card-header">
-            <img :src="pollen.icon" alt="Pollen Icon" class="pollen-icon" />
-            <h3>{{ pollen.title }}</h3>
+      <section class="overview-container">
+        <!-- Header with background image -->
+        <div class="overview-header">
+          <h1 class="overview-slogan">Melbourne Pollen Daily Forecast</h1>
+        </div>
+        
+        <!-- Pollen cards container -->
+        <div class="part2-overview">
+          <!-- Melbourne Overall Pollen Level Card -->
+          <div class="overall-pollen-card">
+            <h2 class="overall-title">Overall Pollen Level</h2>
+            <div class="overall-level-text" :class="getOverallRiskLevel().toLowerCase()">
+              {{ getOverallRiskLevel() }}
+            </div>
           </div>
-          <div class="risk-level" :style="{ backgroundColor: getRiskColor(pollen.riskLevel) }">
-            {{ pollen.riskLevel.toUpperCase() }} RISK
-          </div>
-          <div class="common-types">
-            <strong>Common types:</strong> {{ pollen.commonTypes }}
-          </div>
-          <div class="action-advice">
-            <p>{{ pollen.actionAdvice }}</p>
+  
+          <div class="pollen-card" v-for="(pollen, index) in overviewPollenData" :key="index">
+            <div class="card-header">
+              <div class="pollen-emoji">{{ getPollenEmoji(pollen.title) }}</div>
+              <h3>{{ pollen.title }}</h3>
+            </div>
+            <div class="risk-indicator">
+              <div class="risk-bar" :class="pollen.riskLevel.toLowerCase()">
+                <div class="fill"></div>
+              </div>
+              <div class="risk-text" :class="pollen.riskLevel.toLowerCase()">
+                {{ pollen.riskLevel.toUpperCase() }} RISK
+              </div>
+            </div>
+            <div class="common-types">
+              <strong>Common types:</strong> {{ pollen.commonTypes }}
+            </div>
+            <div class="learn-more-link">
+              <router-link to="/polleninfo" class="pollen-link">Learn more plant types?</router-link>
+            </div>
+            <div class="action-advice">
+              <strong>Action:</strong> {{ pollen.actionAdvice }}
+            </div>
           </div>
         </div>
       </section>
   
-      <!-- 下面第三、四、五部分并排布局 -->
       <div class="main-lower-container">
         <!-- Part 3: Melbourne Suburb Pollen Map (left side) -->
         <section class="part3-map">
@@ -76,19 +81,19 @@
           </div>
         </section>
   
-        <!-- 右侧容器：包含第四部分和第五部分 -->
         <div class="right-container">
           <!-- Part 4: Personal Pollen Tracker -->
           <section class="part4-personal-tracker">
-            <h2>Personal Pollen Tracker</h2>
+            <h2>Suburb Pollen Tracker</h2>
             <div class="tracker-input">
               <input
                 type="text"
-                v-model="suburbInput"
+                v-model.trim="suburbInput"
                 placeholder="Search suburbs e.g. Clayton"
                 @input="searchSuburb"
               />
-              <button @click="handleTrackNow">Track Now</button>
+              <p v-if="inputError" class="input-error">{{ inputError }}</p>
+              <button @click="handleTrackNow" :disabled="!isValidInput">Track Now</button>
             </div>
   
             <!-- Suggestions List -->
@@ -102,7 +107,6 @@
               </li>
             </ul>
   
-            <!-- 第四部分输出：个人花粉结果 -->
             <div class="personal-results" v-if="personalPollenData.length > 0">
               <div
                 class="personal-risk-item"
@@ -126,7 +130,7 @@
           <section class="part5-allergy-resources">
             <h2>Allergy Resources</h2>
             <p>Undersanding Pollen Allergen</p>
-            <router-link to="/plant-allergen" class="learn-more-btn">
+            <router-link to="/polleninfo" class="learn-more-btn">
               Learn More
             </router-link>
           </section>
@@ -138,18 +142,56 @@
   <script>
   import { ref, onMounted } from 'vue'
   import axios from 'axios'
-  
+  import Navbar from '../components/Navbar.vue'
+
   // Assets
   import logo from '/logo.png'
-  import treeIcon from '/tree-icon.svg'
-  import grassIcon from '/grass-icon.svg'
-  import weedIcon from '/weed-icon.svg'
   
   // AccuWeather API key
-  const ACCUWEATHER_API_KEY = 'lvpmHARVErhdkbJDqm7zBMtpDQdtNziU'
+  const ACCUWEATHER_API_KEY = 'kdrg7WkUvLGa02xEDoJNx2KxdUpQIGo5'
+  
+  // Suburb list
+  const suburbList = ref([])
+  
+  // Load suburb list
+  const loadSuburbList = async () => {
+    try {
+      const response = await fetch('/src/assets/suburblist.txt')
+      const text = await response.text()
+      suburbList.value = text.split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0)
+    } catch (error) {
+      console.error('Error loading suburb list:', error)
+    }
+  }
+  
+  // Risk level color
+  const getRiskColor = (level) => {
+    switch (level.toLowerCase()) {
+      case 'low':
+        return 'green'
+      case 'moderate':
+      case 'medium':
+        return 'orange'
+      case 'high':
+        return 'red'
+      case 'unknown':
+        return '#888888' // 灰色
+      default:
+        return '#888888' // 默认也是灰色
+    }
+  }
   
   // Helper function to map Category -> risk/advice
   function mapCategoryToRisk(category) {
+    if (!category) {
+      return {
+        riskLevel: 'unknown',
+        actionAdvice: 'Unable to determine risk level. Check back later.'
+      }
+    }
+
     const cat = category.toLowerCase()
     if (cat === 'low' || cat === 'good') {
       return {
@@ -168,14 +210,17 @@
       }
     } else {
       return {
-        riskLevel: 'low',
-        actionAdvice: 'Minimal exposure concerns. Outdoor activities safe.'
+        riskLevel: 'unknown',
+        actionAdvice: 'Unable to determine risk level. Check back later.'
       }
     }
   }
   
   export default {
     name: 'PollenTrackerView',
+    components: {
+      Navbar
+    },
     setup() {
       // Logo
       const logoUrl = logo
@@ -184,21 +229,18 @@
       const overviewPollenData = ref([
         {
           title: 'Tree Pollen',
-          icon: treeIcon,
           riskLevel: 'low',
           commonTypes: 'Cypress, Oak, Olive, Birch',
           actionAdvice: ''
         },
         {
           title: 'Grass Pollen',
-          icon: grassIcon,
           riskLevel: 'moderate',
           commonTypes: 'Ryegrass, Bermuda grass',
           actionAdvice: ''
         },
         {
           title: 'Weed Pollen',
-          icon: weedIcon,
           riskLevel: 'high',
           commonTypes: 'Plantain, Nettle, Ragweed',
           actionAdvice: ''
@@ -209,21 +251,8 @@
       const suburbInput = ref('')
       const suburbSuggestions = ref([])
       const personalPollenData = ref([])
-  
-      // Risk level color
-      const getRiskColor = (level) => {
-        switch (level.toLowerCase()) {
-          case 'low':
-            return 'green'
-          case 'moderate':
-          case 'medium':
-            return 'orange'
-          case 'high':
-            return 'red'
-          default:
-            return 'gray'
-        }
-      }
+      const inputError = ref('')
+      const isValidInput = ref(false)
   
       // Fetch overview pollen data for Melbourne (locationKey=26216)
       const fetchMelbournePollenData = async () => {
@@ -254,36 +283,95 @@
                 }
               }
             })
+          } else {
+            // 如果没有找到AirAndPollen数据，设置所有花粉类型为unknown
+            setAllPollensToUnknown()
           }
         } catch (error) {
           console.error('Error fetching Melbourne pollen data:', error)
+          // API请求失败时，设置所有花粉类型为unknown
+          setAllPollensToUnknown()
         }
+      }
+  
+      // 辅助函数：设置所有花粉类型为unknown
+      const setAllPollensToUnknown = () => {
+        overviewPollenData.value.forEach(pollen => {
+          pollen.riskLevel = 'unknown'
+          pollen.actionAdvice = 'Unable to determine risk level. Check back later.'
+        })
       }
   
       // Search suburb using Autocomplete API
       const searchSuburb = async () => {
-        if (!suburbInput.value) {
+        // 重置错误消息
+        inputError.value = ''
+        
+        // 检查输入是否为空
+        if (!suburbInput.value || suburbInput.value.trim() === '') {
+          inputError.value = 'Please enter a suburb name'
+          isValidInput.value = false
           suburbSuggestions.value = []
           return
         }
+        
+        // 检查输入长度
+        if (suburbInput.value.length < 2) {
+          inputError.value = 'Please enter at least 2 characters'
+          isValidInput.value = false
+          suburbSuggestions.value = []
+          return
+        }
+        
         const url = `http://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=${ACCUWEATHER_API_KEY}&q=${suburbInput.value}&language=en-us`
         try {
           const response = await axios.get(url)
-          suburbSuggestions.value = response.data
+          // First filter for Victoria, Australia
+          const victoriaLocations = response.data.filter(location => 
+            location.Country?.ID === 'AU' && 
+            location.AdministrativeArea?.ID === 'VIC'
+          )
+          
+          // Then filter for Melbourne suburbs using the suburblist
+          const melbourneSuburbs = new Set(suburbList.value.map(suburb => suburb.toLowerCase()))
+          suburbSuggestions.value = victoriaLocations.filter(location => 
+            melbourneSuburbs.has(location.LocalizedName.toLowerCase())
+          )
+          
+          // 检查是否有结果
+          if (suburbSuggestions.value.length === 0) {
+            inputError.value = 'No matching suburbs found in Melbourne'
+          } else {
+            isValidInput.value = true
+          }
         } catch (error) {
           console.error('Error searching suburbs:', error)
+          inputError.value = 'Error searching suburbs. Please try again.'
+          suburbSuggestions.value = []
+          isValidInput.value = false
         }
       }
   
       // "Track Now" button click
       const handleTrackNow = () => {
-        // Optionally implement auto-selection logic
+        if (!isValidInput.value) {
+          inputError.value = 'Please select a valid suburb from the list'
+          return
+        }
+        
+        // 如果没有选择suggestion但输入框有值，尝试匹配第一个suggestion
+        if (suburbSuggestions.value.length > 0) {
+          selectSuggestion(suburbSuggestions.value[0])
+        }
       }
   
       // User selects a suggestion
       const selectSuggestion = async (suggestion) => {
         suburbSuggestions.value = []
-        suburbInput.value = `${suggestion.LocalizedName} (${suggestion.Country.LocalizedName})`
+        // Only show Victoria in the display text
+        suburbInput.value = `${suggestion.LocalizedName}, Victoria`
+        isValidInput.value = true
+        inputError.value = ''
         await fetchPersonalPollenData(suggestion.Key)
       }
   
@@ -332,6 +420,7 @@
   
       // On mounted
       onMounted(() => {
+        loadSuburbList()
         fetchMelbournePollenData()
         // Initialize Tableau
         const divElement = document.getElementById('viz1743854171827')
@@ -361,6 +450,54 @@
         }
       })
   
+      const getOverallRiskLevel = () => {
+        if (!overviewPollenData.value.length) return 'Low';
+        
+        const riskValues = overviewPollenData.value.map(pollen => {
+          switch (pollen.riskLevel.toLowerCase()) {
+            case 'high': return 3;
+            case 'moderate': return 2;
+            case 'low': return 1;
+            case 'unknown': return 0;
+            default: return 0;
+          }
+        });
+        
+        // 如果所有值都是0（unknown），则返回Unknown
+        if (riskValues.every(val => val === 0)) {
+          return 'Unknown';
+        }
+        
+        // 计算非0值的平均
+        const validValues = riskValues.filter(val => val > 0);
+        if (validValues.length === 0) return 'Unknown';
+        
+        const sum = validValues.reduce((acc, val) => acc + val, 0);
+        const average = sum / validValues.length;
+        
+        const roundedAverage = Math.round(average);
+        
+        switch (roundedAverage) {
+          case 3: return 'High';
+          case 2: return 'Moderate';
+          case 1: return 'Low';
+          default: return 'Unknown';
+        }
+      }
+  
+      const getPollenEmoji = (title) => {
+        switch (title.toLowerCase()) {
+          case 'tree pollen':
+            return '🌳';
+          case 'grass pollen':
+            return '🌱';
+          case 'weed pollen':
+            return '🌿';
+          default:
+            return '❓';
+        }
+      }
+  
       return {
         logoUrl,
         overviewPollenData,
@@ -370,7 +507,12 @@
         getRiskColor,
         searchSuburb,
         handleTrackNow,
-        selectSuggestion
+        selectSuggestion,
+        loadSuburbList,
+        getOverallRiskLevel,
+        getPollenEmoji,
+        inputError,
+        isValidInput
       }
     }
   }
@@ -378,7 +520,7 @@
   
   <style scoped>
   /* ========== Part 1: Header ========== */
-  .navbar {
+  .part1-header {
     position: fixed;
     top: 0;
     left: 0;
@@ -389,30 +531,18 @@
     -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
     z-index: 999;
-  }
-  
-  .navbar-container {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    width: 100%;
-    height: 100%;
     padding: 0 2rem;
   }
   
-  .navbar-left {
+  .logo-title {
     display: flex;
     align-items: center;
     gap: 1rem;
   }
   
-  .logo-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-  }
-  
-  .logo {
+  .web-logo {
     height: 65px;
     width: auto;
   }
@@ -423,13 +553,13 @@
     color: #000000;
   }
   
-  .navbar-right {
+  .nav-links {
     display: flex;
     gap: 2rem;
     align-items: center;
   }
   
-  .nav-btn {
+  .nav-item {
     text-decoration: none;
     padding: 0.3rem 0.6rem;
     font-weight: 600;
@@ -438,7 +568,7 @@
     transition: color 0.2s ease;
   }
   
-  .nav-btn:hover {
+  .nav-item:hover {
     color: #4c4b4b;
   }
   
@@ -448,16 +578,64 @@
   }
   
   /* ========== Part 2: Pollen Overview ========== */
-  .part2-overview {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    margin: 2rem;
+  .overview-container {
+    position: relative;
+    margin: 5rem 2rem 2rem 2rem; /* Match the spacing of lower components (2rem left & right) */
+    padding: 0;
+    width: auto; /* Remove fixed width calculation to match lower components */
+    max-width: none; /* Remove max-width to match lower components */
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--apple-border);
+    box-shadow: 0 4px 24px var(--apple-shadow);
+    border-radius: 20px;
   }
   
+  .overview-header {
+    width: 100%;
+    height: 300px;
+    background-image: url('/public/melcity.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 20px 20px 0 0;
+  }
+  
+  .overview-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+    border-radius: 20px 20px 0 0;
+  }
+  
+  .overview-slogan {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    text-align: center;
+    padding: 0 2rem;
+  }
+  
+  .part2-overview {
+    display: flex;
+    flex-wrap: nowrap;
+    padding: 2rem;
+    gap: 2rem;
+  }
+  
+  .overall-pollen-card,
   .pollen-card {
-    flex: 1;
-    min-width: 280px;
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 20px;
     padding: 1.5rem;
@@ -468,42 +646,195 @@
     transition: transform 0.2s ease;
   }
   
+  .overall-pollen-card {
+    flex: 0 0 200px; /* Increase width slightly from 180px to 200px */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .pollen-card {
+    flex: 1;
+    min-width: 250px; /* Set minimum width to ensure proper sizing */
+  }
+  
+  .overall-pollen-card:hover,
   .pollen-card:hover {
     transform: translateY(-4px);
+  }
+  
+  .overall-title {
+    font-size: 1.4rem;  /* Increased from 1.1rem */
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 1.2rem;  /* Adjusted spacing */
+    text-align: center;
+    line-height: 1.3;
+  }
+  
+  .overall-level-text {
+    font-size: 2.5rem;  /* Increased from 2rem */
+    font-weight: bold;
+    text-align: center;
+    margin-top: 0.6rem;  /* Adjusted spacing */
+  }
+  
+  .overall-level-text.high {
+    color: #ff4d4d;
+  }
+  
+  .overall-level-text.moderate {
+    color: #ffa500;
+  }
+  
+  .overall-level-text.low {
+    color: #4CAF50;
+  }
+  
+  .overall-level-text.unknown {
+    color: #888888;
   }
   
   .card-header {
     display: flex;
     align-items: center;
-    margin-bottom: 1rem;
+    gap: 1rem;  /* Increased from 0.8rem */
+    margin-bottom: 1.2rem;  /* Increased from 1rem */
   }
   
-  .pollen-icon {
-    height: 60px;
-    margin-right: 1rem;
+  .card-header h3 {
+    font-size: 1.3rem;  /* Increased from 1rem */
+    font-weight: bold;
   }
   
-  .risk-level {
-    color: white;
-    text-align: center;
+  .pollen-emoji {
+    font-size: 2rem;  /* Increased from 1.5rem */
+  }
+  
+  .risk-indicator {
+    position: relative;
+    margin: 2rem 0 3.5rem 0;  /* Increased bottom margin to accommodate larger text */
+  }
+  
+  .risk-bar {
+    height: 10px;  /* Increased from 8px */
+    background-color: rgba(200, 200, 200, 0.7);
+    border-radius: 5px;  /* Adjusted for increased height */
+    position: relative;
+  }
+  
+  /* Divider lines */
+  .risk-bar::before,
+  .risk-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2;
+  }
+  
+  .risk-bar::before {
+    left: 33.33%;
+    transform: translateX(-50%);
+  }
+  
+  .risk-bar::after {
+    left: 66.66%;
+    transform: translateX(-50%);
+  }
+  
+  /* Risk fill area */
+  .risk-bar .fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    border-radius: 4px 0 0 4px;
+    z-index: 1;
+  }
+  
+  /* Risk level specific styles */
+  .risk-bar.high .fill {
+    width: 100%;
+    background-color: #ff4d4d;
+    border-radius: 4px;
+  }
+  
+  .risk-bar.moderate .fill {
+    width: 66.67%;
+    background-color: #ffa500;
+  }
+  
+  .risk-bar.low .fill {
+    width: 33.33%;
+    background-color: #4CAF50;
+  }
+  
+  .risk-bar.unknown .fill {
+    width: 100%;
+    background-color: #888888;
+    opacity: 0.5;
+    border-radius: 4px;
+  }
+  
+  .risk-text {
+    position: absolute;
+    right: 0;
+    bottom: -30px;  /* Adjusted for larger font */
+    font-size: 1.1rem;  /* Increased from 0.9rem */
     font-weight: 600;
-    margin: 1rem 0;
-    padding: 8px;
-    border-radius: 12px;
-    font-size: 14px;
-    letter-spacing: 0.02em;
+  }
+  
+  .risk-text.high {
+    color: #ff4d4d;
+  }
+  
+  .risk-text.moderate {
+    color: #ffa500;
+  }
+  
+  .risk-text.low {
+    color: #4CAF50;
+  }
+  
+  .risk-text.unknown {
+    color: #888888;
   }
   
   .common-types {
-    margin: 1rem 0;
-    font-size: 14px;
-    color: var(--apple-gray);
+    font-size: 1rem;  /* Increased from 0.85rem */
+    margin-top: 2rem;  /* Increased from 1.5rem */
   }
   
   .action-advice {
-    font-size: 14px;
-    color: #1D1D1F;
-    line-height: 1.4;
+    font-size: 1rem;  /* Increased from 0.85rem */
+    margin-top: 1rem;  /* Increased from 0.8rem */
+    padding: 1rem;  /* Increased from 0.8rem */
+  }
+  
+  .learn-more-link {
+    margin: 1rem 0;  /* Increased from 0.8rem */
+    text-align: center;
+  }
+  
+  .pollen-link {
+    font-size: 1rem;  /* Increased from 0.8rem */
+    text-decoration: none;
+    color: #0070c9;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    display: inline-block;
+    padding: 0.3rem 0;
+    border-bottom: 1px dashed #0070c9;
+  }
+  
+  .pollen-link:hover {
+    color: #005b9f;
+    border-bottom: 1px solid #005b9f;
   }
   
   /* ========== Main Lower Container (Parts 3, 4, 5) ========== */
@@ -588,6 +919,19 @@
   .tracker-input button:hover {
     transform: scale(1.02);
     background-color: rgba(0, 113, 227, 0.9);
+  }
+  
+  .tracker-input button:disabled {
+    background-color: rgba(0, 122, 255, 0.4);
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .input-error {
+    color: #ff4d4d;
+    font-size: 0.85rem;
+    margin: 0.5rem 0;
+    text-align: left;
   }
   
   .suggestions {

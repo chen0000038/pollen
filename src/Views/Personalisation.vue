@@ -1,21 +1,16 @@
 <template>
     <div class="personalisation-container">
-      <!-- 固定导航栏 -->
       <Navbar />
   
-      <!-- 顶部横幅（banner） -->
       <div class="banner">
         <h1 class="banner-title">
           Select the choice which fit you the most and get your personalized pollen solution
         </h1>
       </div>
   
-      <!-- 表单区域 -->
       <div class="form-section">
         <form @submit.prevent="submitForm">
-          <!-- 下拉菜单容器：水平排列 + 紧急按钮 -->
           <div class="dropdown-container">
-            <!-- 下拉菜单 1 -->
             <div class="dropdown-group">
               <label for="role">Your Role</label>
               <select id="role" v-model="selectedRole">
@@ -26,9 +21,8 @@
                 <option value="probablyallergic">Probably with allergy</option>
               </select>
             </div>
-            <!-- 下拉菜单 2 -->
             <div class="dropdown-group">
-              <label for="condition">Your Condition</label>
+              <label for="condition">Known Allergy</label>
               <select id="condition" v-model="selectedCondition">
                 <option value="">Please select</option>
                 <option value="hayfever">I want to know more about allergic rhinitis (hay fever)</option>
@@ -37,27 +31,23 @@
               </select>
             </div>
   
-            <!-- 紧急联系按钮 -->
             <div class="emergency-box">
               <span class="phone-icon">📞</span>
               IN CASE OF EMERGENCY CONTACT TRIPLE ZERO (000)
             </div>
           </div>
-          <!-- 提交按钮 -->
           <button type="submit" class="submit-btn">
             Get Your Personalized Pollen Solution
           </button>
         </form>
       </div>
   
-      <!-- 结果显示区域 -->
       <div class="result-section" v-if="showResults">
         <div class="result-box">
           <h2>Your Personalized Pollen Solution</h2>
           <p><strong>Role:</strong> {{ selectedRole || 'N/A' }}</p>
           <p><strong>Condition:</strong> {{ selectedCondition || 'N/A' }}</p>
   
-          <!-- 根据选择动态显示建议 -->
           <div class="suggestions" v-if="suggestions.length">
             <h3>Advice for You:</h3>
             <ul>
@@ -79,7 +69,6 @@
   const selectedCondition = ref('')
   const showResults = ref(false)
   
-  // 根据用户选择计算建议
   const suggestions = computed(() => {
   if (selectedRole.value === 'parent' && selectedCondition.value === 'hayfever') {
     return [
@@ -171,7 +160,6 @@
     min-height: 100vh;
   }
   
-  /* 顶部横幅 */
   .banner {
     width: 100%;
     height: 200px;
@@ -188,7 +176,6 @@
     padding: 0 1rem;
   }
   
-  /* 表单区域 */
   .form-section {
     width: 100%;
     padding: 2rem 1rem;
@@ -202,24 +189,22 @@
     border-radius: 1rem;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     width: 100%;
-    max-width: 900px; /* 调整宽度以容纳紧急按钮 */
+    max-width: 900px;
     box-sizing: border-box;
   }
   
-  /* 下拉菜单容器：水平排列 */
   .dropdown-container {
     display: flex;
     gap: 1rem;
     justify-content: space-between;
-    flex-wrap: wrap; /* 在屏幕较窄时自动换行 */
+    flex-wrap: wrap;
     margin-bottom: 1.5rem;
   }
   
-  /* 每个下拉菜单组 */
   .dropdown-group {
     display: flex;
     flex-direction: column;
-    flex: 1; /* 使下拉菜单自适应宽度 */
+    flex: 1;
     min-width: 200px;
   }
   .dropdown-group label {
@@ -234,9 +219,8 @@
     border: 1px solid #ccc;
   }
   
-  /* 紧急按钮样式 */
   .emergency-box {
-    background-color: #d32f2f; /* 红色背景 */
+    background-color: #d32f2f;
     color: #fff;
     padding: 1rem;
     border-radius: 8px;
@@ -245,14 +229,13 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-width: 280px; /* 保证有一定的最小宽度 */
+    min-width: 280px;
     box-sizing: border-box;
   }
   .phone-icon {
     margin-right: 0.5rem;
   }
   
-  /* 提交按钮 */
   .submit-btn {
     width: 100%;
     padding: 0.75rem;
@@ -268,7 +251,6 @@
     background-color: #1d4ed8;
   }
   
-  /* 结果显示区域 */
   .result-section {
     width: 100%;
     padding: 2rem 1rem;
@@ -295,7 +277,6 @@
     color: #333;
   }
   
-  /* 建议列表样式 */
   .suggestions {
     margin-top: 1rem;
   }

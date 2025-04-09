@@ -1,14 +1,12 @@
 <template>
   <nav class="navbar">
     <div class="navbar-container">
-      <!-- 左侧：Logo 和标题放在一起 -->
       <div class="navbar-left">
         <router-link to="/" class="logo-link">
           <img src="/logo.png" alt="Logo" class="logo" />
           <span class="site-title">Melbourne Pollen Monitor</span>
         </router-link>
       </div>
-      <!-- 右侧：导航按钮 -->
       <div class="navbar-right">
         <router-link to="/" class="nav-btn">Home</router-link>
         <router-link to="/pollentracker" class="nav-btn">Pollen Tracker</router-link>
@@ -46,7 +44,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding-left: 1rem; /* 为左侧增加内边距 */
+  padding-left: 1rem;
 }
 .logo-link {
   display: flex;
@@ -54,7 +52,7 @@
   text-decoration: none;
 }
 .logo {
-  height: 65px; /* 放大 Logo 到导航栏高度 */
+  height: 65px;
   width: auto;
 }
 .site-title {
@@ -73,7 +71,7 @@
   font-weight: 600;
   font-size: 0.95rem;
   color: #034563;
-  background-color: rgba(255, 255, 255, 0.5); /* 半透明背景 */
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 4px;
   transition: background-color 0.2s ease, color 0.2s ease;
 }

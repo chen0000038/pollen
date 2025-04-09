@@ -1,13 +1,9 @@
 <template>
   <div class="pollen-info-container">
-    <!-- 固定导航栏 -->
     <Navbar />
 
-    <!-- 内容区：避免导航栏遮挡 -->
     <div class="content-area">
-      <!-- 当尚未选择任何类别时，显示提示、三张大卡片和游戏选择框 -->
       <div v-if="!activeCategory">
-        <!-- 提示信息 -->
         <div class="hint-row">
           <p style="font-size: 24px; font-weight: bold;">
             Click on any of the cards for more information about pollen
@@ -15,7 +11,6 @@
         </div>
 
         <div class="category-cards">
-          <!-- Grass Pollen 卡片 -->
           <div class="big-card" @click="selectCategory('grass')">
             <img src="/grass pollen.png" alt="Grass Pollen" />
             <h2>Grass Pollen</h2>
@@ -24,13 +19,11 @@
               allergies.
             </p>
           </div>
-          <!-- Tree Pollen 卡片 -->
           <div class="big-card" @click="selectCategory('tree')">
             <img src="/tree pollen.png" alt="Tree Pollen" />
             <h2>Tree Pollen</h2>
             <p>Discover tree pollen and how to mitigate its effects.</p>
           </div>
-          <!-- Weed Pollen 卡片 -->
           <div class="big-card" @click="selectCategory('weed')">
             <img src="/weed pollen.png" alt="Weed Pollen" />
             <h2>Weed Pollen</h2>
@@ -40,7 +33,6 @@
           </div>
         </div>
 
-        <!-- 游戏选择框 -->
         <div class="game-section">
           <h2>Interactive Pollen Awareness Game</h2>
           <p>
@@ -53,15 +45,12 @@
         </div>
       </div>
 
-      <!-- 如果选择了某个类别，就显示子卡片翻转区 -->
       <div class="sub-cards-area" v-else>
-        <!-- 提示信息 -->
         <div class="hint-row">
           <p style="font-size: 30px; font-weight: bold;">
             Click on any card for more details
           </p>
         </div>
-        <!-- 小卡片区域，确保间距一致且居中 -->
         <div class="flip-cards-grid">
           <template v-if="activeCategory === 'grass'">
             <FlipCard
@@ -92,7 +81,6 @@
           </template>
         </div>
 
-        <!-- 返回按钮放置在底部 -->
         <div class="back-button-container">
           <button class="back-btn" @click="activeCategory = null">Back</button>
         </div>
@@ -106,15 +94,12 @@ import { ref } from 'vue'
 import Navbar from '../components/Navbar.vue'
 import FlipCard from '../components/FlipCard.vue'
 
-// 用于记录当前选中的类别 (grass, tree, weed)
 const activeCategory = ref(null)
 
-// 选择类别时调用，设置 activeCategory
 function selectCategory(category) {
   activeCategory.value = category
 }
 
-// 草类花粉子卡片数据
 const grassList = [
   {
     title: 'Ryegrass',
@@ -142,7 +127,6 @@ const grassList = [
   }
 ]
 
-// 树类花粉子卡片数据
 const treeList = [
   {
     title: 'Pine',
@@ -194,7 +178,6 @@ const treeList = [
   }
 ]
 
-// 杂草花粉子卡片数据
 const weedList = [
   {
     title: 'Ragweed',
@@ -233,7 +216,6 @@ const weedList = [
   padding: 1rem;
 }
 
-/* 大卡片（类别选择） */
 .category-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -269,7 +251,7 @@ const weedList = [
   font-size: 0.95rem;
 }
 
-/* 翻转卡片保持固定大小 */
+
 .flip-card {
   width: 250px;
   height: 300px;
@@ -309,7 +291,6 @@ const weedList = [
   line-height: 1.4;
 }
 
-/* 使用 Grid 布局，每排3张卡片，左右居中且间距一致 */
 .flip-cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -319,24 +300,21 @@ const weedList = [
   margin: 0 auto;
 }
 
-/* 返回按钮容器，放在页面底部居中显示 */
 .back-button-container {
   text-align: center;
   margin-top: 1rem;
 }
 .back-btn {
   background-color: #eef2ff;
-  padding: 0.8rem 1.8rem;  /* 内边距加大 */
+  padding: 0.8rem 1.8rem;
   border-radius: 8px;
   font-weight: 600;
-  font-size: 16px;  /* 字体变大 */
+  font-size: 16px;
   color: #1e1e1e;
   border: none;
   cursor: pointer;
 }
 
-
-/* 游戏区块 */
 .game-section {
   background-color: #f5f7ff;
   border-radius: 1rem;
@@ -369,7 +347,6 @@ const weedList = [
   background-color: #1d4ed8;
 }
 
-/* 响应式：较窄屏幕下，自动变为单列或两列 */
 @media (max-width: 992px) {
   .flip-cards-grid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));

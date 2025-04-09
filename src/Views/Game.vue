@@ -1,39 +1,53 @@
 <template>
     <div class="game-container">
-      <!-- 固定导航栏 -->
       <Navbar />
   
-      <!-- 背景覆盖层 -->
       <div class="overlay"></div>
   
-      <!-- 游戏主要内容 -->
       <div class="game-content">
-        <!-- 顶部积分与轮次统计 -->
         <div class="scoreboard">
-          <p>Score: {{ score }}</p>
+          <p>Score: {{ score }}/{{ maxScore }}</p>
           <p>Round: {{ currentRound }} / {{ maxRounds }}</p>
         </div>
   
-        <!-- 游戏进行中 -->
         <div v-if="!gameEnded">
-          <!-- 图片选择轮：用统一的 round-container 包裹 -->
           <div v-if="roundType === 'image'" class="round-container">
-            <h1>Select the correct image for <span class="highlight">{{ targetType }}</span> pollen</h1>
+            <h1>
+              Select the correct image for
+              <span class="highlight">{{ targetType }}</span> pollen
+            </h1>
             <div class="images">
               <div 
                 v-for="(img, index) in images" 
                 :key="index" 
-                class="image-card"
-                @click="checkImageAnswer(img)"
+                class="image-card-wrapper"
               >
-                <img :src="img.src" alt="pollen image" />
+                <div 
+                  class="image-card"
+                  @click="checkImageAnswer(img)"
+                  :class="{'highlight-correct': answerChosen && img.id === correctImage.id}"
+                >
+                  <img :src="img.src" alt="pollen image" />
+                </div>
+                <p v-if="answerChosen && img.id === correctImage.id" class="image-correct-text">
+                  This is the correct answer
+                </p>
               </div>
             </div>
-            <p v-if="resultMessage" class="result-message">{{ resultMessage }}</p>
-            <button v-if="answerChosen" @click="nextRound" class="next-btn">Next Round</button>
+  
+            <p 
+              v-if="resultMessage" 
+              class="result-message"
+              :class="isAnswerCorrect ? 'correct-text' : 'wrong-text'"
+            >
+              {{ resultMessage }}
+            </p>
+  
+            <button v-if="answerChosen" @click="nextRound" class="next-btn">
+              Next Round
+            </button>
           </div>
   
-          <!-- 知识问答轮：同样用 round-container 包裹 -->
           <div v-else-if="roundType === 'quiz'" class="round-container">
             <h1>{{ currentQuiz.question }}</h1>
             <div class="options">
@@ -42,20 +56,31 @@
                 :key="index" 
                 @click="selectQuizOption(index)"
                 :disabled="answerChosen"
+                :class="{'highlight-correct': answerChosen && index === currentQuiz.correctIndex}"
               >
                 {{ option }}
               </button>
             </div>
-            <p v-if="resultMessage" class="result-message">{{ resultMessage }}</p>
-            <p v-if="answerChosen" class="quiz-tip">Tip: {{ currentQuiz.tip }}</p>
-            <button v-if="answerChosen" @click="nextRound" class="next-btn">Next Round</button>
+  
+            <p 
+              v-if="resultMessage" 
+              class="result-message"
+              :class="isAnswerCorrect ? 'correct-text' : 'wrong-text'"
+            >
+              {{ resultMessage }}
+            </p>
+            <p v-if="answerChosen" class="quiz-tip">
+              Tip: {{ currentQuiz.tip }}
+            </p>
+            <button v-if="answerChosen" @click="nextRound" class="next-btn">
+              Next Round
+            </button>
           </div>
         </div>
   
-        <!-- 游戏结束，显示最终得分与评价 -->
         <div v-else class="final-score">
           <h2>Game Over</h2>
-          <p>Your final score is: {{ score }}</p>
+          <p>Your final score is: {{ score }}/{{ maxScore }}</p>
           <p class="evaluation">Evaluation: {{ finalEvaluation }}</p>
           <button @click="restartGame" class="restart-btn">Play Again</button>
         </div>
@@ -68,8 +93,6 @@
   import Navbar from '../components/Navbar.vue'
   import confetti from 'canvas-confetti'
   
-  /* ===== 数据定义 ===== */
-  // 针对图片选择轮的图片数据，每个图片具有对应的 pollen 类型
   const pollenImages = [
     { id: 1, src: '/Ryegrass.jpg', type: 'grass' },
     { id: 2, src: '/weed pollen.png', type: 'weed' },
@@ -86,7 +109,6 @@
     { id: 13, src: '/Other7.png', type: 'other' }
   ]
   
-  // 针对知识问答轮的题目数据
   const quizQuestions = [
     {
       question: "Which method is most effective in reducing indoor pollen exposure?",
@@ -112,30 +134,25 @@
     }
   ]
   
-  /* ===== 状态变量 ===== */
   const currentRound = ref(1)
   const maxRounds = 5
   const score = ref(0)
   const gameEnded = ref(false)
+  const maxScore = computed(() => maxRounds * 10)
   
-  // 当前轮次是否已作答
   const answerChosen = ref(false)
-  // 本轮反馈信息
+  const isAnswerCorrect = ref(false)
   const resultMessage = ref('')
-  // 图片选择轮中目标 pollen 类型（tree, grass, weed）
   const targetType = ref('')
-  // 图片选择轮中展示的图片数组
   const images = ref([])
-  // 知识问答轮当前题目
+  const correctImage = ref({})
+  
   const currentQuiz = ref({})
   
-  /* ===== 计算属性 ===== */
-  // 轮次类型：奇数轮为图片选择，偶数轮为知识问答
   const roundType = computed(() => {
     return currentRound.value % 2 === 1 ? 'image' : 'quiz'
   })
   
-  // 根据最终得分生成评价信息
   const finalEvaluation = computed(() => {
     if (score.value <= 10) {
       return "Keep learning! You might need to review the pollen knowledge."
@@ -148,10 +165,10 @@
     }
   })
   
-  /* ===== 轮次初始化 ===== */
   function setupRound() {
     answerChosen.value = false
     resultMessage.value = ''
+    isAnswerCorrect.value = false
   
     if (roundType.value === 'image') {
       setupImageRound()
@@ -160,7 +177,6 @@
     }
   }
   
-  // 图片选择轮：随机选择一个目标 pollen 类型，并构建出包含一张正确图片和两张错误图片的数组
   function setupImageRound() {
     const types = ['tree', 'grass', 'weed']
     targetType.value = types[Math.floor(Math.random() * types.length)]
@@ -173,6 +189,7 @@
     }
   
     const randomCorrect = correctCandidates[Math.floor(Math.random() * correctCandidates.length)]
+    correctImage.value = randomCorrect
   
     function getRandomItems(arr, count) {
       const copy = [...arr]
@@ -186,7 +203,6 @@
     }
     const randomIncorrects = getRandomItems(incorrectCandidates, 2)
   
-    // 合并正确和错误图片，并打乱顺序
     const tempArray = [randomCorrect, ...randomIncorrects]
     for (let i = tempArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
@@ -195,42 +211,41 @@
     images.value = tempArray
   }
   
-  // 知识问答轮：根据当前轮次（如第2轮用 quizQuestions[0]，第4轮用 quizQuestions[1]）设置题目
   function setupQuizRound() {
     const quizIndex = currentRound.value === 2 ? 0 : currentRound.value === 4 ? 1 : 0
     currentQuiz.value = quizQuestions[quizIndex]
   }
   
-  /* ===== 回答处理 ===== */
-  // 图片选择轮答案判断
   function checkImageAnswer(selectedImage) {
-    if (answerChosen.value) return  // 防止重复作答
+    if (answerChosen.value) return
   
     if (selectedImage.type === targetType.value) {
       score.value += 10
+      isAnswerCorrect.value = true
       resultMessage.value = 'Correct! You chose the right image.'
       triggerConfetti()
     } else {
+      isAnswerCorrect.value = false
       resultMessage.value = 'Wrong choice.'
     }
     answerChosen.value = true
   }
   
-  // 知识问答轮答案选择
   function selectQuizOption(index) {
     if (answerChosen.value) return
   
     if (index === currentQuiz.value.correctIndex) {
       score.value += 10
+      isAnswerCorrect.value = true
       resultMessage.value = 'Correct! Good job.'
       triggerConfetti()
     } else {
+      isAnswerCorrect.value = false
       resultMessage.value = 'Wrong answer.'
     }
     answerChosen.value = true
   }
   
-  /* ===== 下一轮与重启 ===== */
   function nextRound() {
     if (currentRound.value < maxRounds) {
       currentRound.value++
@@ -247,7 +262,6 @@
     setupRound()
   }
   
-  /* ===== 彩带动画 ===== */
   function triggerConfetti() {
     const duration = 2000
     const end = Date.now() + duration
@@ -272,7 +286,6 @@
   </script>
   
   <style scoped>
-  /* 主容器背景及上内边距，避免固定导航栏遮挡 */
   .game-container {
     position: relative;
     width: 100%;
@@ -282,9 +295,6 @@
     padding-top: 70px;
   }
   
-
-  
-  /* 游戏主要内容 */
   .game-content {
     position: relative;
     z-index: 1;
@@ -295,7 +305,6 @@
     color: #333;
   }
   
-  /* 积分与轮次显示 */
   .scoreboard {
     display: flex;
     justify-content: space-evenly;
@@ -304,7 +313,6 @@
     font-size: 1.2rem;
   }
   
-  /* 统一的容器，用于图片选择和问答轮 */
   .round-container {
     max-width: 800px;
     margin: 0 auto;
@@ -315,20 +323,23 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
   
-  /* 标题字体稍大 */
   .round-container h1 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     margin-bottom: 20px;
   }
   
-  /* 图片展示：所有图片在一排显示 */
   .images {
     display: flex;
     justify-content: center;
-    flex-wrap: nowrap;
     gap: 20px;
     margin-bottom: 20px;
   }
+  
+  .image-card-wrapper {
+    display: inline-block;
+    text-align: center;
+  }
+  
   .image-card {
     width: 200px;
     height: 150px;
@@ -336,54 +347,71 @@
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    background-color: #fff;
     transition: transform 0.3s, box-shadow 0.3s;
   }
+  
   .image-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   }
+  
   .image-card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
   
-  /* 问答轮选项按钮 */
-  .options {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 20px;
+  .image-correct-text {
+    font-size: 0.9rem;
+    color: #388e3c;
+    margin-top: 5px;
   }
+  
   .options button {
-    padding: 10px 15px;
-    font-size: 16px;
+    padding: 12px 15px;
+    font-size: 18px;
     border: none;
     border-radius: 6px;
     background-color: #3178c6;
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin: 10px auto;
+    display: block;
+    width: 80%;
+    text-align: center;
   }
+  
   .options button:hover {
     background-color: #265a8f;
   }
   
-  /* 结果反馈 */
+  .highlight-correct {
+    background-color: #4caf50 !important;
+    border: 3px solid #388e3c;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: scale(1.02);
+  }
+  
   .result-message {
     font-size: 1.2rem;
     margin-bottom: 20px;
     font-weight: 600;
   }
   
-  /* 高亮文字 */
+  .correct-text {
+    color: #4caf50;
+  }
+  
+  .wrong-text {
+    color: #f44336;
+  }
+  
   .highlight {
     color: #e91e63;
     text-transform: capitalize;
   }
   
-  /* 按钮 */
   .next-btn,
   .restart-btn {
     padding: 10px 20px;
@@ -395,19 +423,18 @@
     color: #fff;
     transition: background-color 0.3s;
   }
+  
   .next-btn:hover,
   .restart-btn:hover {
     background-color: #265a8f;
   }
   
-  /* 知识问答提示 */
   .quiz-tip {
     font-size: 1rem;
     margin-bottom: 20px;
     font-style: italic;
   }
   
-  /* 游戏结束提示区域，与 round-container 风格保持一致 */
   .final-score {
     max-width: 800px;
     margin: 0 auto;
@@ -417,16 +444,24 @@
     border-radius: 10px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   }
+  
   .final-score h2 {
     margin-top: 0;
     font-size: 1.5rem;
   }
+  
   .evaluation {
     font-size: 1.2rem;
     margin-top: 10px;
     color: #4caf50;
   }
   </style>
+  
+  
+  
+  
+  
+  
   
   
   
