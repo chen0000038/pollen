@@ -61,8 +61,8 @@ button:focus-visible {
 #app {
   width: 100%;
   margin: 0;
-  padding: 0; /* 根据需要调整内边距 */
-  text-align: center; /* 如有需要可保留 */
+  padding: 0;
+  text-align: center;
 }
 
 
