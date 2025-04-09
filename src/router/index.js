@@ -4,7 +4,6 @@ import PollenInfo from '../Views/PollenInfo.vue'
 import Personalisation from '../Views/Personalisation.vue'
 import PollenTracker from '../Views/PollenTracker.vue'
 import Game from '../Views/Game.vue'
-// 其他页面
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
