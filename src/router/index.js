@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../Views/Home.vue'
-import PollenInfo from '../views/PollenInfo.vue'
+import PollenInfo from '../Views/PollenInfo.vue'
 import Personalisation from '../Views/Personalisation.vue'
 import PollenTracker from '../Views/PollenTracker.vue'
 import Game from '../Views/Game.vue'
