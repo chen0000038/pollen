@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Upper part of weed -->
+  <path d="M32 12 L28 24 L36 24 Z" fill="#6B8E23"/>
+  <!-- Lower part of weed -->
+  <path d="M32 24 L26 40 L38 40 Z" fill="#556B2F"/>
+</svg>

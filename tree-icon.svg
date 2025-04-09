@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Tree trunk -->
+  <rect x="28" y="40" width="8" height="16" fill="#8B4513"/>
+  <!-- Tree foliage -->
+  <circle cx="32" cy="28" r="16" fill="#228B22"/>
+</svg>
