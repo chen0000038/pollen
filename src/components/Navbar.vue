@@ -52,7 +52,7 @@
   text-decoration: none;
 }
 .logo {
-  height: 65px;
+  height: 120px;
   width: auto;
 }
 .site-title {

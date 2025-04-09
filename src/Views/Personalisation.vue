@@ -13,8 +13,8 @@
           <div class="dropdown-container">
             <div class="dropdown-group">
               <label for="role">Your Role</label>
-              <select id="role" v-model="selectedRole">
-                <option value="">Please select</option>
+              <select id="role" v-model="selectedRole" required placeholder="Please Select">
+                <option value="" disabled hidden>Please Select</option>
                 <option value="parent">I am a parent/carer</option>
                 <option value="allergy">Person with allergy</option>
                 <option value="newresident">New Melbourne residence</option>
@@ -23,8 +23,8 @@
             </div>
             <div class="dropdown-group">
               <label for="condition">Known Allergy</label>
-              <select id="condition" v-model="selectedCondition">
-                <option value="">Please select</option>
+              <select id="condition" v-model="selectedCondition" required placeholder="Please Select">
+                <option value="" disabled hidden>Please select</option>
                 <option value="hayfever">I want to know more about allergic rhinitis (hay fever)</option>
                 <option value="asthma">Asthma</option>
                 <option value="conjunctivitis">Allergic conjunctivitis</option>

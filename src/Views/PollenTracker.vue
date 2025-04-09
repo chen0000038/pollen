@@ -253,6 +253,7 @@ export default {
     const personalPollenData = ref([])
     const inputError = ref('')
     const isValidInput = ref(false)
+    const selectedLocationKey = ref(null)
 
     // Fetch overview pollen data for Melbourne (locationKey=26216)
     const fetchMelbournePollenData = async () => {
@@ -345,18 +346,6 @@ export default {
       }
     }
 
-    // "Track Now" button click
-    const handleTrackNow = () => {
-      if (!isValidInput.value) {
-        inputError.value = 'Please select a valid suburb from the list'
-        return
-      }
-
-      if (suburbSuggestions.value.length > 0) {
-        selectSuggestion(suburbSuggestions.value[0])
-      }
-    }
-
     // User selects a suggestion
     const selectSuggestion = async (suggestion) => {
       suburbSuggestions.value = []
@@ -364,7 +353,26 @@ export default {
       suburbInput.value = `${suggestion.LocalizedName}, Victoria`
       isValidInput.value = true
       inputError.value = ''
-      await fetchPersonalPollenData(suggestion.Key)
+      // Store the selected location key instead of fetching data immediately
+      selectedLocationKey.value = suggestion.Key
+    }
+
+    // Track Now button click
+    const handleTrackNow = async () => {
+      if (!isValidInput.value) {
+        inputError.value = 'Please select a valid suburb from the list'
+        return
+      }
+
+      // If there are suggestions and no location key selected yet, use the first suggestion
+      if (suburbSuggestions.value.length > 0 && !selectedLocationKey.value) {
+        selectSuggestion(suburbSuggestions.value[0])
+      }
+      
+      // Fetch data only if a location key is selected
+      if (selectedLocationKey.value) {
+        await fetchPersonalPollenData(selectedLocationKey.value)
+      }
     }
 
     // Fetch personal pollen data for user-chosen suburb
@@ -502,7 +510,8 @@ export default {
       getOverallRiskLevel,
       getPollenEmoji,
       inputError,
-      isValidInput
+      isValidInput,
+      selectedLocationKey
     }
   }
 }
@@ -877,6 +886,7 @@ export default {
   flex-direction: column;
   gap: 1rem;
   margin-bottom: 1rem;
+  width: 100%;
 }
 
 .tracker-input input {
@@ -888,6 +898,7 @@ export default {
   background-color: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  box-sizing: border-box;
 }
 
 .tracker-input button {
