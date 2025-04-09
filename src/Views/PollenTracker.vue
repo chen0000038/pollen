@@ -156,7 +156,7 @@ const suburbList = ref([])
 // Load suburb list
 const loadSuburbList = async () => {
   try {
-    const response = await fetch('/public/suburblist.txt')
+    const response = await fetch('/suburblist.txt')
     const text = await response.text()
     suburbList.value = text.split('\n')
       .map(line => line.trim())
