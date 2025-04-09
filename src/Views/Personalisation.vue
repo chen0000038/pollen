@@ -14,18 +14,18 @@
             <div class="dropdown-group">
               <label for="role">Your Role</label>
               <select id="role" v-model="selectedRole" required placeholder="Please Select">
-                <option value="" disabled hidden>Please Select</option>
-                <option value="parent">I am a parent/carer</option>
+                <option value="" disabled hidden>I am a</option>
+                <option value="parent">parent/carer</option>
                 <option value="allergy">Person with allergy</option>
-                <option value="newresident">New Melbourne residence</option>
-                <option value="probablyallergic">Probably with allergy</option>
+                <option value="new resident">New Melbourne residence</option>
+                <option value="probably allergic">Probably with allergy</option>
               </select>
             </div>
             <div class="dropdown-group">
               <label for="condition">Known Allergy</label>
               <select id="condition" v-model="selectedCondition" required placeholder="Please Select">
-                <option value="" disabled hidden>Please select</option>
-                <option value="hayfever">I want to know more about allergic rhinitis (hay fever)</option>
+                <option value="" disabled hidden>I want to know more about</option>
+                <option value="hayfever">allergic rhinitis (hay fever)</option>
                 <option value="asthma">Asthma</option>
                 <option value="conjunctivitis">Allergic conjunctivitis</option>
               </select>
@@ -45,8 +45,8 @@
       <div class="result-section" v-if="showResults">
         <div class="result-box">
           <h2>Your Personalized Pollen Solution</h2>
-          <p><strong>Role:</strong> {{ selectedRole || 'N/A' }}</p>
-          <p><strong>Condition:</strong> {{ selectedCondition || 'N/A' }}</p>
+          <p><strong>Role:</strong> {{ submittedRole || 'N/A' }}</p>
+          <p><strong>Condition:</strong> {{ submittedCondition || 'N/A' }}</p>
   
           <div class="suggestions" v-if="suggestions.length">
             <h3>Advice for You:</h3>
@@ -68,75 +68,77 @@
   const selectedRole = ref('')
   const selectedCondition = ref('')
   const showResults = ref(false)
+  const submittedRole = ref('')
+  const submittedCondition = ref('')
   
   const suggestions = computed(() => {
-  if (selectedRole.value === 'parent' && selectedCondition.value === 'hayfever') {
+  if (submittedRole.value === 'parent' && submittedCondition.value === 'hayfever') {
     return [
       "The allergens were minimized. Keep Windows closed in your home and car during spring, summer and early fall when pollen counts are high.",
       "If you grow flowers at home, research which plants do not cause hay fever.",
       "Use filters in vacuum cleaners and air conditioners to reduce the amount of allergens in the air."
     ]
-  } else if (selectedRole.value === 'parent' && selectedCondition.value === 'asthma') {
+  } else if (submittedRole.value === 'parent' && submittedCondition.value === 'asthma') {
     return [
       "Changing the ventilation, heating and cooling systems in your home can improve air quality for people with asthma.",
       "Keep an eye on the daily pollen index and avoid outdoor activities during peak times.Tip: You can check local pollen concentrations and types on our website Pollen Map",
       "Be familiar with the emergency treatment process of asthma attack, carry the emergency inhaler with you, and master the use of it."
     ]
-  } else if (selectedRole.value === 'parent' && selectedCondition.value === 'conjunctivitis') {
+  } else if (submittedRole.value === 'parent' && submittedCondition.value === 'conjunctivitis') {
     return [
       "Keep allergy eye drops or oral medications (over-the-counter or prescription) at home and on your person.",
       "Manage eye rubbing behavior. Repeated eye rubbing can worsen symptoms. Cut the person's nails short and apply gentle pressure with a tissue.",
       "Providing people with conjunctivitis with foods rich in vitamins and minerals can help strengthen the immune system and reduce inflammation in the body."
     ]
-  } else if (selectedRole.value === 'allergy' && selectedCondition.value === 'hayfever') {
+  } else if (submittedRole.value === 'allergy' && submittedCondition.value === 'hayfever') {
     return [
       "Wear a mask when you go outside to protect yourself from pollen. Change your clothes as soon as you enter the house and avoid touching your nose.",
       "Nasal douches, saline nasal sprays or rinses can relieve hay fever. They clear mucus and allergens from the nasal passages. They are safe and can often help relieve symptoms.",
       "Stay indoors when it is windy, pollen levels are high, or during and after thunderstorms. You can check today's pollen count on the Pollen Forecaster website"
     ]
-  } else if (selectedRole.value === 'allergy' && selectedCondition.value === 'asthma') {
+  } else if (submittedRole.value === 'allergy' && submittedCondition.value === 'asthma') {
     return [
       "If possible, avoid going outside during thunderstorms from October to December, especially gusty winds before the storm.",
       "Clean frequently and wipe dust with a damp cloth to avoid pollen buildup.",
       "Take your asthma medication regularly every day and carry an emergency inhaler with you."
     ]
-  } else if (selectedRole.value === 'allergy' && selectedCondition.value === 'conjunctivitis') {
+  } else if (submittedRole.value === 'allergy' && submittedCondition.value === 'conjunctivitis') {
     return [
       "For cold compresses, wash your eyes with cold water, an ice pack, and a cold compress. Do wash after coming back from going out and apply a cold compress before going to bed.",
       "Wear protective goggles when you go outside to prevent allergens from entering your eyes.",
       "Maintain hygiene, take good care of personal items, such as towels, and do not share with others to avoid cross infection."
     ]
-  } else if (selectedRole.value === 'newresident' && selectedCondition.value === 'hayfever') {
+  } else if (submittedRole.value === 'new resident' && submittedCondition.value === 'hayfever') {
     return [
       "Wash sheets and pillows frequently, and do not hang clothes or sheets outside to dry.",
       "Purchase over-the-counter (OTC) medications through a pharmacy at home to prepare for the relief caused by discomfort.",
       "Keep records. Record your allergies daily to create an allergy map of your new environment."
     ]
-  } else if (selectedRole.value === 'newresident' && selectedCondition.value === 'asthma') {
+  } else if (submittedRole.value === 'new resident' && submittedCondition.value === 'asthma') {
     return [
       "Treat 'don't know' as 'high risk' and open the protection mode in advance. For uncertain environments, use universal asthma control drugs first and observe the response.",
       "Familiar with the environment, know the nearest medical resources (hospital/pharmacy), understand the local pollen situation.",
       "Consult a map to find out where parks are located near your home and avoid areas with high pollen levels."
     ]
-  } else if (selectedRole.value === 'newresident' && selectedCondition.value === 'conjunctivitis') {
+  } else if (submittedRole.value === 'new resident' && submittedCondition.value === 'conjunctivitis') {
     return [
       "Clean the environment of your new home, including air conditioning filters, to prevent pollen buildup from causing allergic conjunctivitis.",
       "Using a humidifier at home can also help relieve dry eyes, especially if the environment is dry. If the eyes are dry, allergic conjunctivitis may worsen; Therefore, maintaining a moist environment may help protect the eyes from excessive inflammation. Humidifiers are very effective in air-conditioned or hot rooms.",
       "Keep protective tools, sterile wipes, eye drops, eye masks and tissues handy."
     ]
-  } else if (selectedRole.value === 'probablyallergic' && selectedCondition.value === 'hayfever') {
+  } else if (submittedRole.value === 'probably allergic' && submittedCondition.value === 'hayfever') {
     return [
       "Determine which allergens you are most likely to be exposed to and see if the symptoms fit the profile (especially 'itchy nose, sneezing, watery nose') to make a preliminary judgment about yourself.",
       "Avoid early morning (6-10 o 'clock) and windy weather when pollen concentration is high.",
       "Basic protection. Fixed window ventilation time, wear protective equipment when going out."
     ]
-  } else if (selectedRole.value === 'probablyallergic' && selectedCondition.value === 'asthma') {
+  } else if (submittedRole.value === 'probably allergic' && submittedCondition.value === 'asthma') {
     return [
       "Make lifestyle changes, prioritize good sleep and relaxation, and stay within a healthy weight range. Forget the junk food, eat more fresh fruits, vegetables and lean meats, and get more exercise.",
       "It's important for everyone to stay away from smoke, and breathing in other people's smoke can also harm your health.",
       "Notice and control symptoms, pay attention to the triggers and symptoms of asthma attacks, and act quickly if you notice something unusual. Although carrying an inhaler is essential."
     ]
-  } else if (selectedRole.value === 'probablyallergic' && selectedCondition.value === 'conjunctivitis') {
+  } else if (submittedRole.value === 'probably allergic' && submittedCondition.value === 'conjunctivitis') {
     return [
       "If symptoms do not go away after trying home remedies and over-the-counter medications, you should see a doctor about allergic conjunctivitis. If you experience severe discomfort, pain, vision problems, or severe redness of the eyes, seek medical attention.",
       "Sunglasses and a hat with a brim should be worn to protect your eyes from the sun. This helps prevent UV damage to your eyes.",
@@ -150,6 +152,12 @@
   function submitForm() {
     console.log('Selected Role:', selectedRole.value)
     console.log('Selected Condition:', selectedCondition.value)
+    
+    // Store the submitted values to use for computing suggestions
+    submittedRole.value = selectedRole.value
+    submittedCondition.value = selectedCondition.value
+    
+    // Show results only after form submission
     showResults.value = true
   }
   </script>

@@ -27,7 +27,7 @@
           <div class="feature-card">
             <div class="feature-icon">💓</div>
             <h3 class="feature-title">Get Personalized Suggestion</h3>
-            <p class="feature-desc">Personalized allergy education platform that customizes learning content based on your sepcific pollen sensitivities</p>
+            <p class="feature-desc">Personalized allergy education platform</p>
             <router-link to="/personalisation">
               <button class="feature-btn">Start customizing</button>
             </router-link>
@@ -128,9 +128,11 @@
   }
   
   .feature-subtitle {
-    font-size: 1.1rem;
+    font-size: 1.4rem;
     font-weight: 600;
     margin-bottom: 0.75rem;
+    color: #2563eb;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
   }
   
   .feature-card {
@@ -139,6 +141,9 @@
     padding: 1.5rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: box-shadow 0.2s;
+    background-color: rgba(245, 240, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
   
   .feature-card:hover {
