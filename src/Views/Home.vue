@@ -113,18 +113,24 @@
   }
   
   .features-wrapper {
-    width: 95%;
-    padding: 1rem;
+    width: 100%;
+    padding: 2rem;
+    margin: 0 auto;
+    max-width: 1400px;
   }
   
   .features-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
+    margin: 0 auto;
   }
   
   .feature-block {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
   .feature-subtitle {
@@ -144,6 +150,8 @@
     background-color: rgba(245, 240, 255, 0.8);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    width: 100%;
+    max-width: 550px;
   }
   
   .feature-card:hover {

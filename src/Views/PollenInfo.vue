@@ -90,15 +90,43 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onBeforeUnmount, onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import Navbar from '../components/Navbar.vue'
 import FlipCard from '../components/FlipCard.vue'
 
 const activeCategory = ref(null)
+const router = useRouter()
 
 function selectCategory(category) {
   activeCategory.value = category
 }
+
+// Reset activeCategory when navigating away
+function resetCategory() {
+  activeCategory.value = null
+}
+
+// Add event listener to navbar links
+onMounted(() => {
+  const navLinks = document.querySelectorAll('.navbar a')
+  navLinks.forEach(link => {
+    link.addEventListener('click', resetCategory)
+  })
+})
+
+// Clean up event listeners on component unmount
+onBeforeUnmount(() => {
+  const navLinks = document.querySelectorAll('.navbar a')
+  navLinks.forEach(link => {
+    link.removeEventListener('click', resetCategory)
+  })
+})
+
+// Watch for route changes to reset category
+watch(() => router.currentRoute.value.path, () => {
+  resetCategory()
+})
 
 const grassList = [
   {
@@ -109,7 +137,7 @@ const grassList = [
   },
   {
     title: 'Bermuda Grass',
-    description: `The cause of Bermuda Grass allergies is pollen. The peak pollen period for Bermuda grass is from early summer through mid-autumn, but in warmer locales, the grass can create pollen all year long. The reaction to Bermuda grass pollen can range from barely noticeable to almost feeling like you have the flu, depending on the severity of your body’s immune response.
+    description: `The cause of Bermuda Grass allergies is pollen. The peak pollen period for Bermuda grass is from early summer through mid-autumn, but in warmer locales, the grass can create pollen all year long. The reaction to Bermuda grass pollen can range from barely noticeable to almost feeling like you have the flu, depending on the severity of your body's immune response.
 `,
     image: '/Bermuda.png'
   },

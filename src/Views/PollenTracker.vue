@@ -430,19 +430,22 @@ export default {
           vizElement.style.minWidth = '420px'
           vizElement.style.maxWidth = '650px'
           vizElement.style.width = '100%'
-          vizElement.style.minHeight = '687px'
-          vizElement.style.maxHeight = '987px'
-          vizElement.style.height = divElement.offsetWidth * 0.85 + 'px'
+          vizElement.style.minHeight = '830px'
+          vizElement.style.maxHeight = '1150px'
+          vizElement.style.height = divElement.offsetWidth * 1.0 + 'px'
+          vizElement.style.margin = '0 auto'
         } else if (divElement.offsetWidth > 500) {
           vizElement.style.minWidth = '420px'
           vizElement.style.maxWidth = '650px'
           vizElement.style.width = '100%'
-          vizElement.style.minHeight = '687px'
-          vizElement.style.maxHeight = '987px'
-          vizElement.style.height = divElement.offsetWidth * 0.85 + 'px'
+          vizElement.style.minHeight = '830px'
+          vizElement.style.maxHeight = '1150px'
+          vizElement.style.height = divElement.offsetWidth * 1.0 + 'px'
+          vizElement.style.margin = '0 auto'
         } else {
           vizElement.style.width = '100%'
-          vizElement.style.height = '827px'
+          vizElement.style.height = '970px'
+          vizElement.style.margin = '0 auto'
         }
         const scriptElement = document.createElement('script')
         scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js'
@@ -579,7 +582,7 @@ export default {
 /* ========== Part 2: Pollen Overview ========== */
 .overview-container {
   position: relative;
-  margin: 5rem 2rem 2rem 2rem; /* Match the spacing of lower components (2rem left & right) */
+  margin: 2rem 2rem 2rem 2rem; /* Reduced top margin from 5rem to 2rem */
   padding: 0;
   width: auto; /* Remove fixed width calculation to match lower components */
   max-width: none; /* Remove max-width to match lower components */
@@ -1025,5 +1028,15 @@ export default {
   backdrop-filter: blur(5px);
   padding: 10px;
   border: 1px solid rgba(221, 221, 221, 0.5);
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Override Tableau object styles */
+.tableauViz {
+  width: 100% !important;
+  margin: 0 auto !important;
 }
 </style>
