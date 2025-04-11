@@ -36,8 +36,7 @@
         <div class="game-section">
           <h2>Interactive Pollen Awareness Game</h2>
           <p>
-            Engage with our interactive game to learn strategies for dealing
-            with pollen allergies and protecting yourself during high pollen.
+            Engage with interactive game to learn strategies against pollen allergies and protecting yourself during high pollen.
           </p>
           <router-link to="/game">
             <button class="game-btn">Start Game</button>
@@ -48,7 +47,7 @@
       <div class="sub-cards-area" v-else>
         <div class="hint-row">
           <p style="font-size: 30px; font-weight: bold;">
-            Click on any card for more details
+            Click on any card for more <span style="color: #4CAF50;">{{ activeCategory }}</span> details
           </p>
         </div>
         <div class="flip-cards-grid">
@@ -113,6 +112,15 @@ onMounted(() => {
   navLinks.forEach(link => {
     link.addEventListener('click', resetCategory)
   })
+  
+  // Check URL query parameters for direct navigation
+  const params = new URLSearchParams(window.location.search)
+  const typeParam = params.get('type')
+  if (typeParam && ['tree', 'grass', 'weed'].includes(typeParam)) {
+    selectCategory(typeParam)
+    // Scroll to top of the page
+    window.scrollTo(0, 0)
+  }
 })
 
 // Clean up event listeners on component unmount
@@ -127,6 +135,15 @@ onBeforeUnmount(() => {
 watch(() => router.currentRoute.value.path, () => {
   resetCategory()
 })
+
+// Watch for query parameter changes
+watch(() => router.currentRoute.value.query, (newQuery) => {
+  if (newQuery.type && ['tree', 'grass', 'weed'].includes(newQuery.type)) {
+    selectCategory(newQuery.type)
+    // Scroll to top of the page
+    window.scrollTo(0, 0)
+  }
+}, { immediate: true })
 
 const grassList = [
   {

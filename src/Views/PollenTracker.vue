@@ -37,7 +37,7 @@
             <strong>Common types:</strong> {{ pollen.commonTypes }}
           </div>
           <div class="learn-more-link">
-            <router-link to="/polleninfo" class="pollen-link">Learn more plant types?</router-link>
+            <router-link :to="'/polleninfo?type=' + getPollenCategory(pollen.title)" class="pollen-link">Learn more {{ getPollenCategory(pollen.title) }} types?</router-link>
           </div>
           <div class="action-advice">
             <strong>Action:</strong> {{ pollen.actionAdvice }}
@@ -499,6 +499,19 @@ export default {
       }
     }
 
+    const getPollenCategory = (title) => {
+      switch (title.toLowerCase()) {
+        case 'tree pollen':
+          return 'tree';
+        case 'grass pollen':
+          return 'grass';
+        case 'weed pollen':
+          return 'weed';
+        default:
+          return 'unknown';
+      }
+    }
+
     return {
       logoUrl,
       overviewPollenData,
@@ -514,7 +527,8 @@ export default {
       getPollenEmoji,
       inputError,
       isValidInput,
-      selectedLocationKey
+      selectedLocationKey,
+      getPollenCategory
     }
   }
 }
@@ -582,10 +596,10 @@ export default {
 /* ========== Part 2: Pollen Overview ========== */
 .overview-container {
   position: relative;
-  margin: 2rem 2rem 2rem 2rem; /* Reduced top margin from 5rem to 2rem */
+  margin: 1rem 2rem 1rem 2rem;
   padding: 0;
-  width: auto; /* Remove fixed width calculation to match lower components */
-  max-width: none; /* Remove max-width to match lower components */
+  width: auto;
+  max-width: none;
   background-color: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -596,7 +610,7 @@ export default {
 
 .overview-header {
   width: 100%;
-  height: 300px;
+  height: 200px;
   background-image: url('/public/melcity.jpg');
   background-size: cover;
   background-position: center;
@@ -632,15 +646,15 @@ export default {
 .part2-overview {
   display: flex;
   flex-wrap: nowrap;
-  padding: 2rem;
-  gap: 2rem;
+  padding: 1.5rem;
+  gap: 1.5rem;
 }
 
 .overall-pollen-card,
 .pollen-card {
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 20px;
-  padding: 1.5rem;
+  padding: 1.2rem;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--apple-border);
@@ -649,7 +663,7 @@ export default {
 }
 
 .overall-pollen-card {
-  flex: 0 0 200px; /* Increase width slightly from 180px to 200px */
+  flex: 0 0 200px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -659,7 +673,7 @@ export default {
 
 .pollen-card {
   flex: 1;
-  min-width: 250px; /* Set minimum width to ensure proper sizing */
+  min-width: 250px;
 }
 
 .overall-pollen-card:hover,
@@ -668,19 +682,19 @@ export default {
 }
 
 .overall-title {
-  font-size: 1.4rem;  /* Increased from 1.1rem */
+  font-size: 1.4rem;
   font-weight: bold;
   color: #000000;
-  margin-bottom: 1.2rem;  /* Adjusted spacing */
+  margin-bottom: 1.2rem;
   text-align: center;
   line-height: 1.3;
 }
 
 .overall-level-text {
-  font-size: 2.5rem;  /* Increased from 2rem */
+  font-size: 2.5rem;
   font-weight: bold;
   text-align: center;
-  margin-top: 0.6rem;  /* Adjusted spacing */
+  margin-top: 0.6rem; 
 }
 
 .overall-level-text.high {
@@ -702,28 +716,28 @@ export default {
 .card-header {
   display: flex;
   align-items: center;
-  gap: 1rem;  /* Increased from 0.8rem */
-  margin-bottom: 1.2rem;  /* Increased from 1rem */
+  gap: 1rem;
+  margin-bottom: 1.2rem;
 }
 
 .card-header h3 {
-  font-size: 1.3rem;  /* Increased from 1rem */
+  font-size: 1.3rem;
   font-weight: bold;
 }
 
 .pollen-emoji {
-  font-size: 2rem;  /* Increased from 1.5rem */
+  font-size: 2rem;
 }
 
 .risk-indicator {
   position: relative;
-  margin: 2rem 0 3.5rem 0;  /* Increased bottom margin to accommodate larger text */
+  margin: 1.5rem 0 3rem 0;
 }
 
 .risk-bar {
-  height: 10px;  /* Increased from 8px */
+  height: 10px;
   background-color: rgba(200, 200, 200, 0.7);
-  border-radius: 5px;  /* Adjusted for increased height */
+  border-radius: 5px;
   position: relative;
 }
 
@@ -759,7 +773,6 @@ export default {
   z-index: 1;
 }
 
-/* Risk level specific styles */
 .risk-bar.high .fill {
   width: 100%;
   background-color: #ff4d4d;
@@ -808,23 +821,23 @@ export default {
 }
 
 .common-types {
-  font-size: 1rem;  /* Increased from 0.85rem */
-  margin-top: 2rem;  /* Increased from 1.5rem */
+  font-size: 1rem;
+  margin-top: 1.5rem;
 }
 
 .action-advice {
-  font-size: 1rem;  /* Increased from 0.85rem */
-  margin-top: 1rem;  /* Increased from 0.8rem */
-  padding: 1rem;  /* Increased from 0.8rem */
+  font-size: 1rem;
+  margin-top: 0.8rem;
+  padding: 0.8rem;
 }
 
 .learn-more-link {
-  margin: 1rem 0;  /* Increased from 0.8rem */
+  margin: 0.8rem 0;
   text-align: center;
 }
 
 .pollen-link {
-  font-size: 1rem;  /* Increased from 0.8rem */
+  font-size: 1rem;
   text-decoration: none;
   color: #0070c9;
   font-weight: 500;
@@ -839,14 +852,12 @@ export default {
   border-bottom: 1px solid #005b9f;
 }
 
-/* ========== Main Lower Container (Parts 3, 4, 5) ========== */
 .main-lower-container {
   display: flex;
-  margin: 2rem;
-  gap: 2rem;
+  margin: 1rem 2rem;
+  gap: 1.5rem;
 }
 
-/* ========== Part 3: Map (left side) ========== */
 .part3-map {
   flex: 2;
   min-width: 300px;

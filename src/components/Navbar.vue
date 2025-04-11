@@ -8,11 +8,11 @@
         </router-link>
       </div>
       <div class="navbar-right">
-        <router-link to="/" class="nav-btn">Home</router-link>
-        <router-link to="/pollentracker" class="nav-btn">Pollen Tracker</router-link>
-        <router-link to="/personalisation" class="nav-btn">Personalisation</router-link>
-        <router-link to="/polleninfo" class="nav-btn">Education Resources</router-link>
-        <router-link to="/game" class="nav-btn">Game</router-link>
+        <router-link to="/" class="nav-btn" exact-active-class="active">Home</router-link>
+        <router-link to="/pollentracker" class="nav-btn" active-class="active">Pollen Tracker</router-link>
+        <router-link to="/personalisation" class="nav-btn" active-class="active">Personalisation</router-link>
+        <router-link to="/polleninfo" class="nav-btn" active-class="active">Education Resources</router-link>
+        <router-link to="/game" class="nav-btn" active-class="active">Game</router-link>
       </div>
     </div>
   </nav>
@@ -78,6 +78,13 @@
 .nav-btn:hover {
   color: #4c4b4b;
   background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Active link styling */
+.nav-btn.active {
+  background-color: #034563;
+  color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 </style>
 

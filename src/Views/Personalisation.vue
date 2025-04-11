@@ -30,12 +30,13 @@
                 <option value="conjunctivitis">Allergic conjunctivitis</option>
               </select>
             </div>
-  
-            <div class="emergency-box">
-              <span class="phone-icon">📞</span>
-              IN CASE OF EMERGENCY CONTACT TRIPLE ZERO (000)
-            </div>
           </div>
+          
+          <div class="emergency-box">
+            <span class="phone-icon">📞</span>
+            IN CASE OF EMERGENCY CONTACT TRIPLE ZERO (000)
+          </div>
+          
           <button type="submit" class="submit-btn">
             Get Your Personalized Pollen Solution
           </button>
@@ -174,14 +175,16 @@
     background: url("/personalisation-bg.jpg") center center / cover no-repeat;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     position: relative;
+    padding-bottom: 30px;
   }
   .banner-title {
     color: #0c0e10;
-    font-size: 2rem;
+    font-size: 1.75rem;
     text-align: center;
     padding: 0 1rem;
+    margin-bottom: 20px;
   }
   
   .form-section {
@@ -231,14 +234,15 @@
     background-color: #d32f2f;
     color: #fff;
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: 0;
     font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-width: 280px;
+    width: 100%;
     box-sizing: border-box;
+    margin: 1.5rem 0;
   }
   .phone-icon {
     margin-right: 0.5rem;

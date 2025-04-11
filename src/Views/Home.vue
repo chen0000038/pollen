@@ -102,14 +102,15 @@
     justify-content: center;
     align-items: center;
     position: relative;
+    margin-top: 60px;
   }
   
   .banner-title {
-    color: #ffffff;
-    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 2rem;
     text-align: center;
     padding: 0 1rem;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   }
   
   .features-wrapper {
