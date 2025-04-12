@@ -1,6 +1,16 @@
 <template>
   <div class="pollen-info-container">
     <Navbar />
+    <div class="search-container">
+      <input 
+        type="text" 
+        v-model="searchQuery" 
+        placeholder="Search pollen..." 
+        class="search-input"
+        @input="handleSearch"
+      />
+      <p v-if="searchError" class="search-error">Currently no information available for this pollen</p>
+    </div>
 
     <div class="content-area">
       <div v-if="!activeCategory">
@@ -53,7 +63,7 @@
         <div class="flip-cards-grid">
           <template v-if="activeCategory === 'grass'">
             <FlipCard
-              v-for="(item, index) in grassList"
+              v-for="(item, index) in filteredGrassList"
               :key="index"
               :image="item.image"
               :title="item.title"
@@ -62,7 +72,7 @@
           </template>
           <template v-else-if="activeCategory === 'tree'">
             <FlipCard
-              v-for="(item, index) in treeList"
+              v-for="(item, index) in filteredTreeList"
               :key="index"
               :image="item.image"
               :title="item.title"
@@ -71,7 +81,7 @@
           </template>
           <template v-else-if="activeCategory === 'weed'">
             <FlipCard
-              v-for="(item, index) in weedList"
+              v-for="(item, index) in filteredWeedList"
               :key="index"
               :image="item.image"
               :title="item.title"
@@ -89,13 +99,16 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, onMounted, watch } from 'vue'
+import { ref, onBeforeUnmount, onMounted, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import Navbar from '../components/Navbar.vue'
 import FlipCard from '../components/FlipCard.vue'
 
 const activeCategory = ref(null)
 const router = useRouter()
+
+const searchQuery = ref('')
+const searchError = ref(false)
 
 function selectCategory(category) {
   activeCategory.value = category
@@ -249,6 +262,37 @@ const weedList = [
     image: 'Parthenium weed.png'
   }
 ]
+
+const filteredGrassList = computed(() => {
+  if (!searchQuery.value) return grassList
+  const filtered = grassList.filter(item => 
+    item.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+  searchError.value = filtered.length === 0
+  return filtered
+})
+
+const filteredTreeList = computed(() => {
+  if (!searchQuery.value) return treeList
+  const filtered = treeList.filter(item => 
+    item.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+  searchError.value = filtered.length === 0
+  return filtered
+})
+
+const filteredWeedList = computed(() => {
+  if (!searchQuery.value) return weedList
+  const filtered = weedList.filter(item => 
+    item.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+  searchError.value = filtered.length === 0
+  return filtered
+})
+
+function handleSearch() {
+  searchError.value = false
+}
 </script>
 
 <style scoped>
@@ -396,5 +440,26 @@ const weedList = [
   .flip-cards-grid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
+}
+
+.search-container {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  z-index: 10;
+}
+
+.search-input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 200px;
+  font-size: 14px;
+}
+
+.search-error {
+  color: #ff4444;
+  margin-top: 5px;
+  font-size: 14px;
 }
 </style>
