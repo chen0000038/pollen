@@ -3,9 +3,17 @@
       <Navbar />
   
       <div class="banner">
-        <h1 class="banner-title">
-          Do you know Melbourne is the city with the most severe pollen allergy?
-        </h1>
+        <video autoplay muted loop playsinline>
+          <source src="/pollenallergy.mp4" type="video/mp4">
+        </video>
+        <div class="banner-content">
+          <h1 class="banner-title">
+            Do you know Melbourne is the city with the most severe pollen allergy?
+          </h1>
+          <router-link to="/pollentracker">
+            <button class="start-exploring-btn">Start Exploring</button>
+          </router-link>
+        </div>
       </div>
   
       <section class="features-wrapper">
@@ -95,22 +103,91 @@
   
 
   .banner {
-    width: 100%;
-    height: 250px;
-    background: url("../assets/back.png") center center / cover no-repeat;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    margin-top: 0;
+  }
+  
+  .banner video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+  
+  .banner::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+  }
+  
+  .banner-content {
     position: relative;
-    margin-top: 60px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    margin-top: -100px;
+    width: 100%;
+    padding: 0 2rem;
   }
   
   .banner-title {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.4rem;
     text-align: center;
-    padding: 0 1rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5),
+                 0 0 10px rgba(0, 0, 0, 0.3);
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  
+  @media (min-width: 768px) {
+    .banner-title {
+      font-size: 1.6rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .banner-title {
+      font-size: 1.8rem;
+    }
+  }
+  
+  .start-exploring-btn {
+    padding: 1rem 2.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  
+  .start-exploring-btn:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
   
   .features-wrapper {

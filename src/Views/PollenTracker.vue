@@ -7,14 +7,43 @@
     <section class="overview-container">
       <!-- Header with background image -->
       <div class="overview-header">
-        <h1 class="overview-slogan">Melbourne Pollen Daily Forecast</h1>
+        <h1 class="overview-slogan">Melbourne Pollen Daily Report</h1>
+      </div>
+
+      <!-- Personal Pollen Tracker Search -->
+      <div class="personal-tracker-search">
+        <h2>Suburb Pollen Tracker</h2>
+        <div class="tracker-input">
+          <input
+            type="text"
+            v-model.trim="suburbInput"
+            placeholder="Search suburbs e.g. Clayton"
+            @input="searchSuburb"
+          />
+          <p v-if="inputError" class="input-error">{{ inputError }}</p>
+          <button @click="handleTrackNow" :disabled="!isValidInput || isLoading">
+            <span v-if="!isLoading">Track Now</span>
+            <span v-else class="loading-spinner"></span>
+          </button>
+        </div>
+
+        <!-- Suggestions List -->
+        <ul class="suggestions" v-if="suburbSuggestions.length > 0">
+          <li
+            v-for="(suggestion, idx) in suburbSuggestions"
+            :key="idx"
+            @click="selectSuggestion(suggestion)"
+          >
+            {{ suggestion.LocalizedName }} ({{ suggestion.Country.LocalizedName }})
+          </li>
+        </ul>
       </div>
       
       <!-- Pollen cards container -->
       <div class="part2-overview">
         <!-- Melbourne Overall Pollen Level Card -->
         <div class="overall-pollen-card">
-          <h2 class="overall-title">Overall Pollen Level</h2>
+          <h2 class="overall-title">{{ currentLocation }} Overall Pollen Level</h2>
           <div class="overall-level-text" :class="getOverallRiskLevel().toLowerCase()">
             {{ getOverallRiskLevel() }}
           </div>
@@ -82,50 +111,6 @@
       </section>
 
       <div class="right-container">
-        <!-- Part 4: Personal Pollen Tracker -->
-        <section class="part4-personal-tracker">
-          <h2>Suburb Pollen Tracker</h2>
-          <div class="tracker-input">
-            <input
-              type="text"
-              v-model.trim="suburbInput"
-              placeholder="Search suburbs e.g. Clayton"
-              @input="searchSuburb"
-            />
-            <p v-if="inputError" class="input-error">{{ inputError }}</p>
-            <button @click="handleTrackNow" :disabled="!isValidInput">Track Now</button>
-          </div>
-
-          <!-- Suggestions List -->
-          <ul class="suggestions" v-if="suburbSuggestions.length > 0">
-            <li
-              v-for="(suggestion, idx) in suburbSuggestions"
-              :key="idx"
-              @click="selectSuggestion(suggestion)"
-            >
-              {{ suggestion.LocalizedName }} ({{ suggestion.Country.LocalizedName }})
-            </li>
-          </ul>
-
-          <div class="personal-results" v-if="personalPollenData.length > 0">
-            <div
-              class="personal-risk-item"
-              v-for="(item, i) in personalPollenData"
-              :key="i"
-            >
-              <strong>{{ item.title }}: </strong>
-              <span
-                class="risk-dot"
-                :style="{ backgroundColor: getRiskColor(item.riskLevel) }"
-              ></span>
-              <span>{{ item.riskLevel }}</span>
-              <div class="action-advice">
-                <p>{{ item.actionAdvice }}</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <!-- Part 5: Allergy Resources -->
         <section class="part5-allergy-resources">
           <h2>Allergy Resources</h2>
@@ -254,6 +239,8 @@ export default {
     const inputError = ref('')
     const isValidInput = ref(false)
     const selectedLocationKey = ref(null)
+    const isLoading = ref(false)
+    const currentLocation = ref('Melbourne City')
 
     // Fetch overview pollen data for Melbourne (locationKey=26216)
     const fetchMelbournePollenData = async () => {
@@ -353,7 +340,7 @@ export default {
       suburbInput.value = `${suggestion.LocalizedName}, Victoria`
       isValidInput.value = true
       inputError.value = ''
-      // Store the selected location key instead of fetching data immediately
+      // Store the selected location key
       selectedLocationKey.value = suggestion.Key
     }
 
@@ -371,7 +358,14 @@ export default {
       
       // Fetch data only if a location key is selected
       if (selectedLocationKey.value) {
-        await fetchPersonalPollenData(selectedLocationKey.value)
+        isLoading.value = true
+        try {
+          await fetchPersonalPollenData(selectedLocationKey.value)
+          // Update current location name
+          currentLocation.value = suburbInput.value.split(',')[0]
+        } finally {
+          isLoading.value = false
+        }
       }
     }
 
@@ -382,36 +376,44 @@ export default {
         const response = await axios.get(url)
         const forecast = response.data.DailyForecasts[0]
         if (forecast && Array.isArray(forecast.AirAndPollen)) {
-          // Default to low risk
-          const treeObj = {
-            title: 'Tree Pollen',
-            riskLevel: 'low',
-            actionAdvice: 'Minimal exposure concerns. Outdoor activities safe.'
-          }
-          const grassObj = {
-            title: 'Grass Pollen',
-            riskLevel: 'low',
-            actionAdvice: 'Minimal exposure concerns. Outdoor activities safe.'
-          }
-          const weedObj = {
-            title: 'Weed Pollen',
-            riskLevel: 'low',
-            actionAdvice: 'Minimal exposure concerns. Outdoor activities safe.'
-          }
           forecast.AirAndPollen.forEach((item) => {
             const mapping = mapCategoryToRisk(item.Category)
             if (item.Name.toLowerCase() === 'tree') {
-              treeObj.riskLevel = mapping.riskLevel
-              treeObj.actionAdvice = mapping.actionAdvice
+              const treeData = overviewPollenData.value.find(p => p.title.toLowerCase().includes('tree'))
+              if (treeData) {
+                treeData.riskLevel = mapping.riskLevel
+                treeData.actionAdvice = mapping.actionAdvice
+                document.querySelector('.pollen-card:nth-child(2)').classList.add('card-updating')
+                setTimeout(() => {
+                  document.querySelector('.pollen-card:nth-child(2)').classList.remove('card-updating')
+                }, 500)
+              }
             } else if (item.Name.toLowerCase() === 'grass') {
-              grassObj.riskLevel = mapping.riskLevel
-              grassObj.actionAdvice = mapping.actionAdvice
+              const grassData = overviewPollenData.value.find(p => p.title.toLowerCase().includes('grass'))
+              if (grassData) {
+                grassData.riskLevel = mapping.riskLevel
+                grassData.actionAdvice = mapping.actionAdvice
+                document.querySelector('.pollen-card:nth-child(3)').classList.add('card-updating')
+                setTimeout(() => {
+                  document.querySelector('.pollen-card:nth-child(3)').classList.remove('card-updating')
+                }, 500)
+              }
             } else if (item.Name.toLowerCase() === 'ragweed') {
-              weedObj.riskLevel = mapping.riskLevel
-              weedObj.actionAdvice = mapping.actionAdvice
+              const weedData = overviewPollenData.value.find(p => p.title.toLowerCase().includes('weed'))
+              if (weedData) {
+                weedData.riskLevel = mapping.riskLevel
+                weedData.actionAdvice = mapping.actionAdvice
+                document.querySelector('.pollen-card:nth-child(4)').classList.add('card-updating')
+                setTimeout(() => {
+                  document.querySelector('.pollen-card:nth-child(4)').classList.remove('card-updating')
+                }, 500)
+              }
             }
           })
-          personalPollenData.value = [treeObj, grassObj, weedObj]
+          document.querySelector('.overall-pollen-card').classList.add('card-updating')
+          setTimeout(() => {
+            document.querySelector('.overall-pollen-card').classList.remove('card-updating')
+          }, 500)
         }
       } catch (error) {
         console.error('Error fetching personal pollen data:', error)
@@ -528,7 +530,9 @@ export default {
       inputError,
       isValidInput,
       selectedLocationKey,
-      getPollenCategory
+      getPollenCategory,
+      isLoading,
+      currentLocation
     }
   }
 }
@@ -658,8 +662,9 @@ export default {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--apple-border);
-  box-shadow: 0 4px 24px var(--apple-shadow);
-  transition: transform 0.2s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
+              0 4px 16px rgba(0, 122, 255, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .overall-pollen-card {
@@ -679,6 +684,8 @@ export default {
 .overall-pollen-card:hover,
 .pollen-card:hover {
   transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2),
+              0 6px 20px rgba(0, 122, 255, 0.15);
 }
 
 .overall-title {
@@ -867,7 +874,15 @@ export default {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--apple-border);
-  box-shadow: 0 4px 24px var(--apple-shadow);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
+              0 4px 16px rgba(0, 122, 255, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.part3-map:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2),
+              0 6px 20px rgba(0, 122, 255, 0.15);
 }
 
 /* ========== Right Container (Parts 4 + 5) ========== */
@@ -905,14 +920,28 @@ export default {
 
 .tracker-input input {
   width: 100%;
-  padding: 12px;
-  border: 1px solid var(--apple-border);
+  padding: 16px;
+  border: 2px solid rgba(0, 122, 255, 0.3);
   border-radius: 12px;
-  font-size: 14px;
-  background-color: rgba(255, 255, 255, 0.3);
+  font-size: 16px;
+  background-color: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-sizing: border-box;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.1);
+}
+
+.tracker-input input:focus {
+  outline: none;
+  border-color: rgba(0, 122, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
+}
+
+.tracker-input input::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 500;
 }
 
 .tracker-input button {
@@ -929,11 +958,15 @@ export default {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   margin-top: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3),
+              0 2px 6px rgba(0, 122, 255, 0.2);
 }
 
 .tracker-input button:hover {
   transform: scale(1.02);
   background-color: rgba(0, 113, 227, 0.9);
+  box-shadow: 0 6px 16px rgba(0, 122, 255, 0.4),
+              0 3px 8px rgba(0, 122, 255, 0.3);
 }
 
 .tracker-input button:disabled {
@@ -993,28 +1026,38 @@ export default {
 .part5-allergy-resources {
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 20px;
-  padding: 1.5rem;
+  padding: 1.2rem 1.5rem;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--apple-border);
-  box-shadow: 0 4px 24px var(--apple-shadow);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
+              0 4px 16px rgba(0, 122, 255, 0.1);
   text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.part5-allergy-resources:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2),
+              0 6px 20px rgba(0, 122, 255, 0.15);
 }
 
 .part5-allergy-resources h2 {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.8rem;
   font-size: 24px;
+  color: #1D1D1F;
+  font-weight: 600;
 }
 
 .part5-allergy-resources p {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem;
   font-size: 16px;
   color: #1D1D1F;
 }
 
 .learn-more-btn {
   display: inline-block;
-  margin-top: 1.5rem;
+  margin-top: 1.2rem;
   padding: 12px 24px;
   background-color: rgba(0, 122, 255, 0.8);
   color: white;
@@ -1026,11 +1069,15 @@ export default {
   transition: all 0.2s ease;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3),
+              0 2px 6px rgba(0, 122, 255, 0.2);
 }
 
 .learn-more-btn:hover {
   transform: scale(1.02);
   background-color: rgba(0, 113, 227, 0.9);
+  box-shadow: 0 6px 16px rgba(0, 122, 255, 0.4),
+              0 3px 8px rgba(0, 122, 255, 0.3);
 }
 
 .tableauPlaceholder {
@@ -1049,5 +1096,121 @@ export default {
 .tableauViz {
   width: 100% !important;
   margin: 0 auto !important;
+}
+
+.personal-tracker-search {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  padding: 0.8rem 1.2rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--apple-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 
+              0 4px 16px rgba(0, 122, 255, 0.1);
+  margin: 1rem 1.5rem 0.5rem 1.5rem;
+}
+
+.personal-tracker-search h2 {
+  margin-bottom: 0.8rem;
+  font-size: 24px;
+  text-align: center;
+  color: #1D1D1F;
+  font-weight: 600;
+}
+
+.tracker-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+  width: 100%;
+}
+
+.tracker-input input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid rgba(0, 122, 255, 0.3);
+  border-radius: 12px;
+  font-size: 14px;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.1);
+}
+
+.suggestions {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.5rem 0;
+  border: 1px solid var(--apple-border);
+  border-radius: 12px;
+  max-height: 180px;
+  overflow-y: auto;
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.suggestions li {
+  padding: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 14px;
+}
+
+.suggestions li:hover {
+  background-color: rgba(0, 122, 255, 0.1);
+}
+
+@keyframes cardUpdate {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 24px var(--apple-shadow);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 8px 32px rgba(0, 122, 255, 0.3);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 24px var(--apple-shadow);
+  }
+}
+
+.card-updating {
+  animation: cardUpdate 0.5s ease-in-out;
+}
+
+/* Loading spinner styles */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+button:disabled {
+  background-color: rgba(0, 122, 255, 0.4);
+  cursor: not-allowed;
+  transform: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:disabled .loading-spinner {
+  border-top-color: rgba(255, 255, 255, 0.6);
 }
 </style>
