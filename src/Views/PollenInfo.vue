@@ -114,29 +114,24 @@ function selectCategory(category) {
   activeCategory.value = category
 }
 
-// Reset activeCategory when navigating away
 function resetCategory() {
   activeCategory.value = null
 }
 
-// Add event listener to navbar links
 onMounted(() => {
   const navLinks = document.querySelectorAll('.navbar a')
   navLinks.forEach(link => {
     link.addEventListener('click', resetCategory)
   })
   
-  // Check URL query parameters for direct navigation
   const params = new URLSearchParams(window.location.search)
   const typeParam = params.get('type')
   if (typeParam && ['tree', 'grass', 'weed'].includes(typeParam)) {
     selectCategory(typeParam)
-    // Scroll to top of the page
     window.scrollTo(0, 0)
   }
 })
 
-// Clean up event listeners on component unmount
 onBeforeUnmount(() => {
   const navLinks = document.querySelectorAll('.navbar a')
   navLinks.forEach(link => {
@@ -144,16 +139,13 @@ onBeforeUnmount(() => {
   })
 })
 
-// Watch for route changes to reset category
 watch(() => router.currentRoute.value.path, () => {
   resetCategory()
 })
 
-// Watch for query parameter changes
 watch(() => router.currentRoute.value.query, (newQuery) => {
   if (newQuery.type && ['tree', 'grass', 'weed'].includes(newQuery.type)) {
     selectCategory(newQuery.type)
-    // Scroll to top of the page
     window.scrollTo(0, 0)
   }
 }, { immediate: true })

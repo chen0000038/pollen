@@ -33,14 +33,19 @@ const isHomePage = computed(() => route.path === '/')
   left: 0;
   width: 100%;
   height: 60px;
-  background-color: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.1);
   z-index: 999;
   display: flex;
   align-items: center;
   padding: 0 1rem;
+  transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+.navbar:hover {
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 .navbar-container {
@@ -71,7 +76,8 @@ const isHomePage = computed(() => route.path === '/')
 .site-title {
   font-size: 1.3rem;
   font-weight: bold;
-  color: #000;
+  color: #034563;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 .navbar-right {
@@ -82,79 +88,83 @@ const isHomePage = computed(() => route.path === '/')
 
 .nav-btn {
   text-decoration: none;
-  padding: 0.3rem 0.6rem;
+  padding: 0.5rem 1rem;
   font-weight: 600;
   font-size: 0.95rem;
   color: #034563;
-  background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 4px;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.nav-btn:hover::before {
+  transform: translateX(0);
 }
 
 .nav-btn:hover {
-  color: #4c4b4b;
-  background-color: rgba(255, 255, 255, 0.7);
+  color: #000;
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .nav-btn.active {
-  background-color: #034563;
+  background-color: rgba(3, 69, 99, 0.9);
   color: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Home page specific styles */
 .home-navbar {
-  background-color: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow: none;
 }
 
-.home-site-title {
-  color: rgba(255, 255, 255, 0.7);
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5),
-               0 0 10px rgba(0, 0, 0, 0.3);
+.home-navbar:hover {
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .home-navbar .nav-btn {
-  color: rgba(255, 255, 255, 0.7);
-  background-color: transparent;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5),
-               0 0 10px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-  border: none;
-  padding: 0.3rem 0.8rem;
+  color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.1);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .home-navbar .nav-btn:hover {
-  color: rgba(255, 255, 255, 0.85);
-  background-color: transparent;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7),
-               0 0 12px rgba(0, 0, 0, 0.5);
+  color: white;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
   transform: translateY(-2px);
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  padding: calc(0.3rem - 1px) calc(0.8rem - 1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .home-navbar .nav-btn.active {
-  color: rgba(255, 255, 255, 0.9);
-  background-color: transparent;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6),
-               0 0 12px rgba(0, 0, 0, 0.4);
+  color: white;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
   font-weight: 700;
-  position: relative;
 }
 
-.home-navbar .nav-btn.active::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: rgba(255, 255, 255, 0.7);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+.home-site-title {
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 </style>
 

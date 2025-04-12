@@ -1,10 +1,7 @@
 <template>
   <div class="flip-card-container">
-    <!-- 固定位置容器 -->
     <div class="flip-card">
-      <!-- 翻转区域 -->
       <div class="flip-card-inner" :class="{ flipped: isFlipped }" @click="handleCardClick">
-        <!-- 正面 -->
         <div class="flip-card-front">
           <div class="card-title-container">
             <h3 class="card-title">{{ title }}</h3>
@@ -18,7 +15,6 @@
             </div>
           </div>
         </div>
-        <!-- 背面 -->
         <div class="flip-card-back">
           <div class="description-container">
             <p class="card-description">{{ description }}</p>
@@ -28,7 +24,6 @@
     </div>
   </div>
 
-  <!-- 全屏模态层 -->
   <Teleport to="body">
     <div v-if="modalOpen" class="modal-overlay" @click="closeModal">
       <div class="modal-content">
@@ -51,7 +46,6 @@ const isFlipped = ref(false)
 const modalOpen = ref(false)
 
 function handleCardClick(event) {
-  // 如果点击的是放大镜图标，不触发翻转
   if (!event.target.closest('.magnifier-icon')) {
     isFlipped.value = !isFlipped.value
   }
@@ -60,13 +54,11 @@ function handleCardClick(event) {
 function openModal(event) {
   event.stopPropagation()
   modalOpen.value = true
-  // 防止页面滚动
   document.body.style.overflow = 'hidden'
 }
 
 function closeModal() {
   modalOpen.value = false
-  // 恢复页面滚动
   document.body.style.overflow = ''
 }
 </script>
@@ -128,12 +120,11 @@ function closeModal() {
   height: 100%;
   overflow-y: auto;
   padding-right: 0.5rem;
-  /* 添加自定义滚动条样式 */
   scrollbar-width: thin;
   scrollbar-color: #888 #f1f1f1;
 }
 
-/* 自定义滚动条样式 - Webkit浏览器 */
+
 .description-container::-webkit-scrollbar {
   width: 6px;
 }
@@ -180,7 +171,7 @@ function closeModal() {
 
 .card-image-container {
   position: relative;
-  height: calc(100% - 40px); /* 减去标题高度 */
+  height: calc(100% - 40px);
   overflow: hidden;
 }
 
@@ -210,7 +201,6 @@ function closeModal() {
   background: rgba(0, 0, 0, 0.8);
 }
 
-/* 模态层样式 */
 .modal-overlay {
   position: fixed;
   top: 0;
