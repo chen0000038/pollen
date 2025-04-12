@@ -118,9 +118,51 @@ function closeModal() {
   transform: rotateY(180deg);
   background: #f8f8f8;
   display: flex;
-  align-items: center;
-  padding: 1rem;
+  align-items: flex-start;
+  padding: 1.5rem;
   box-sizing: border-box;
+}
+
+.description-container {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  /* 添加自定义滚动条样式 */
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+/* 自定义滚动条样式 - Webkit浏览器 */
+.description-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.description-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.description-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.description-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.card-description {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: left;
+  color: #333;
+  letter-spacing: 0.3px;
+  text-align: justify;
+  hyphens: auto;
+  word-break: break-word;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .card-title-container {
@@ -166,13 +208,6 @@ function closeModal() {
 
 .magnifier-icon:hover {
   background: rgba(0, 0, 0, 0.8);
-}
-
-.card-description {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  text-align: left;
 }
 
 /* 模态层样式 */
