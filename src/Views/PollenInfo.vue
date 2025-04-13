@@ -1,15 +1,17 @@
 <template>
   <div class="pollen-info-container">
     <Navbar />
-    <div class="search-container">
-      <input 
-        type="text" 
-        v-model="searchQuery" 
-        placeholder="Search pollen..." 
-        class="search-input"
-        @input="handleSearch"
-      />
-      <p v-if="searchError" class="search-error">Currently no information available for this pollen</p>
+    <div class="search-container" v-if="activeCategory">
+      <div class="search-wrapper">
+        <input 
+          type="text" 
+          v-model="searchQuery" 
+          placeholder="Search pollen..." 
+          class="search-input"
+          @input="handleSearch"
+        />
+        <p v-if="searchError" class="search-error">Currently no information available for this pollen</p>
+      </div>
     </div>
 
     <div class="content-area">
@@ -435,23 +437,47 @@ function handleSearch() {
 }
 
 .search-container {
-  position: absolute;
+  position: fixed;
   top: 80px;
-  right: 20px;
+  left: 20px;
   z-index: 10;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.search-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .search-input {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  width: 200px;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  width: 250px;
   font-size: 14px;
+  transition: all 0.3s ease;
+  background-color: #f8fafc;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
 }
 
 .search-error {
-  color: #ff4444;
+  color: #ef4444;
   margin-top: 5px;
   font-size: 14px;
+  font-weight: 500;
 }
 </style>

@@ -22,6 +22,41 @@
         </div>
       </section>
 
+      <section class="stats-section">
+        <h2 class="stats-title">The Pollen Crisis</h2>
+        <div class="stats-container">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <img src="/public/Statemnt 1.png" alt="Stat Icon 1" class="stat-image" />
+            </div>
+            <h3 class="stat-number">31.8%<span class="stat-highlight"> | 3 in 10</span></h3>
+            <p class="stat-description">Melbourne residents experience allergic rhinitis</p>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">
+              <img src="/public/Statemnt 2.png" alt="Stat Icon 2" class="stat-image" />
+            </div>
+            <h3 class="stat-number">One in four</h3>
+            <p class="stat-description">People with allergic rhinitis (hay fever) also have asthma</p>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">
+              <img src="/public/5.png" alt="Stat Icon 3" class="stat-image" />
+            </div>
+            <h3 class="stat-number">4 months</h3>
+            <p class="stat-description">Melbourne pollen fever will last from September each year to January of the following year</p>
+          </div>
+        </div>
+        
+        <div class="scroll-indicator">
+          <div class="chevron"></div>
+          <div class="chevron"></div>
+          <div class="chevron"></div>
+        </div>
+      </section>
+
       <section class="journey-section">
         <div class="journey-header">
           <h2>Your Journey to Better Health in Melbourne</h2>
@@ -468,6 +503,166 @@ import Navbar from '../components/Navbar.vue'
 .journey-step:hover .full-chevron {
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
   opacity: 1 !important;
+}
+
+.stats-section {
+  padding: 2rem 2rem 4rem;
+  background-color: #f8fafc;
+  position: relative;
+}
+
+.stats-title {
+  text-align: center;
+  color: #2F5A43;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+.stats-container {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.stat-card {
+  flex: 1;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-icon {
+  margin-bottom: 1rem;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-image {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.stat-number {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2F5A43;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.stat-highlight {
+  color: #FF7F50;
+}
+
+.stat-description {
+  color: #4A5568;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  height: 60px;
+}
+
+.chevron {
+  width: 30px;
+  height: 4px;
+  opacity: 0;
+  transform: scale(0.3);
+  animation: scroll-down-anim 2s infinite;
+}
+
+.chevron:before,
+.chevron:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  background: #2F5A43;
+}
+
+.chevron:before {
+  left: 0;
+  transform: skewY(30deg);
+}
+
+.chevron:after {
+  right: 0;
+  transform: skewY(-30deg);
+}
+
+.chevron:first-child {
+  animation-delay: 0s;
+}
+
+.chevron:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.chevron:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes scroll-down-anim {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0) scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0) scale(0.3);
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-container {
+    flex-direction: column;
+  }
+  
+  .stat-card {
+    margin-bottom: 1rem;
+  }
+
+  .stats-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-description {
+    max-width: 100%;
+  }
+
+  .scroll-indicator {
+    bottom: 10px;
+  }
 }
 </style>
   
