@@ -7,7 +7,7 @@
     <section class="overview-container">
       <!-- Header with background image -->
       <div class="overview-header">
-        <h1 class="overview-slogan">Melbourne Pollen Daily Report</h1>
+        <h1 class="overview-slogan">Greater Melbourne Pollen Daily Report</h1>
       </div>
 
       <!-- Personal Pollen Tracker Search -->
@@ -17,7 +17,7 @@
           <input
             type="text"
             v-model.trim="suburbInput"
-            placeholder="Search suburbs e.g. Clayton"
+            placeholder="Search pollen level of specific suburbs in Greater Melbourne e.g. Clayton"
             @input="searchSuburb"
           />
           <p v-if="inputError" class="input-error">{{ inputError }}</p>
@@ -43,7 +43,9 @@
       <div class="part2-overview">
         <!-- Melbourne Overall Pollen Level Card -->
         <div class="overall-pollen-card">
-          <h2 class="overall-title">{{ currentLocation }} Overall Pollen Level</h2>
+          <h2 class="overall-title">
+            <span>{{ currentLocation }}</span> Overall Pollen Level
+          </h2>
           <div class="overall-level-text" :class="getOverallRiskLevel().toLowerCase()">
             {{ getOverallRiskLevel() }}
           </div>
@@ -697,6 +699,10 @@ export default {
   line-height: 1.3;
 }
 
+.overall-title span {
+  color: rgba(0, 122, 255, 0.8);
+}
+
 .overall-level-text {
   font-size: 2.5rem;
   font-weight: bold;
@@ -942,6 +948,7 @@ export default {
 .tracker-input input::placeholder {
   color: rgba(0, 0, 0, 0.5);
   font-weight: 500;
+  font-style: italic;
 }
 
 .tracker-input button {
