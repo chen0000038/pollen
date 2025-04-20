@@ -10,7 +10,7 @@
         </div>
         <div class="hero-content">
           <h1>Melbourne Pollen Monitor</h1>
-          <p class="hero-subtitle">Your Essential Guide to Managing Pollen Allergies in Melbourne</p>
+          <p class="hero-subtitle">Your Essential Guide to Manage Pollen Allergies in Melbourne</p>
           <div class="hero-buttons">
             <router-link to="/pollentracker">
               <button class="primary-btn">Check Today's Pollen Level</button>
