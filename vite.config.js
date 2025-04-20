@@ -4,6 +4,6 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
-  base: '/',
+  base: process.env.VITE_APP_BASE || '/',
 })
 
