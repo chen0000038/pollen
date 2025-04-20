@@ -16,7 +16,7 @@ jobs:
         include:
           - branch: main
             base: '/'
-            dest: '' 
+            dest: ''
           - branch: iteration1
             base: '/iteration1/'
             dest: iteration1
@@ -30,6 +30,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          persist-credentials: true
 
       - name: Use Node.js
         uses: actions/setup-node@v3
