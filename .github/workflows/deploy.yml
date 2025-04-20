@@ -13,24 +13,35 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        branch: [main, iteration1, iteration2， iteration3]
-    if: github.ref == 'refs/heads/' + matrix.branch
+        include:
+          - branch: main
+            base: '/'
+            dest: '' 
+          - branch: iteration1
+            base: '/iteration1/'
+            dest: iteration1
+          - branch: iteration2
+            base: '/iteration2/'
+            dest: iteration2
+          - branch: iteration3
+            base: '/iteration3/'
+            dest: iteration3
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Use Node.js 18
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Install dependencies
+      - name: Install deps
         run: npm ci
 
-      - name: Build for ${{ matrix.branch }}
+      - name: Build site for ${{ matrix.branch }}
         env:
-          VITE_BASE: ${{ matrix.branch == 'main' && '/' || '/' + matrix.branch + '/' }}
+          VITE_BASE: ${{ matrix.base }}
         run: npm run build
 
       - name: Deploy to gh-pages
@@ -39,4 +50,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-          destination_dir: ${{ matrix.branch == 'main' && '' || matrix.branch }}
+          destination_dir: ${{ matrix.dest }}
