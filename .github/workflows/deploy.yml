@@ -1,4 +1,4 @@
-name: CI & Deploy to gh-pages subpaths
+name: CI & Deploy to gh-pages
 
 on:
   push:
@@ -11,22 +11,6 @@ on:
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - branch: main
-            base: '/'
-            dest: ''
-          - branch: iteration1
-            base: '/iteration1/'
-            dest: iteration1
-          - branch: iteration2
-            base: '/iteration2/'
-            dest: iteration2
-          - branch: iteration3
-            base: '/iteration3/'
-            dest: iteration3
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -34,17 +18,28 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Use Node.js
+      - name: Use Node.js 18
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Install deps
+      - name: Install dependencies
         run: npm ci
 
-      - name: Build site for ${{ matrix.branch }}
+      - name: Determine deploy paths
+        run: |
+          BRANCH=${GITHUB_REF#refs/heads/}
+          if [ "$BRANCH" = "main" ]; then
+            echo "BASE=/" >> $GITHUB_ENV
+            echo "DEST=" >> $GITHUB_ENV
+          else
+            echo "BASE=/${BRANCH}/" >> $GITHUB_ENV
+            echo "DEST=${BRANCH}" >> $GITHUB_ENV
+          fi
+
+      - name: Build site
         env:
-          VITE_BASE: ${{ matrix.base }}
+          VITE_BASE: ${{ env.BASE }}
         run: npm run build
 
       - name: Deploy to gh-pages
@@ -53,4 +48,5 @@ jobs:
           github_token: ${{ secrets.PAT_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-          destination_dir: ${{ matrix.dest }}
+          destination_dir: ${{ env.DEST }}
+          force: true
