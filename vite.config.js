@@ -1,11 +1,10 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [vue()],
-
-  base: '/iteration1/', 
+  base: mode === 'production' ? '/iteration1/' : '/',
   publicDir: 'public'
-})
+}))
 
 
