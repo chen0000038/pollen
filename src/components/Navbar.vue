@@ -17,7 +17,6 @@
           Pollen Tracker
         </router-link>
 
-        <!-- 下拉菜单容器 -->
         <div class="nav-dropdown">
           <button class="nav-btn" type="button">
             Education Resources
@@ -52,7 +51,6 @@ const isHomePage = computed(() => route.path === '/')
 </script>
 
 <style scoped>
-/* ———————— 主导航样式 ———————— */
 .navbar {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 60px;
@@ -106,7 +104,6 @@ const isHomePage = computed(() => route.path === '/')
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-/* Home 页面特有 */
 .home-navbar {
   background-color: rgba(0,0,0,0.2); backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px); box-shadow: none;
@@ -131,7 +128,6 @@ const isHomePage = computed(() => route.path === '/')
   color: #fff; text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
 }
 
-/* ———————— 下拉菜单额外样式 ———————— */
 .nav-dropdown {
   position: relative;
 }
