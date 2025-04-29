@@ -15,7 +15,7 @@
             <router-link to="/pollentracker">
               <button class="primary-btn">Check Today's Pollen Level</button>
             </router-link>
-            <router-link to="/personalisation">
+            <router-link to="/simulator">
               <button class="secondary-btn">Get Personalized Advice</button>
             </router-link>
           </div>
@@ -27,7 +27,7 @@
         <div class="stats-container">
           <div class="stat-card">
             <div class="stat-icon">
-              <img src="/public/Statemnt 1.png" alt="Stat Icon 1" class="stat-image" />
+              <img src="/Statemnt 1.png" alt="Stat Icon 1" class="stat-image" />
             </div>
             <h3 class="stat-number">31.8%<span class="stat-highlight"> | 3 in 10</span></h3>
             <p class="stat-description">Melbourne residents experience allergic rhinitis</p>
@@ -35,7 +35,7 @@
 
           <div class="stat-card">
             <div class="stat-icon">
-              <img src="/public/Statemnt 2.png" alt="Stat Icon 2" class="stat-image" />
+              <img src="/Statemnt 2.png" alt="Stat Icon 2" class="stat-image" />
             </div>
             <h3 class="stat-number">One in four</h3>
             <p class="stat-description">People with allergic rhinitis (hay fever) also have asthma</p>
@@ -43,7 +43,7 @@
   
           <div class="stat-card">
             <div class="stat-icon">
-              <img src="/public/5.png" alt="Stat Icon 3" class="stat-image" />
+              <img src="/5.png" alt="Stat Icon 3" class="stat-image" />
             </div>
             <h3 class="stat-number">4 months</h3>
             <p class="stat-description">Melbourne pollen fever will last from September each year to January of the following year</p>
@@ -71,10 +71,10 @@
                 <p>Access real-time and forecasted pollen data for Melbourne. Stay informed and plan ahead with our professional monitoring tools.</p>
                 <div class="step-btn-group">
                   <router-link to="/pollentracker">
-                    <button class="today-btn">Today's Index</button>
+                    <button class="primary-btn">Today's Index</button>
                   </router-link>
                   <router-link to="/forecasting">
-                    <button class="forecast-btn">Forecast</button>
+                    <button class="secondary-btn">Forecast</button>
                   </router-link>
                 </div>
               </div>
@@ -93,10 +93,15 @@
             <div class="step-content right">
               <div class="step-details">
                 <h3>Get Personalized Recommendations</h3>
-                <p>Receive tailored advice based on your allergy profile.</p>
-                <router-link to="/personalisation">
-                  <button class="step-btn">Personalize Now</button>
-                </router-link>
+                <p>Choose your way to receive tailored advice for your allergy management.</p>
+                <div class="step-btn-group">
+                  <router-link to="/personalisation">
+                    <button class="primary-btn">Allergy Profile Advice</button>
+                  </router-link>
+                  <router-link to="/simulator">
+                    <button class="secondary-btn">Lifestyle & Environment Simulator</button>
+                  </router-link>
+                </div>
               </div>
             </div>
             <div class="step-visual">
@@ -152,17 +157,21 @@
           <div class="resource-card">
             <i class="fas fa-map-marker-alt"></i>
             <h4>Forecasting</h4>
-            <p>Pollen Forecasting Engine and notification</p>
+            <router-link to="/forecasting" class="forecast-link">
+              Pollen Forecasting Engine and notification
+            </router-link>
           </div>
           <div class="resource-card">
             <i class="fas fa-calendar-alt"></i>
             <h4>Dashboard</h4>
-            <p>Health Impact Dashboard</p>
+            <p>.....</p>
           </div>
           <div class="resource-card">
             <i class="fas fa-first-aid"></i>
-            <h4>Personalizationo</h4>
-            <p>......</p>
+            <h4>Personalization</h4>
+            <router-link to="/simulator" class="simulator-link">
+              Get personalized advice and risk alerts based on your lifestyle, protective measures, and home environment
+            </router-link>
           </div>
           <div class="resource-card">
             <i class="fas fa-book-medical"></i>
@@ -230,8 +239,8 @@ import { ref } from 'vue'
 }
 
 .hero-content h1 {
-  font-size: 3rem;
-  font-weight: 700;
+  font-size: 3.8rem;
+  font-weight: 900;
   margin-bottom: 0.8rem;
 }
 
@@ -248,8 +257,8 @@ import { ref } from 'vue'
 }
 
 .primary-btn, .secondary-btn {
-  padding: 1rem 2rem;
-  border-radius: 30px;
+  padding: 0.6rem 1.5rem;
+  border-radius: 24px;
   font-weight: 600;
   transition: all 0.3s ease;
 }
@@ -468,6 +477,13 @@ import { ref } from 'vue'
   font-size: 2rem;
   color: #4CAF50;
   margin-bottom: 1rem;
+}
+
+.resource-card h4 {
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #1a365d;
 }
 
 @media (max-width: 768px) {
@@ -702,6 +718,80 @@ import { ref } from 'vue'
 .today-btn:hover, .forecast-btn:hover {
   filter: brightness(0.95);
   transform: translateY(-2px);
+}
+
+.personal-btn {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  border-radius: 25px;
+  padding: 0.8rem 1.5rem;
+  margin-right: 0.5rem;
+  transition: all 0.3s;
+}
+.simulator-btn {
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  border-radius: 25px;
+  padding: 0.8rem 1.5rem;
+  margin-left: 0.5rem;
+  transition: all 0.3s;
+}
+.personal-btn:hover, .simulator-btn:hover {
+  filter: brightness(0.95);
+  transform: translateY(-2px);
+}
+
+.primary-btn, .step-btn, .personal-btn {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.6rem 1.5rem;
+  margin: 0 0.5rem;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+  cursor: pointer;
+}
+.primary-btn:hover, .step-btn:hover, .personal-btn:hover {
+  background-color: #174bb1;
+  filter: brightness(0.97);
+  transform: translateY(-2px);
+}
+.secondary-btn, .forecast-btn {
+  background-color: #fff;
+  color: #2563eb;
+  border: 2px solid #2563eb;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.6rem 1.5rem;
+  margin: 0 0.5rem;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+  cursor: pointer;
+}
+.secondary-btn:hover, .forecast-btn:hover {
+  background-color: #f0f6ff;
+  filter: brightness(0.98);
+  transform: translateY(-2px);
+}
+
+.forecast-link {
+  color: #22b573;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+.forecast-link:hover {
+  text-decoration: underline;
+  color: #179c5a;
 }
   </style>
   
