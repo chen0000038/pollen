@@ -7,7 +7,7 @@
             <source src="/background.mp4" type="video/mp4">
             Your browser does not support the video tag.
           </video>
-        </div>
+      </div>
         <div class="hero-content">
           <h1>Melbourne Pollen Monitor</h1>
           <p class="hero-subtitle">Your Essential Guide to Managing Pollen Allergies in Melbourne</p>
@@ -39,8 +39,8 @@
             </div>
             <h3 class="stat-number">One in four</h3>
             <p class="stat-description">People with allergic rhinitis (hay fever) also have asthma</p>
-          </div>
-
+        </div>
+  
           <div class="stat-card">
             <div class="stat-icon">
               <img src="/public/5.png" alt="Stat Icon 3" class="stat-image" />
@@ -49,7 +49,7 @@
             <p class="stat-description">Melbourne pollen fever will last from September each year to January of the following year</p>
           </div>
         </div>
-        
+  
         <div class="scroll-indicator">
           <div class="chevron"></div>
           <div class="chevron"></div>
@@ -109,7 +109,7 @@
               <div class="step-details">
                 <h3>Learn About Melbourne's Pollen</h3>
                 <p>Understand common allergens in Melbourne and how to identify them.</p>
-                <router-link to="/polleninfo">
+            <router-link to="/polleninfo">
                   <button class="step-btn">Start Learning</button>
                 </router-link>
               </div>
@@ -131,7 +131,7 @@
                 <p>Test your knowledge about Melbourne's pollen types through interactive activities.</p>
                 <router-link to="/game">
                   <button class="step-btn">Try Activities</button>
-                </router-link>
+            </router-link>
               </div>
             </div>
             <div class="step-visual">
@@ -163,19 +163,19 @@
             <i class="fas fa-book-medical"></i>
             <h4>Pollen-Safe Route Planning</h4>
             <p>......</p>
-          </div>
         </div>
-      </section>
-    </div>
-</template>
-
-<script setup>
+      </div>
+    </section>
+  </div>
+  </template>
+  
+  <script setup>
 import { ref } from 'vue'
-import Navbar from '../components/Navbar.vue'
-</script>
-
-<style scoped>
-.home-container {
+  import Navbar from '../components/Navbar.vue'
+  </script>
+  
+  <style scoped>
+  .home-container {
   width: 100%;
   background-color: #f8fafc;
 }
@@ -237,9 +237,9 @@ import Navbar from '../components/Navbar.vue'
 }
 
 .hero-buttons {
-  display: flex;
+    display: flex;
   gap: 1rem;
-  justify-content: center;
+    justify-content: center;
 }
 
 .primary-btn, .secondary-btn {
@@ -284,7 +284,7 @@ import Navbar from '../components/Navbar.vue'
 
 .journey-step {
   display: flex;
-  align-items: center;
+    align-items: center;
   margin-bottom: 6rem;
   position: relative;
 }
@@ -296,9 +296,9 @@ import Navbar from '../components/Navbar.vue'
 .step-content {
   flex: 1;
   padding: 2rem;
-  position: relative;
-}
-
+    position: relative;
+  }
+  
 .step-number {
   width: 50px;
   height: 50px;
@@ -308,7 +308,7 @@ import Navbar from '../components/Navbar.vue'
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+    font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
@@ -430,7 +430,7 @@ import Navbar from '../components/Navbar.vue'
 .quick-access {
   background-color: #f1f5f9;
   padding: 4rem 2rem;
-  text-align: center;
+    text-align: center;
 }
 
 .resource-grid {
@@ -559,7 +559,7 @@ import Navbar from '../components/Navbar.vue'
   font-size: 1.8rem;
   font-weight: 700;
   color: #2F5A43;
-  margin-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
   line-height: 1.2;
 }
 
@@ -650,7 +650,7 @@ import Navbar from '../components/Navbar.vue'
   .stat-card {
     margin-bottom: 1rem;
   }
-
+  
   .stats-title {
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
@@ -662,9 +662,9 @@ import Navbar from '../components/Navbar.vue'
 
   .scroll-indicator {
     bottom: 10px;
+    }
   }
-}
-</style>
+  </style>
   
   
   
