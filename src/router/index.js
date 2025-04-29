@@ -4,6 +4,7 @@ import PollenInfo from '../Views/PollenInfo.vue'
 import Personalisation from '../Views/Personalisation.vue'
 import PollenTracker from '../Views/PollenTracker.vue'
 import Game from '../Views/Game.vue'
+import Forecasting from '../Views/Forecasting.vue'
 import Simulator from '../Views/Simulator.vue'
 
 const routes = [
@@ -12,6 +13,7 @@ const routes = [
   { path: '/personalisation', name: 'Personalisation', component: Personalisation},
   { path: '/pollentracker', name: 'PollenTracker', component: PollenTracker},
   { path: '/game', name: 'Game', component: Game},
+  { path: '/forecasting', name: 'Forecasting', component: Forecasting},
   { path: '/simulator', name: 'Simulator', component: Simulator}
   // ...
 ]
