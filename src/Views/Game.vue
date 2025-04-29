@@ -303,7 +303,7 @@ onMounted(() => {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(135deg, #ece9ff, #b8c6db);
+  background: #ffffff;
   overflow: hidden;
   padding-top: 70px;
 }
