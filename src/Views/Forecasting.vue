@@ -15,6 +15,7 @@
         <!-- 7-Day Cards Section (Left Column) -->
         <section class="forecast-cards-section">
           <h2 class="section-title">7-Day Pollen Forecast</h2>
+
           <div v-if="isLoading" class="loading-container">
             <div class="loading-spinner"></div>
             <p>Loading data...</p>
@@ -86,6 +87,14 @@
                   <div class="action-label">Action Plan:</div>
                   <div class="action-text">{{ day['Action Plan'] || 'N/A' }}</div>
                 </div>
+                <button class="gcal-button" @click="addToGoogleCalendar(day)">
+                  <span class="gcal-icon">🗓️</span>
+                  Add to  Google calendar
+                </button>
+                <button v-if="isTodayCard(day.Date)" class="calendar-button" @click="exportWeekToCalendar" style="margin-top:0.5rem;">
+                  <span class="calendar-icon">📅</span>
+                  Export 7-day forecast to calendar
+                </button>
               </div>
             </div>
             <div class="stacked-card-controls">
@@ -125,7 +134,7 @@
         </section>
       </div>
 
-      <!-- Pollen Contributors (原本在下方，现在移到前面) -->
+      <!-- Pollen Contributors  -->
       <section class="pollen-contributors-section">
         <h2 class="section-title">Pollen Source Distribution</h2>
         <div v-if="isLoading" class="loading-container">
@@ -197,7 +206,7 @@
 import { ref, onMounted, computed, watch, nextTick } from 'vue'
 import Navbar from '../components/Navbar.vue'
 import axios from 'axios'
-import Chart from 'chart.js/auto'
+import { Chart } from 'chart.js/auto'
 
 export default {
   name: 'PersonalisationView',
@@ -1111,7 +1120,7 @@ export default {
                 callbacks: {
                   label: function(context) {
                     const datasetLabel = context.dataset.label || ''
-                    const level = context.raw // 1=Low, 2=Medium, 3=High
+                    const level = context.raw // 1=Low, 2=Moderate, 3=High
                     const index = context.dataIndex
                     
                     // 获取原始数值
@@ -1206,6 +1215,129 @@ export default {
       return 'Low'
     }
 
+    // Add new refs for share functionality
+    const shareLink = ref('')
+    const copyStatus = ref('Copy')
+    
+    // Add new function to generate share link
+    const generateShareLink = () => {
+      if (!weekForecast.value.length) return
+      
+      const today = weekForecast.value.find(day => isTodayCard(day.Date))
+      if (!today) return
+      
+      // Create a URL with the forecast data
+      const baseUrl = window.location.origin + '/forecast'
+      const params = new URLSearchParams({
+        date: today.Date,
+        index: today['Pollen Index (0-10)'],
+        risk: getPollenIndexText(today['Pollen Index (0-10)']),
+        tree: today['Tree Risk Level'] || 'N/A',
+        grass: today['Grass Risk Level'] || 'N/A',
+        weed: today['Weed Risk Level'] || 'N/A',
+        allergens: today['Main Allergens'] || 'N/A',
+        action: today['Action Plan'] || 'N/A'
+      })
+      
+      shareLink.value = `${baseUrl}?${params.toString()}`
+    }
+    
+    // Add function to copy to clipboard
+    const copyToClipboard = async () => {
+      try {
+        await navigator.clipboard.writeText(shareLink.value)
+        copyStatus.value = 'Copied!'
+        setTimeout(() => {
+          copyStatus.value = 'Copy'
+        }, 2000)
+      } catch (err) {
+        console.error('Failed to copy:', err)
+        copyStatus.value = 'Failed'
+      }
+    }
+
+    // 导出到日历ics文件
+    const exportToCalendar = (day) => {
+      // ics内容
+      const pad = (n) => String(n).padStart(2, '0')
+      const dateObj = new Date(day.Date)
+      const y = dateObj.getFullYear()
+      const m = pad(dateObj.getMonth() + 1)
+      const d = pad(dateObj.getDate())
+      const dt = `${y}${m}${d}`
+      const summary = `Pollen Alert: ${getPollenIndexText(day['Pollen Index (0-10)'])}`
+      const description = `Pollen Index: ${day['Pollen Index (0-10)']} (${getPollenIndexText(day['Pollen Index (0-10)'])})\\nTree: ${day['Tree Risk Level'] || 'N/A'}\\nGrass: ${day['Grass Risk Level'] || 'N/A'}\\nWeed: ${day['Weed Risk Level'] || 'N/A'}\\nAllergens: ${day['Main Allergens'] || 'N/A'}\\nAction: ${day['Action Plan'] || 'N/A'}`
+      const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${summary}\nDESCRIPTION:${description}\nDTSTART;VALUE=DATE:${dt}\nDTEND;VALUE=DATE:${dt}\nEND:VEVENT\nEND:VCALENDAR`;
+      // 生成blob并下载
+      const blob = new Blob([ics], { type: 'text/calendar' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `pollen-forecast-${day.Date}.ics`
+      document.body.appendChild(a)
+      a.click()
+      setTimeout(() => {
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
+      }, 100)
+    }
+
+    // 添加到 Google Calendar
+    const addToGoogleCalendar = (day) => {
+      const pad = (n) => String(n).padStart(2, '0')
+      const dateObj = new Date(day.Date)
+      const y = dateObj.getFullYear()
+      const m = pad(dateObj.getMonth() + 1)
+      const d = pad(dateObj.getDate())
+      // Google Calendar 需要日期格式为 YYYYMMDD
+      const start = `${y}${m}${d}`
+      // 全天事件，结束日期要+1天
+      const endObj = new Date(dateObj)
+      endObj.setDate(endObj.getDate() + 1)
+      const endY = endObj.getFullYear()
+      const endM = pad(endObj.getMonth() + 1)
+      const endD = pad(endObj.getDate())
+      const end = `${endY}${endM}${endD}`
+      const title = `Pollen Alert: ${getPollenIndexText(day['Pollen Index (0-10)'])}`
+      const details = `Pollen Index: ${day['Pollen Index (0-10)']} (${getPollenIndexText(day['Pollen Index (0-10)'])})%0A` +
+        `Tree: ${day['Tree Risk Level'] || 'N/A'}%0A` +
+        `Grass: ${day['Grass Risk Level'] || 'N/A'}%0A` +
+        `Weed: ${day['Weed Risk Level'] || 'N/A'}%0A` +
+        `Allergens: ${day['Main Allergens'] || 'N/A'}%0A` +
+        `Action: ${day['Action Plan'] || 'N/A'}`
+      const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${start}/${end}&details=${details}`
+      window.open(url, '_blank')
+    }
+
+    // 导出7天到ics
+    const exportWeekToCalendar = () => {
+      if (!weekForecast.value.length) return
+      const pad = (n) => String(n).padStart(2, '0')
+      let events = ''
+      weekForecast.value.forEach(day => {
+        const dateObj = new Date(day.Date)
+        const y = dateObj.getFullYear()
+        const m = pad(dateObj.getMonth() + 1)
+        const d = pad(dateObj.getDate())
+        const dt = `${y}${m}${d}`
+        const summary = `Pollen Alert: ${getPollenIndexText(day['Pollen Index (0-10)'])}`
+        const description = `Pollen Index: ${day['Pollen Index (0-10)']} (${getPollenIndexText(day['Pollen Index (0-10)'])})\\nTree: ${day['Tree Risk Level'] || 'N/A'}\\nGrass: ${day['Grass Risk Level'] || 'N/A'}\\nWeed: ${day['Weed Risk Level'] || 'N/A'}\\nAllergens: ${day['Main Allergens'] || 'N/A'}\\nAction: ${day['Action Plan'] || 'N/A'}`
+        events += `BEGIN:VEVENT\nSUMMARY:${summary}\nDESCRIPTION:${description}\nDTSTART;VALUE=DATE:${dt}\nDTEND;VALUE=DATE:${dt}\nEND:VEVENT\n`
+      })
+      const ics = `BEGIN:VCALENDAR\nVERSION:2.0\n${events}END:VCALENDAR`
+      const blob = new Blob([ics], { type: 'text/calendar' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `pollen-forecast-week.ics`
+      document.body.appendChild(a)
+      a.click()
+      setTimeout(() => {
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
+      }, 100)
+    }
+
     return {
       forecastData,
       trendData,
@@ -1235,7 +1367,14 @@ export default {
       treeDonutChart,
       grassDonutChart,
       weedDonutChart,
-      seasonalChart
+      seasonalChart,
+      shareLink,
+      copyStatus,
+      generateShareLink,
+      copyToClipboard,
+      exportToCalendar,
+      addToGoogleCalendar,
+      exportWeekToCalendar
     }
   }
 }
@@ -1894,5 +2033,130 @@ section:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2),
               0 6px 20px rgba(0, 122, 255, 0.15);
+}
+
+/* Share button styles */
+.share-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.share-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.8rem;
+  background-color: rgba(0, 122, 255, 0.1);
+  border: 1px solid rgba(0, 122, 255, 0.3);
+  border-radius: 12px;
+  color: #0066cc;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.share-button:hover {
+  background-color: rgba(0, 122, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.share-icon {
+  font-size: 1.2rem;
+}
+
+.share-link-container {
+  margin-top: 0.8rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.share-link-input {
+  flex: 1;
+  padding: 0.6rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  cursor: text;
+}
+
+.copy-button {
+  padding: 0.6rem 1rem;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.copy-button:hover {
+  background-color: #0052a3;
+  transform: translateY(-2px);
+}
+
+/* Responsive adjustments for share section */
+@media (max-width: 576px) {
+  .share-link-container {
+    flex-direction: column;
+  }
+  
+  .copy-button {
+    width: 100%;
+  }
+}
+
+/* Share button styles */
+.calendar-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.8rem;
+  background-color: rgba(0, 200, 83, 0.1);
+  border: 1px solid rgba(0, 200, 83, 0.3);
+  border-radius: 12px;
+  color: #009688;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+.calendar-button:hover {
+  background-color: rgba(0, 200, 83, 0.2);
+  transform: translateY(-2px);
+}
+.calendar-icon {
+  font-size: 1.2rem;
+}
+
+.gcal-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.8rem;
+  background-color: rgba(66, 133, 244, 0.1);
+  border: 1px solid rgba(66, 133, 244, 0.3);
+  border-radius: 12px;
+  color: #4285F4;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+.gcal-button:hover {
+  background-color: rgba(66, 133, 244, 0.2);
+  transform: translateY(-2px);
+}
+.gcal-icon {
+  font-size: 1.2rem;
 }
 </style>

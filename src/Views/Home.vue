@@ -10,7 +10,7 @@
       </div>
         <div class="hero-content">
           <h1>Melbourne Pollen Monitor</h1>
-          <p class="hero-subtitle">Your Essential Guide to Managing Pollen Allergies in Melbourne</p>
+          <p class="hero-subtitle">Your Essential Guide to Manage Pollen Allergies in Melbourne</p>
           <div class="hero-buttons">
             <router-link to="/pollentracker">
               <button class="primary-btn">Check Today's Pollen Level</button>
@@ -67,11 +67,16 @@
           <div class="journey-step">
             <div class="step-content left">
               <div class="step-details">
-                <h3>Check Current Pollen Levels</h3>
-                <p>Get real-time pollen index to Melbourne's unique climate.</p>
-                <router-link to="/pollentracker">
-                  <button class="step-btn">View Pollen Map</button>
-                </router-link>
+                <h3>Melbourne Pollen Index</h3>
+                <p>Access real-time and forecasted pollen data for Melbourne. Stay informed and plan ahead with our professional monitoring tools.</p>
+                <div class="step-btn-group">
+                  <router-link to="/pollentracker">
+                    <button class="today-btn">Today's Index</button>
+                  </router-link>
+                  <router-link to="/forecasting">
+                    <button class="forecast-btn">Forecast</button>
+                  </router-link>
+                </div>
               </div>
             </div>
             <div class="step-visual">
@@ -95,7 +100,7 @@
               </div>
             </div>
             <div class="step-visual">
-              <img src="/images/personalized.jpg" alt="Personalized Advice" />
+              <img src="/images/hrecommendation.jpg" alt="Personalized Advice" />
             </div>
             <div class="full-chevron-arrows blue">
               <div class="full-chevron"></div>
@@ -115,7 +120,7 @@
               </div>
             </div>
             <div class="step-visual">
-              <img src="/images/education.jpg" alt="Pollen Education" />
+              <img src="/images/heducation.webp" alt="Pollen Education" />
             </div>
             <div class="full-chevron-arrows orange">
               <div class="full-chevron"></div>
@@ -135,7 +140,7 @@
               </div>
             </div>
             <div class="step-visual">
-              <img src="/images/interactive.jpg" alt="Interactive Learning" />
+              <img src="/images/hquiz.png" alt="Interactive Learning" />
             </div>
           </div>
         </div>
@@ -311,6 +316,12 @@ import { ref } from 'vue'
     font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
+}
+
+.step-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .step-details h3 {
@@ -664,6 +675,34 @@ import { ref } from 'vue'
     bottom: 10px;
     }
   }
+
+.step-btn-group {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  justify-content: center;
+}
+
+.today-btn {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+}
+
+.forecast-btn {
+  background-color: #fff;
+  color: #2563eb;
+  border: 2px solid #2563eb;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+}
+
+.today-btn:hover, .forecast-btn:hover {
+  filter: brightness(0.95);
+  transform: translateY(-2px);
+}
   </style>
   
   
