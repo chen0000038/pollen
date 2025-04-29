@@ -652,7 +652,11 @@
     flex: 0.45;
     height: 100%;
     padding: 2rem 3rem;
+<<<<<<< HEAD
     background-color: #c7c7cc; /* 更浅的灰色背景 */
+=======
+    background-color: #f2d0b8; /* 更柔和、不那么明亮的浅橘色背景 */
+>>>>>>> main
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
@@ -693,7 +697,11 @@
   .overview-title {
     font-size: 2.2rem;
     font-weight: bold;
+<<<<<<< HEAD
     color: #0a4987; /* 深蓝色字体，偏蓝而非偏黑 */
+=======
+    color: #d35400; /* 深橘色字体 */
+>>>>>>> main
     margin-bottom: 1rem;
     text-align: left;
     line-height: 1.2;
@@ -703,7 +711,11 @@
   .overview-subtitle {
     font-size: 1.15rem;
     font-weight: 400;
+<<<<<<< HEAD
     color: #0d5aa0; /* 稍微浅一点的深蓝色字体 */
+=======
+    color: #e67e22; /* 稍微浅一点的橘色字体 */
+>>>>>>> main
     text-align: left;
     line-height: 1.5;
     padding: 0;
