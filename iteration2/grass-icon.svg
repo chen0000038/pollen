@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Three grass blades -->
+  <path d="M16 48 C18 32, 22 32, 24 48" fill="none" stroke="#228B22" stroke-width="4"/>
+  <path d="M28 48 C30 36, 34 36, 36 48" fill="none" stroke="#228B22" stroke-width="4"/>
+  <path d="M40 48 C42 40, 46 40, 48 48" fill="none" stroke="#228B22" stroke-width="4"/>
+</svg>
