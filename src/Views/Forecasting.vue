@@ -7,7 +7,7 @@
     <div class="main-container">
       <div class="section-header">
         <h1>Melbourne Pollen Forecast</h1>
-        <p>Daily Melbourne pollen levels and personalized allergy management</p>
+        <p>Stay ahead of your allergies by scheduling alerts for high pollen days. Export to your calendar and never be caught unprepared again.</p>
       </div>
 
       <!-- Two-column dashboard layout -->
@@ -89,11 +89,11 @@
                 </div>
                 <button class="gcal-button" @click="addToGoogleCalendar(day)">
                   <span class="gcal-icon">🗓️</span>
-                  Add to Google Calendar for today
+                  Add Today Forecast To Calendar
                 </button>
                 <button v-if="isTodayCard(day.Date)" class="calendar-button" @click="exportWeekToCalendar" style="margin-top:0.5rem;">
                   <span class="calendar-icon">📅</span>
-                  Export 7-day forecast to calendar
+                  Export 7-day Forecast To Calendar
                 </button>
               </div>
             </div>
@@ -534,7 +534,7 @@ export default {
               fill: true,
                 pointBackgroundColor: overallConcentrations.map(level => {
                   if (level === 3) return '#FF4D4D'      // High
-                  if (level === 2) return '#FFA500'      // Medium
+                  if (level === 2) return '#FFD600'      // Medium (bright yellow)
                   return '#4CAF50'                       // Low
               }),
               pointRadius: 8,
@@ -642,7 +642,7 @@ export default {
                   color: function(context) {
                     const value = context.tick.value
                     if (value === 3) return '#FF4D4D'     // High
-                    if (value === 2) return '#FFA500'     // Medium
+                    if (value === 2) return '#FFD600'     // Medium (bright yellow)
                     if (value === 1) return '#4CAF50'     // Low
                     return '#888888'
                   },
@@ -1087,14 +1087,14 @@ export default {
                     const datasetLabel = context.chart.data.datasets[datasetIndex].label;
                     const riskLevel = context.chart.data.datasets[datasetIndex].riskLevels[index];
                     
-                    const getRiskColor = (riskText) => {
-                      if (riskText === 'High') return '🟥';
-                      if (riskText === 'Medium') return '🟧'; 
-                      if (riskText === 'Low') return '🟩'; 
-                      return '⬜'; 
-                    };
+                    // Assign color emoji by risk level
+                    let riskEmoji = '';
+                    if (riskLevel === 'High') riskEmoji = '🟥';
+                    else if (riskLevel === 'Medium') riskEmoji = '🟨';
+                    else if (riskLevel === 'Low') riskEmoji = '🟩';
+                    else riskEmoji = '⬜';
                     
-                    return `${getRiskColor(riskLevel)} ${datasetLabel}: ${riskLevel}`;
+                    return `${riskEmoji} ${datasetLabel}: ${riskLevel}`;
                   }
                 },
                 titleFont: {
@@ -1134,7 +1134,7 @@ export default {
                   color: function(context) {
                     const value = context.tick.value
                     if (value === 3) return '#FF4D4D'     // High
-                    if (value === 2) return '#FFA500'     // Medium
+                    if (value === 2) return '#FFD600'     // Medium (bright yellow)
                     if (value === 1) return '#4CAF50'     // Low
                     return '#888888'
                   },
