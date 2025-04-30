@@ -363,7 +363,7 @@ function handleSearch() {
   box-sizing: border-box;
 }
 .flip-card-back {
-  background-color: #f8f8f8;
+  background-color: #ffffff;
   transform: rotateY(180deg);
   text-align: left;
   overflow-y: auto;
@@ -399,7 +399,7 @@ function handleSearch() {
 }
 
 .game-section {
-  background-color: #f5f7ff;
+  background-color: #ffffff;
   border-radius: 1rem;
   padding: 2rem;
   text-align: center;

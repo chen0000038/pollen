@@ -172,28 +172,10 @@
 
           <router-link to="" class="feature-item">
             <div class="feature-bubble">
-              <div class="feature-icon blue">
-                <img src="/icons/chess-knight.svg" alt="Strategy Icon" />
-              </div>
-            </div>
-            <div class="feature-dots">
-                <div class="feature-dot"></div>
-                <div class="feature-dot"></div>
-                <div class="feature-dot"></div>
-              </div>
-            <div class="feature-text-container">
-              <h3></h3>
-              
-              <div class="feature-description">
-                <p></p>
-              </div>
-            </div>
-          </router-link>
-
-          <router-link to="" class="feature-item">
-            <div class="feature-bubble">
               <div class="feature-icon purple">
-                <img src="/icons/chess-knight.svg" alt="Planner Icon" />
+                <svg width="45" height="45" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="white"/>
+                </svg>
               </div>
             </div>
             <div class="feature-dots">
@@ -206,10 +188,10 @@
                 <div class="feature-dot"></div>
               </div>
             <div class="feature-text-container">
-              <h3></h3>
+              <h3>To be continued</h3>
               
               <div class="feature-description">
-                <p></p>
+                <p>.....</p>
               </div>
             </div>
           </router-link>
@@ -318,7 +300,7 @@
             <h4>Forecasting</h4>
             <p>Pollen Forecasting Engine and notification</p>
           </router-link>
-          <router-link to="/dashboard" class="resource-card">
+          <router-link to="" class="resource-card">
             <i class="fas fa-calendar-alt"></i>
             <h4>Dashboard</h4>
             <p>.....</p>
@@ -328,7 +310,7 @@
             <h4>Personalization</h4>
             <p>Get personalized advice and risk alerts based on your lifestyle, protective measures, and home environment</p>
           </router-link>
-          <router-link to="/route-planning" class="resource-card">
+          <router-link to="" class="resource-card">
             <i class="fas fa-book-medical"></i>
             <h4>Pollen-Safe Route Planning</h4>
             <p>......</p>
@@ -1007,7 +989,7 @@ import { ref } from 'vue'
   transform: translateY(-5px);
 }
 
-/* 设置每个项目的主色调 */
+
 .feature-item:nth-child(1) { --feature-color: #ff6b6b; }
 .feature-item:nth-child(2) { --feature-color: #d4a373; }
 .feature-item:nth-child(3) { --feature-color: #ffd43b; }
@@ -1016,7 +998,7 @@ import { ref } from 'vue'
 .feature-item:nth-child(6) { --feature-color: #2563eb; }
 .feature-item:nth-child(7) { --feature-color: #9333ea; }
 
-/* 图标颜色 */
+
 .feature-icon {
   width: 100px;
   height: 100px;
@@ -1036,7 +1018,7 @@ import { ref } from 'vue'
   transition: all 0.3s ease;
 }
 
-/* 图标颜色和内部图案样式 */
+
 .feature-icon.red { 
   background: var(--feature-color);
   box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1);
@@ -1066,7 +1048,7 @@ import { ref } from 'vue'
   box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
-/* 鼠标悬停效果增强 */
+
 .feature-item:hover .feature-icon {
   transform: scale(1.05);
   box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.15);
@@ -1076,7 +1058,6 @@ import { ref } from 'vue'
   transform: scale(1.1);
 }
 
-/* 标题颜色 */
 .feature-text-container h3 {
   font-size: 1rem;
   font-weight: 600;
@@ -1087,7 +1068,7 @@ import { ref } from 'vue'
   transition: color 0.3s ease;
 }
 
-/* 点的颜色 */
+
 .feature-item:nth-child(1) .feature-dot { background: var(--feature-color); }
 .feature-item:nth-child(2) .feature-dot { background: var(--feature-color); }
 .feature-item:nth-child(3) .feature-dot { background: var(--feature-color); }
@@ -1096,7 +1077,7 @@ import { ref } from 'vue'
 .feature-item:nth-child(6) .feature-dot { background: var(--feature-color); }
 .feature-item:nth-child(7) .feature-dot { background: var(--feature-color); }
 
-/* 描述框样式 */
+
 .feature-description {
   background: #fafafa;
   padding: 0.7rem 1rem;
@@ -1119,7 +1100,7 @@ import { ref } from 'vue'
   transition: color 0.3s ease;
 }
 
-/* 鼠标悬停效果 */
+
 .feature-item:hover .feature-bubble {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }

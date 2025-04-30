@@ -32,14 +32,14 @@
           </div>
         </div>
         
-        <div class="emergency-box">
-          <span class="phone-icon">📞</span>
-          IN CASE OF EMERGENCY CONTACT TRIPLE ZERO (000)
-        </div>
-        
         <button type="submit" class="submit-btn">
           Get Your Personalized Pollen Solution
         </button>
+
+        <div class="emergency-box">
+          <span class="warning-icon">❗</span>
+          <span class="emergency-text">Note: In case of emergency, contact Triple Zero (000)</span>
+        </div>
       </form>
     </div>
 
@@ -195,7 +195,7 @@ function submitForm() {
   align-items: center;
 }
 form {
-  background-color: #f7f7f7;
+  background-color: #ffffff;
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -230,24 +230,6 @@ form {
   border: 1px solid #ccc;
 }
 
-.emergency-box {
-  background-color: #d32f2f;
-  color: #fff;
-  padding: 1rem;
-  border-radius: 0;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: 100%;
-  box-sizing: border-box;
-  margin: 1.5rem 0;
-}
-.phone-icon {
-  margin-right: 0.5rem;
-}
-
 .submit-btn {
   width: 100%;
   padding: 0.75rem;
@@ -271,7 +253,7 @@ form {
   align-items: center;
 }
 .result-box {
-  background-color: #f7f7f7;
+  background-color: #ffffff;
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -302,6 +284,34 @@ form {
 .suggestions li {
   margin-bottom: 0.5rem;
   line-height: 1.5;
+}
+
+.emergency-box {
+  background-color: transparent;
+  color: #666;
+  padding: 0.5rem 0;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  border: none;
+}
+
+.warning-icon {
+  color: #dc3545;
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.emergency-text {
+  color: #dc3545;
+  font-style: italic;
+  font-weight: 600;
 }
 </style>
 
