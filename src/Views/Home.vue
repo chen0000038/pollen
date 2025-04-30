@@ -57,6 +57,165 @@
         </div>
       </section>
 
+      <section class="features-navigation">
+        <div class="features-timeline">
+          <div class="timeline-connector"></div>
+          <router-link to="/pollentracker" class="feature-item">
+            <div class="feature-bubble">
+              <div class="feature-icon red">
+                <img src="/icons/gauge.svg" alt="Tracker Icon" />
+              </div>
+            </div>
+            <div class="feature-dots">
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+              </div>
+            <div class="feature-text-container">
+              <h3>Pollen Tracker</h3>
+              
+              <div class="feature-description">
+                <p>Real-time Pollen Index Tracker</p>
+              </div>
+            </div>
+          </router-link>
+
+          <router-link to="/polleninfo" class="feature-item">
+            <div class="feature-bubble">
+              <div class="feature-icon brown">
+                <img src="/icons/book.svg" alt="Education Icon" />
+              </div>
+            </div>
+            <div class="feature-dots">
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+              </div>
+            <div class="feature-text-container">
+              <h3>Education Resource</h3>
+              <div class="feature-description">
+                <p>Get some Pollen Knowledge</p>
+              </div>
+            </div>
+          </router-link>
+
+          <router-link to="/simulator" class="feature-item">
+            <div class="feature-bubble">
+              <div class="feature-icon yellow">
+                <img src="/icons/chart-monitor.svg" alt="Simulator Icon" />
+              </div>
+            </div>
+            <div class="feature-dots">
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+              </div>
+            <div class="feature-text-container">
+              <h3>Pollen Buddy</h3>
+              
+              <div class="feature-description">
+                <p>Personal life pollen Simulator</p>
+              </div>
+            </div>
+          </router-link>
+
+          <router-link to="/forecasting" class="feature-item">
+            <div class="feature-bubble">
+              <div class="feature-icon green">
+                <img src="/icons/chart-growth.svg" alt="Forecast Icon" />
+              </div>
+            </div>
+            <div class="feature-dots">
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+              </div>
+            <div class="feature-text-container">
+              <h3>Pollen Forecast</h3>
+              <div class="feature-description">
+                <p>Pollen index prediction</p>
+              </div>
+            </div>
+          </router-link>
+
+          <router-link to="/forecasting" class="feature-item">
+            <div class="feature-bubble">
+              <div class="feature-icon cyan">
+                <img src="/icons/calendar.svg" alt="Alert Icon" />
+              </div>
+            </div>
+            <div class="feature-dots">
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+              </div>
+            <div class="feature-text-container">
+              <h3>Pollen Alert</h3>
+              <div class="feature-description">
+                <p>Synchronize to calendar</p>
+              </div>
+            </div>
+          </router-link>
+
+          <router-link to="" class="feature-item">
+            <div class="feature-bubble">
+              <div class="feature-icon blue">
+                <img src="/icons/chess-knight.svg" alt="Strategy Icon" />
+              </div>
+            </div>
+            <div class="feature-dots">
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+              </div>
+            <div class="feature-text-container">
+              <h3></h3>
+              
+              <div class="feature-description">
+                <p></p>
+              </div>
+            </div>
+          </router-link>
+
+          <router-link to="" class="feature-item">
+            <div class="feature-bubble">
+              <div class="feature-icon purple">
+                <img src="/icons/chess-knight.svg" alt="Planner Icon" />
+              </div>
+            </div>
+            <div class="feature-dots">
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+                <div class="feature-dot"></div>
+              </div>
+            <div class="feature-text-container">
+              <h3></h3>
+              
+              <div class="feature-description">
+                <p></p>
+              </div>
+            </div>
+          </router-link>
+        </div>
+      </section>
+
       <section class="journey-section">
         <div class="journey-header">
           <h2>Your Journey to Better Health in Melbourne</h2>
@@ -154,33 +313,29 @@
       <section class="quick-access">
         <h2>Quick Resources for New Melbourne Residents</h2>
         <div class="resource-grid">
-          <div class="resource-card">
+          <router-link to="/forecasting" class="resource-card">
             <i class="fas fa-map-marker-alt"></i>
             <h4>Forecasting</h4>
-            <router-link to="/forecasting" class="forecast-link">
-              Pollen Forecasting Engine and notification
-            </router-link>
-          </div>
-          <div class="resource-card">
+            <p>Pollen Forecasting Engine and notification</p>
+          </router-link>
+          <router-link to="/dashboard" class="resource-card">
             <i class="fas fa-calendar-alt"></i>
             <h4>Dashboard</h4>
             <p>.....</p>
-          </div>
-          <div class="resource-card">
+          </router-link>
+          <router-link to="/simulator" class="resource-card">
             <i class="fas fa-first-aid"></i>
             <h4>Personalization</h4>
-            <router-link to="/simulator" class="simulator-link">
-              Get personalized advice and risk alerts based on your lifestyle, protective measures, and home environment
-            </router-link>
-          </div>
-          <div class="resource-card">
+            <p>Get personalized advice and risk alerts based on your lifestyle, protective measures, and home environment</p>
+          </router-link>
+          <router-link to="/route-planning" class="resource-card">
             <i class="fas fa-book-medical"></i>
             <h4>Pollen-Safe Route Planning</h4>
             <p>......</p>
+          </router-link>
         </div>
-      </div>
-    </section>
-  </div>
+      </section>
+    </div>
   </template>
   
   <script setup>
@@ -450,7 +605,7 @@ import { ref } from 'vue'
 .quick-access {
   background-color: #f1f5f9;
   padding: 4rem 2rem;
-    text-align: center;
+  text-align: center;
 }
 
 .resource-grid {
@@ -466,11 +621,15 @@ import { ref } from 'vue'
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: block;
+  color: inherit;
 }
 
 .resource-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .resource-card i {
@@ -483,7 +642,19 @@ import { ref } from 'vue'
   font-size: 1.7rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: #1a365d;
+  color: #05674d;
+}
+
+.resource-card p {
+  color: #22b573;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.4;
+  transition: color 0.2s;
+}
+
+.resource-card:hover p {
+  color: #179c5a;
 }
 
 @media (max-width: 768px) {
@@ -792,6 +963,248 @@ import { ref } from 'vue'
 .forecast-link:hover {
   text-decoration: underline;
   color: #179c5a;
+}
+
+.features-navigation {
+  padding: 4rem 3rem;
+  background: #ffffff;
+  position: relative;
+}
+
+.features-timeline {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  padding: 4rem 0;
+}
+
+.timeline-connector {
+  position: absolute;
+  top: 210px; /* Adjusted to be below icons */
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: #e0e0e0;
+  z-index: 0;
+}
+
+.feature-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  flex: 1;
+  max-width: 180px;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.feature-item:hover {
+  transform: translateY(-5px);
+}
+
+/* 设置每个项目的主色调 */
+.feature-item:nth-child(1) { --feature-color: #ff6b6b; }
+.feature-item:nth-child(2) { --feature-color: #d4a373; }
+.feature-item:nth-child(3) { --feature-color: #ffd43b; }
+.feature-item:nth-child(4) { --feature-color: #4caf50; }
+.feature-item:nth-child(5) { --feature-color: #22d3ee; }
+.feature-item:nth-child(6) { --feature-color: #2563eb; }
+.feature-item:nth-child(7) { --feature-color: #9333ea; }
+
+/* 图标颜色 */
+.feature-icon {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.feature-icon img {
+  width: 45px;
+  height: 45px;
+  filter: brightness(0) invert(1);
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+/* 图标颜色和内部图案样式 */
+.feature-icon.red { 
+  background: var(--feature-color);
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1);
+}
+.feature-icon.brown { 
+  background: var(--feature-color);
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1);
+}
+.feature-icon.yellow { 
+  background: var(--feature-color);
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1);
+}
+.feature-icon.green { 
+  background: var(--feature-color);
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1);
+}
+.feature-icon.cyan { 
+  background: var(--feature-color);
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1);
+}
+.feature-icon.blue { 
+  background: var(--feature-color);
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1);
+}
+.feature-icon.purple { 
+  background: var(--feature-color);
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 鼠标悬停效果增强 */
+.feature-item:hover .feature-icon {
+  transform: scale(1.05);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.feature-item:hover .feature-icon img {
+  transform: scale(1.1);
+}
+
+/* 标题颜色 */
+.feature-text-container h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 0;
+  color: var(--feature-color);
+  order: -1;
+  transition: color 0.3s ease;
+}
+
+/* 点的颜色 */
+.feature-item:nth-child(1) .feature-dot { background: var(--feature-color); }
+.feature-item:nth-child(2) .feature-dot { background: var(--feature-color); }
+.feature-item:nth-child(3) .feature-dot { background: var(--feature-color); }
+.feature-item:nth-child(4) .feature-dot { background: var(--feature-color); }
+.feature-item:nth-child(5) .feature-dot { background: var(--feature-color); }
+.feature-item:nth-child(6) .feature-dot { background: var(--feature-color); }
+.feature-item:nth-child(7) .feature-dot { background: var(--feature-color); }
+
+/* 描述框样式 */
+.feature-description {
+  background: #fafafa;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  border: 1px solid #eee;
+  margin-top: 0;
+  order: 1;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.feature-description p {
+  font-size: 0.85rem;
+  color: var(--feature-color);
+  margin: 0;
+  line-height: 1.4;
+  transition: color 0.3s ease;
+}
+
+/* 鼠标悬停效果 */
+.feature-item:hover .feature-bubble {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.feature-bubble {
+  width: 140px;
+  height: 140px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 35px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.feature-dots {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  height: auto;
+  padding: 4px 0;
+}
+
+.feature-item:nth-child(even) .feature-dots {
+  flex-direction: column;
+}
+
+.feature-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #d1a9a9;
+}
+
+.feature-item:nth-child(1) .feature-dot { background: var(--feature-color); }
+.feature-item:nth-child(2) .feature-dot { background: var(--feature-color); }
+.feature-item:nth-child(3) .feature-dot { background: var(--feature-color); }
+.feature-item:nth-child(4) .feature-dot { background: var(--feature-color); }
+.feature-item:nth-child(5) .feature-dot { background: var(--feature-color); }
+.feature-item:nth-child(6) .feature-dot { background: var(--feature-color); }
+.feature-item:nth-child(7) .feature-dot { background: var(--feature-color); }
+
+@media (max-width: 1200px) {
+  .features-timeline {
+    flex-wrap: wrap;
+    gap: 3rem;
+    justify-content: center;
+  }
+
+  .timeline-connector {
+    display: none;
+  }
+
+  .feature-item {
+    width: calc(33.33% - 3rem);
+    max-width: none;
+  }
+
+  .feature-item:nth-child(even) .feature-text-container,
+  .feature-item:nth-child(odd) .feature-text-container {
+    flex-direction: column;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  .feature-item:nth-child(even) .feature-dots {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .feature-item {
+    width: calc(50% - 3rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .feature-item {
+    width: 100%;
+  }
 }
   </style>
   
