@@ -78,7 +78,7 @@
     </section>
 
     <div class="main-lower-container">
-      <!-- Part 3: Melbourne Suburb Pollen Map (left side) -->
+      <!-- Part 3: Melbourne Suburb Pollen Map -->
       <section class="part3-map">
         <div class="tableauPlaceholder" id="viz1743854171827" style="position: relative">
           <noscript>
@@ -548,7 +548,7 @@ export default {
   left: 0;
   width: 100%;
   height: 60px;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: #ffffff;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
@@ -606,7 +606,7 @@ export default {
   padding: 0;
   width: auto;
   max-width: none;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: #ffffff;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--apple-border);
@@ -658,7 +658,7 @@ export default {
 
 .overall-pollen-card,
 .pollen-card {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: #ffffff;
   border-radius: 20px;
   padding: 1.2rem;
   backdrop-filter: blur(10px);
@@ -874,7 +874,7 @@ export default {
 .part3-map {
   flex: 2;
   min-width: 300px;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: #ffffff;
   border-radius: 20px;
   padding: 1.5rem;
   backdrop-filter: blur(10px);
@@ -901,7 +901,7 @@ export default {
 
 /* Part 4: Personal Pollen Tracker */
 .part4-personal-tracker {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: #ffffff;
   border-radius: 20px;
   padding: 1.5rem;
   backdrop-filter: blur(10px);
@@ -1031,7 +1031,7 @@ export default {
 
 /* Part 5: Allergy Resources */
 .part5-allergy-resources {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: #ffffff;
   border-radius: 20px;
   padding: 1.2rem 1.5rem;
   backdrop-filter: blur(10px);

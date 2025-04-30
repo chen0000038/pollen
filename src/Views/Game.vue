@@ -60,7 +60,6 @@
             </button>
           </div>
 
-          <!-- 选择题回合 -->
           <div v-else-if="roundType === 'quiz'" class="round-container">
             <h1>{{ currentQuiz.question }}</h1>
             <div class="options">

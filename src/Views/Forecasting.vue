@@ -12,7 +12,7 @@
 
       <!-- Two-column dashboard layout -->
       <div class="forecast-dashboard">
-        <!-- 7-Day Cards Section (Left Column) -->
+        <!-- 7-Day Cards Section-->
         <section class="forecast-cards-section">
           <h2 class="section-title">Melbourne 7-Day Pollen Forecast</h2>
 
@@ -108,7 +108,7 @@
           </div>
         </section>
 
-        <!-- Pollen Risk Level Info (Right Column) -->
+        <!-- Pollen Risk Level Info-->
         <section class="pollen-level-info-section">
           <h2 class="section-title">Understanding Pollen Levels</h2>
           <p class="pollen-info-subtitle">Pollen concentration measured in grains per cubic meter (grains/m³)</p>
@@ -155,7 +155,7 @@
 
       <!-- Two-column layout for Seasonal and Monthly -->
       <div class="trends-dashboard">
-        <!-- Seasonal Comparison (左侧) -->
+        <!-- Seasonal Comparison  -->
         <section class="seasonal-comparison-section">
           <div class="chart-header">
             <h2 class="section-title">Melbourne Seasonal Pollen Risk by Type</h2>
@@ -180,7 +180,7 @@
           </div>
         </section>
 
-        <!-- Monthly Trends (右侧) -->
+        <!-- Monthly Trends  -->
         <section class="monthly-trends-section">
           <div class="chart-header">
             <h2 class="section-title">Melbourne Monthly Pollen Risk Trend</h2>
@@ -206,7 +206,7 @@
         </section>
       </div>
 
-      <!-- Pollen Contributors (Moved here) -->
+      <!-- Pollen Contributors -->
       <section class="pollen-contributors-section">
         <div class="chart-header contributors-header">
           <h2 class="section-title">Major Allergen Sources in Melbourne</h2>
@@ -311,7 +311,7 @@ export default {
     const initCardIndex = () => {
       nextTick(() => {
         if (weekForecast.value.length > 0) {
-          // Set index to -2 so that the today card (index 0) appears in the middle (position 2)
+
           currentCardIndex.value = -2
         }
       })
@@ -343,38 +343,25 @@ export default {
       if (!forecastData.value.length) return []
       
       let days = 7
-      // Keep logic based on selectedForecastOption if it's still used elsewhere
-      // if (selectedForecastOption.value === '14days') days = 14 
-      // if (selectedForecastOption.value === '30days') days = 30
-      
-      // 获取今天的日期字符串
       const today = new Date()
       const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
-      
-      // 找到今天在数据中的索引
       const todayIndex = forecastData.value.findIndex(day => day.Date === todayStr)
       
-      // 如果找到今天的数据，从今天开始取指定天数
       if (todayIndex >= 0) {
         return forecastData.value.slice(todayIndex, todayIndex + days)
       }
       
-      // 如果找不到今天的数据，则使用原来的逻辑
       return forecastData.value.slice(0, days)
     })
 
-    // Week forecast (first 7 days)
     const weekForecast = computed(() => {
       if (!forecastData.value.length) return []
       
-      // 获取今天的日期字符串 YYYY-MM-DD
       const today = new Date()
       const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
       
-      // 找到今天在数据中的索引
       const todayIndex = forecastData.value.findIndex(day => day.Date === todayStr)
       
-      // 如果找到今天，从今天开始取7天；否则从第一天开始取
       if (todayIndex >= 0) {
         return forecastData.value.slice(todayIndex, todayIndex + 7)
       } else {
@@ -382,15 +369,12 @@ export default {
       }
     })
 
-    // Format date from YYYY-MM-DD to Apr 30th
     const formatDate = (dateString) => {
       const date = new Date(dateString)
       
-      // 获取月份缩写
       const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       const month = monthNames[date.getMonth()]
       
-      // 获取日期并添加序数词后缀
       const day = date.getDate()
       let suffix = 'th'
       if (day % 10 === 1 && day !== 11) {
@@ -409,7 +393,6 @@ export default {
       return dateString === todayDate.value
     }
 
-    // Get CSS class based on pollen index
     const getPollenIndexClass = (index) => {
       if (index >= 7) return 'very-high'
       if (index >= 5) return 'high'
@@ -417,7 +400,6 @@ export default {
       return 'low'
     }
 
-    // Get CSS class based on risk level
     const getRiskClass = (risk) => {
       if (!risk) return ''
       return risk.toLowerCase().replace(' ', '-')
@@ -467,31 +449,24 @@ export default {
     }
 
     const prevCard = () => {
-      // 允许翻到第一张卡片位于最左侧位置（索引0在position 0）
       if (currentCardIndex.value > -2) {
         currentCardIndex.value--
       }
     }
 
-    // Initialize charts
     const initCharts = () => {
-      isLoading.value = false // Ensure loading is complete before chart init
-      
-      // Defer chart initialization to next tick and add delay to ensure DOM is fully ready
+      isLoading.value = false
       setTimeout(() => {
         nextTick(() => {
           try {
-            // Initialize monthly trends chart if data exists
             if (monthlyChart.value && trendData.value.length > 0) {
               initMonthlyChart()
             }
-            
-            // Initialize donut charts if data exists
+
             if (treeDonutChart.value && grassDonutChart.value && weedDonutChart.value && plantData.value.length > 0) {
               initDonutCharts()
             }
             
-            // Initialize seasonal bar chart if data exists
             if (seasonalChart.value && seasonalData.value.length > 0) {
               initSeasonalChart()
             }
@@ -499,10 +474,9 @@ export default {
             console.error('Error initializing charts:', err)
           }
         })
-      }, 300) // Small delay to ensure DOM is ready
+      }, 300)
     }
 
-    // Initialize monthly trends chart
     const initMonthlyChart = () => {
       if (!monthlyChart.value) return
       
@@ -516,15 +490,13 @@ export default {
         
         const months = trendData.value.map(item => item.Month)
         
-        // 根据风险级别文本直接转换为数值
         const convertRiskTextToLevel = (riskText) => {
           if (riskText === 'Low') return 1
           if (riskText === 'Moderate' || riskText === 'Medium') return 2
-          if (riskText === 'High' || riskText === 'Very High') return 3  // Very High归为High
-          return 1 // 默认为Low
+          if (riskText === 'High' || riskText === 'Very High') return 3 
+          return 1
         }
 
-        // 使用API中返回的风险级别文本值
         const overallConcentrations = trendData.value.map(item => 
           convertRiskTextToLevel(item['Overall Pollen Risk Level']))
         const treeConcentrations = trendData.value.map(item => 
@@ -534,13 +506,11 @@ export default {
         const weedConcentrations = trendData.value.map(item => 
           convertRiskTextToLevel(item['Weed Pollen Risk Level']))
         
-        // 获取原始数据用于tooltip显示
         const originalOverall = trendData.value.map(item => item['Overall Pollen Concentration (grains/m_)'])
         const originalTree = trendData.value.map(item => item['Tree Pollen Concentration (grains/m_)'])
         const originalGrass = trendData.value.map(item => item['Grass Pollen Concentration (grains/m_)'])
         const originalWeed = trendData.value.map(item => item['Weed Pollen Month Concentration (grains/m_)'])
         
-        // 获取原始风险级别文本用于tooltip，并将Moderate替换为Medium
         const originalOverallRisk = trendData.value.map(item => 
           item['Overall Pollen Risk Level'] === 'Moderate' ? 'Medium' : item['Overall Pollen Risk Level'])
         const originalTreeRisk = trendData.value.map(item => 
@@ -556,11 +526,11 @@ export default {
             labels: months,
             datasets: [
               {
-                label: '',  // 将数据集的label设为空，不显示默认图例
+                label: '', 
                 data: overallConcentrations,
                 borderColor: 'rgba(75, 192, 192, 1)',
                 backgroundColor: 'rgba(75, 192, 192, 0.1)',
-                tension: 0, // 设置为0使线条成为直线
+                tension: 0,
               fill: true,
                 pointBackgroundColor: overallConcentrations.map(level => {
                   if (level === 3) return '#FF4D4D'      // High
@@ -570,8 +540,7 @@ export default {
               pointRadius: 8,
               pointHoverRadius: 10,
                 borderWidth: 3,
-                originalData: originalOverall, // 保存原始数据用于tooltip
-                // 保存其他花粉类型数据用于tooltip
+                originalData: originalOverall,
                 treeData: treeConcentrations,
                 grassData: grassConcentrations,
                 weedData: weedConcentrations,
@@ -593,7 +562,6 @@ export default {
                 displayColors: false,
                 callbacks: {
                   title: function(context) {
-                    // 获取当前月份名称
                     const index = context[0].dataIndex;
                     const month = months[index];
                     return `${month} Pollen Risk`;
@@ -601,29 +569,25 @@ export default {
                   label: function(context) {
                     const level = context.raw // 1=Low, 2=Medium, 3=High
                     const index = context.dataIndex
-                    
-                    // 使用API返回的原始风险级别文本，但将Very High显示为High
+ 
                     let riskText = context.dataset.originalRiskLevels[index]
                     if (riskText === 'Very High') {
                       riskText = 'High'
                     }
-                    
-                    // 获取风险级别对应的颜色
+
                     const getRiskColor = (riskText) => {
-                      if (riskText === 'High' || riskText === 'Very High') return '🟥'  // 红色方块
-                      if (riskText === 'Medium') return '🟧'  // 橙色方块
-                      if (riskText === 'Low') return '🟩'  // 绿色方块
-                      return '⬜'  // 默认白色
+                      if (riskText === 'High' || riskText === 'Very High') return '🟥'  
+                      if (riskText === 'Medium') return '🟧'  
+                      if (riskText === 'Low') return '🟩' 
+                      return '⬜' 
                     }
                     
-                    // 将颜色方块和风险文本放在同一行
                     return `${getRiskColor(riskText)} Overall: ${riskText}`
                   },
                   afterLabel: function(context) {
                     const index = context.dataIndex
                     const dataset = context.dataset
                     
-                    // 使用API返回的原始风险级别文本，但将Very High显示为High
                     let treeRisk = dataset.originalTreeRiskLevels[index]
                     let grassRisk = dataset.originalGrassRiskLevels[index]
                     let weedRisk = dataset.originalWeedRiskLevels[index]
@@ -631,16 +595,14 @@ export default {
                     if (treeRisk === 'Very High') treeRisk = 'High'
                     if (grassRisk === 'Very High') grassRisk = 'High'
                     if (weedRisk === 'Very High') weedRisk = 'High'
-                    
-                    // 获取风险级别对应的颜色
+
                     const getRiskColor = (riskText) => {
-                      if (riskText === 'High' || riskText === 'Very High') return '🟥'  // 红色方块
-                      if (riskText === 'Medium') return '🟧'  // 橙色方块
-                      if (riskText === 'Low') return '🟩'  // 绿色方块
-                      return '⬜'  // 默认白色
+                      if (riskText === 'High' || riskText === 'Very High') return '🟥' 
+                      if (riskText === 'Medium') return '🟧' 
+                      if (riskText === 'Low') return '🟩' 
+                      return '⬜' 
                     }
                     
-                    // 返回各花粉类型风险等级，前面添加色块，不显示具体数字
                     return [
                       `${getRiskColor(treeRisk)} Tree Pollen: ${treeRisk}`,
                       `${getRiskColor(grassRisk)} Grass Pollen: ${grassRisk}`,
@@ -659,7 +621,7 @@ export default {
                 backgroundColor: 'rgba(0, 0, 0, 0.8)'
               },
               legend: {
-                display: false // 不显示图例（移除顶部的蓝色方块）
+                display: false 
               }
             },
             scales: {
@@ -977,8 +939,7 @@ export default {
         
         const ctx = seasonalChart.value.getContext('2d')
         if (!ctx) return
-        
-        // 硬编码最新的季节性数据（从表格中获取）
+
         const hardcodedSeasonalData = [
           {
             Season: "Summer",
@@ -1026,19 +987,16 @@ export default {
           }
         ];
         
-        // 使用硬编码数据而不是API数据
         const seasons = hardcodedSeasonalData.map(item => item.Season)
         
-        // 将风险级别文本直接转换为数值层级
         const convertRiskTextToLevel = (riskText) => {
           if (!riskText) return 1
           if (riskText === 'Low') return 1
           if (riskText === 'Moderate' || riskText === 'Medium') return 2
           if (riskText === 'High' || riskText === 'Very High') return 3
-          return 1 // 默认为Low
+          return 1
         }
         
-        // 转换数据为离散级别，使用风险级别文本而不是浓度值
         const overallRisk = hardcodedSeasonalData.map(item => 
           convertRiskTextToLevel(item['Overall Pollen Risk Level']))
         const treeRisk = hardcodedSeasonalData.map(item => 
@@ -1048,13 +1006,11 @@ export default {
         const weedRisk = hardcodedSeasonalData.map(item => 
           convertRiskTextToLevel(item['Weed Pollen Risk Level']))
           
-        // 保存原始数据和风险级别文本用于tooltip
         const originalOverall = hardcodedSeasonalData.map(item => item['Overall Pollen Concentration (grains/m_)'])
         const originalTree = hardcodedSeasonalData.map(item => item['Tree Pollen Concentration (grains/m_)'])
         const originalGrass = hardcodedSeasonalData.map(item => item['Grass Pollen Concentration (grains/m_)'])
         const originalWeed = hardcodedSeasonalData.map(item => item['Weed Pollen Month Concentration (grains/m_)'])
-        
-        // 保存并处理风险级别文本
+
         const riskLevelsOverall = hardcodedSeasonalData.map(item => {
           let risk = item['Overall Pollen Risk Level']
           if (risk === 'Very High') return 'High'
@@ -1091,7 +1047,7 @@ export default {
               {
                 label: 'Tree Pollen',
                 data: treeRisk,
-                backgroundColor: 'rgba(54, 162, 235, 0.8)', // 固定颜色
+                backgroundColor: 'rgba(54, 162, 235, 0.8)', 
                 borderWidth: 1,
                 originalData: originalTree,
                 riskLevels: riskLevelsTree
@@ -1099,7 +1055,7 @@ export default {
               {
                 label: 'Grass Pollen',
                 data: grassRisk,
-                backgroundColor: 'rgba(255, 206, 86, 0.8)', // 固定颜色
+                backgroundColor: 'rgba(255, 206, 86, 0.8)', 
                 borderWidth: 1,
                 originalData: originalGrass,
                 riskLevels: riskLevelsGrass
@@ -1107,7 +1063,7 @@ export default {
               {
                 label: 'Weed Pollen',
                 data: weedRisk,
-                backgroundColor: 'rgba(255, 99, 132, 0.8)', // 固定颜色
+                backgroundColor: 'rgba(255, 99, 132, 0.8)', 
                 borderWidth: 1,
                 originalData: originalWeed,
                 riskLevels: riskLevelsWeed
@@ -1132,12 +1088,11 @@ export default {
                     const riskLevel = context.chart.data.datasets[datasetIndex].riskLevels[index];
                     const concentration = context.chart.data.datasets[datasetIndex].originalData[index];
                     
-                    // 获取风险级别对应的颜色
                     const getRiskColor = (riskText) => {
-                      if (riskText === 'High') return '🟥';  // 红色方块
-                      if (riskText === 'Medium') return '🟧';  // 橙色方块
-                      if (riskText === 'Low') return '🟩';  // 绿色方块
-                      return '⬜';  // 默认白色
+                      if (riskText === 'High') return '🟥';
+                      if (riskText === 'Medium') return '🟧'; 
+                      if (riskText === 'Low') return '🟩'; 
+                      return '⬜'; 
                     };
                     
                     return `${getRiskColor(riskLevel)} ${datasetLabel}: ${riskLevel} (${concentration} grains/m³)`;
@@ -1154,7 +1109,7 @@ export default {
                 backgroundColor: 'rgba(0, 0, 0, 0.8)'
               },
               legend: {
-                display: true, // 显示图例以区分不同类型的花粉
+                display: true, 
                 position: 'bottom',
                 labels: {
                   usePointStyle: true,
@@ -1270,9 +1225,7 @@ export default {
       }
     }
 
-    // 导出到日历ics文件
     const exportToCalendar = (day) => {
-      // ics内容
       const pad = (n) => String(n).padStart(2, '0')
       const dateObj = new Date(day.Date)
       const y = dateObj.getFullYear()
@@ -1282,7 +1235,6 @@ export default {
       const summary = `Pollen Alert: ${getPollenIndexText(day['Pollen Index (0-10)'])}`
       const description = `Pollen Index: ${day['Pollen Index (0-10)']} (${getPollenIndexText(day['Pollen Index (0-10)'])})\\nTree: ${day['Tree Risk Level'] || 'N/A'}\\nGrass: ${day['Grass Risk Level'] || 'N/A'}\\nWeed: ${day['Weed Risk Level'] || 'N/A'}\\nAllergens: ${day['Main Allergens'] || 'N/A'}\\nAction: ${day['Action Plan'] || 'N/A'}`
       const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${summary}\nDESCRIPTION:${description}\nDTSTART;VALUE=DATE:${dt}\nDTEND;VALUE=DATE:${dt}\nEND:VEVENT\nEND:VCALENDAR`;
-      // 生成blob并下载
       const blob = new Blob([ics], { type: 'text/calendar' })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
@@ -1296,16 +1248,16 @@ export default {
       }, 100)
     }
 
-    // 添加到 Google Calendar
+
     const addToGoogleCalendar = (day) => {
       const pad = (n) => String(n).padStart(2, '0')
       const dateObj = new Date(day.Date)
       const y = dateObj.getFullYear()
       const m = pad(dateObj.getMonth() + 1)
       const d = pad(dateObj.getDate())
-      // Google Calendar 需要日期格式为 YYYYMMDD
+
       const start = `${y}${m}${d}`
-      // 全天事件，结束日期要+1天
+
       const endObj = new Date(dateObj)
       endObj.setDate(endObj.getDate() + 1)
       const endY = endObj.getFullYear()
@@ -1323,7 +1275,7 @@ export default {
       window.open(url, '_blank')
     }
 
-    // 导出7天到ics
+
     const exportWeekToCalendar = () => {
       if (!weekForecast.value.length) return
       const pad = (n) => String(n).padStart(2, '0')
@@ -1394,7 +1346,7 @@ export default {
 <style scoped>
 .personalisation-page {
   margin-top: 60px;
-  background-color: rgba(227, 231, 255, 0.4);
+  background-color: white;
   min-height: 100vh;
 }
 
@@ -1425,12 +1377,11 @@ export default {
 
 .forecast-dashboard {
   display: grid;
-  grid-template-columns: 65% 35%; /* 调整比例，将卡片区域向左移 */
+  grid-template-columns: 65% 35%;
   gap: 20px;
   margin-bottom: 2rem;
 }
 
-/* 7-Day Cards section */
 .forecast-cards-section {
   width: 100%;
   background: linear-gradient(135deg, rgba(224, 232, 255, 0.8) 0%, rgba(235, 240, 255, 0.9) 100%);
@@ -1459,7 +1410,7 @@ export default {
 
 .forecast-chart-section .chart-container {
   flex-grow: 1;
-  height: 423px !important; /* 设置固定高度以与卡片对齐 */
+  height: 423px !important; 
 }
 
 .forecast-chart-section:hover {
@@ -1592,7 +1543,7 @@ section:hover {
   position: relative;
   padding: 2rem 0;
   margin: 0 auto;
-  height: 550px; /* 从480px增加到550px，以容纳底部的按钮 */
+  height: 550px;
   width: 90%;
   max-width: 700px;
   overflow: visible;
@@ -1608,29 +1559,29 @@ section:hover {
   perspective: 1000px;
 }
 
-/* Restore Forecast card styles for stacking */
+
 .forecast-card {
   position: absolute;
   width: 100%;
-  max-width: 433px; /* 原来宽度的2/3 */
+  max-width: 433px;
   background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border-radius: 20px;
-  padding: 1.5rem; /* Adjust padding */
+  padding: 1.5rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
-  gap: 0.8rem; /* Adjust gap */
+  gap: 0.8rem;
   transition: all 0.5s ease;
   box-sizing: border-box;
   transform-origin: center center;
-  height: auto; /* Allow height to adjust to content */
+  height: auto;
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-top: none;
 }
 
-/* Card positions */
+
 .card-position-0 {
   transform: translateX(-65%) scale(0.8);
   opacity: 0.7;
@@ -1692,12 +1643,12 @@ section:hover {
 }
 
 .control-button {
-  width: 100px; /* 翻页箭头宽度增加一倍 */
-  height: 100px; /* 翻页箭头高度增加一倍 */
+  width: 100px; 
+  height: 100px;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.6);
   border: none;
-  font-size: 3rem; /* 增大箭头字体 */
+  font-size: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1706,16 +1657,16 @@ section:hover {
   transition: all 0.3s ease;
   pointer-events: auto;
   color: #333;
-  outline: none; /* 去掉点击时的黑边 */
+  outline: none;
 }
 
 .control-button:hover:not(:disabled) {
   background-color: rgba(0, 122, 255, 0.2);
-  transform: scale(1.1); /* 移除translateY以保持简单缩放效果 */
+  transform: scale(1.1);
 }
 
 .control-button:active:not(:disabled) {
-  transform: scale(1.2); /* 点击时添加轻微弹出效果 */
+  transform: scale(1.2);
   transition: all 0.1s ease;
 }
 
@@ -1724,26 +1675,26 @@ section:hover {
   cursor: default;
 }
 
-/* Re-apply other necessary styles */
+
 .forecast-card.low,
 .forecast-card.moderate,
 .forecast-card.high,
 .forecast-card.very-high {
-  border-left: none; /* Removed side border */
+  border-left: none;
 }
 
 .today-card {
   border: 2px solid #0066cc !important; 
 }
 
-/* Remove scrollbar styles */
+
 .cards-container::-webkit-scrollbar,
 .cards-container::-webkit-scrollbar-track,
 .cards-container::-webkit-scrollbar-thumb {
   display: none;
 }
 
-/* Keep PollenTracker style card content */
+
 .card-header {
   display: flex;
   align-items: center;
@@ -1762,7 +1713,7 @@ section:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex-wrap: wrap; /* Allow wrapping if needed */
+  flex-wrap: wrap;
 }
 
 .weekday {
@@ -1784,7 +1735,7 @@ section:hover {
   margin-left: auto; 
 }
 
-/* Risk Indicator styles */
+
 .risk-indicator {
   position: relative;
   margin: 0.8rem 0 2rem 0;
@@ -1813,7 +1764,7 @@ section:hover {
   position: relative;
 }
 
-/* 添加分隔线 */
+
 .risk-bar::before,
 .risk-bar::after {
   content: '';
@@ -1835,7 +1786,7 @@ section:hover {
   transform: translateX(-50%);
 }
 
-/* 风险填充区域 */
+
 .risk-bar .fill {
   position: absolute;
   left: 0;
@@ -1881,7 +1832,7 @@ section:hover {
 .risk-text.high { color: #FF4D4D; }
 .risk-text.very-high { color: #9C27B0; }
 
-/* Detailed Risk Levels */
+
 .card-risk-levels-detailed {
   display: flex;
   justify-content: space-around;
@@ -1914,7 +1865,7 @@ section:hover {
 .risk-text-detailed.high { color: #FF4D4D; }
 .risk-text-detailed.very-high { color: #9C27B0; }
 
-/* Allergens and Action Plan */
+
 .card-allergens, .card-action {
   font-size: 0.85rem;
   margin-top: 0.5rem;
@@ -1931,7 +1882,7 @@ section:hover {
   line-height: 1.3;
 }
 
-/* Responsive adjustments */
+
 @media (max-width: 1200px) {
   .forecast-dashboard,
   .trends-dashboard {
@@ -1965,7 +1916,7 @@ section:hover {
 
 @media (max-width: 768px) {
   .cards-container {
-    height: 450px; /* Adjust height if needed */
+    height: 450px;
   }
   .forecast-card {
     max-width: 333px; 
@@ -2006,7 +1957,7 @@ section:hover {
    }
 }
 
-/* Two-column layout for Seasonal and Monthly */
+
 .trends-dashboard {
   display: flex;
   flex-direction: row;
@@ -2041,7 +1992,7 @@ section:hover {
               0 6px 20px rgba(0, 122, 255, 0.15);
 }
 
-/* Share button styles */
+
 .share-section {
   margin-top: 1rem;
   padding-top: 1rem;
@@ -2195,7 +2146,7 @@ section:hover {
 
 .risk-level-card {
   border-radius: 8px;
-  padding: 12px 15px; /* 略微减小上下padding以保持整体高度 */
+  padding: 12px 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -2241,15 +2192,13 @@ section:hover {
 
 .concentration {
   font-size: 0.9rem;
-  font-weight: 600; /* 加粗字体 */
-  /* background-color: rgba(255, 255, 255, 0.6); */ /* 移除背景色 */
-  padding: 3px 0; /* 移除左右内边距 */
-  border-radius: 0; /* 移除圆角 */
-  /* 默认颜色可以保持不变，或者设置一个基础色 */
+  font-weight: 600;
+  padding: 3px 0;
+  border-radius: 0;
   color: #555;
 }
 
-/* 为不同风险级别的浓度文本设置颜色 */
+
 .risk-level-card.low .concentration {
   color: #4CAF50;
 }
@@ -2268,7 +2217,6 @@ section:hover {
   margin: 0;
 }
 
-/* 为不同风险级别的列表项设置不同颜色的小圆点 */
 .risk-level-card.low .risk-level-details li::marker {
   color: #4CAF50;
 }
@@ -2286,7 +2234,6 @@ section:hover {
   font-size: 0.95rem;
 }
 
-/* 响应式调整 */
 @media (max-width: 1024px) {
   .forecast-dashboard {
     grid-template-columns: 1fr;
@@ -2448,7 +2395,7 @@ section:hover {
   background-color: #FFA500;
 }
 
-/* 添加对应的medium类 */
+
 .risk-text.medium, 
 .risk-text-detailed.medium,
 .risk-value.medium {

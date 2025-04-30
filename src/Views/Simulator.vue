@@ -1,4 +1,4 @@
-<!-- AllergyRiskAssessment.vue -->
+
 <template>
   <div class="personalisation-page">
       <Navbar />
@@ -179,7 +179,6 @@
         </div>
       </div>
     
-    <!-- 添加拖动时的虚影元素 -->
     <div v-if="isDragging" class="drag-ghost" :style="{ left: `${ghostPosition.x}px`, top: `${ghostPosition.y}px` }">
       <div class="factor-card ghost-card">
         <span class="emoji-icon">{{ draggedItem?.icon }}</span>
@@ -281,7 +280,6 @@ export default {
     
     // Update ghost element position - direct sync with mouse
     const updateGhostPosition = (e) => {
-      // 添加轻微延迟效果，使运动更平滑
       requestAnimationFrame(() => {
       ghostPosition.value = {
         x: e.clientX,
@@ -364,19 +362,16 @@ export default {
     const handleMouseUp = (e) => {
       if (!isDragging.value) return;
       
-      // 检查是否在放置区内松开
       updateDropzoneRect();
       
       const isValidDrop = checkIfOverDropzone(e.clientX, e.clientY);
       
       if (isValidDrop) {
-        // 仅当元素不在selectedItems中时才添加
         if (!selectedItems.value.find(i => i.id === draggedItem.value.id)) {
           selectedItems.value.push(draggedItem.value);
         }
       }
       
-      // 清理
       cleanupDragState();
     };
     
@@ -405,7 +400,7 @@ export default {
 
     /* ---------- Risk calculations ---------- */
     const riskScore = computed(() => {
-      return currentRiskScore.value; // 直接返回存储的风险分数
+      return currentRiskScore.value;
     });
 
     const riskLevel = computed(() => {
@@ -523,25 +518,19 @@ export default {
 
     // Risk Assessment Functions
     const calculateRisk = () => {
-      // 计算新的风险分数
       let newScore = 50;
       newScore += selectedItems.value.reduce((sum, item) => sum + item.risk, 0);
       currentRiskScore.value = Math.min(100, Math.max(0, newScore));
       
-      // 更新推荐内容
       const selectedIds = selectedItems.value.map(item => item.id);
       currentRecommendations.value = recommendations.value
         .filter(rec => rec.forItems.some(itemId => selectedIds.includes(itemId)));
       
-      // 更新显示的推荐
       filteredRecommendations.value = currentRecommendations.value;
       
-      // 显示评估结果
       showAssessment.value = true;
       
-      // 添加一个短暂延迟，确保DOM已更新
       setTimeout(() => {
-        // 滚动到评估结果部分
         const assessmentElement = document.querySelector('.assessment-results');
         if (assessmentElement) {
           assessmentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -549,17 +538,14 @@ export default {
       }, 100);
     };
 
-    // 检查鼠标是否在放置区域内
     const checkIfOverDropzone = (clientX, clientY) => {
       if (!dropzoneRect.value) return false;
       
       const scrollY = window.scrollY;
       
-      // 只关心鼠标位置
       const mouseX = clientX;
       const mouseY = clientY + scrollY;
       
-      // 检查鼠标是否在放置区域内
       const isInDropzone = 
         mouseX >= dropzoneRect.value.left && 
         mouseX <= dropzoneRect.value.right &&
@@ -569,24 +555,21 @@ export default {
       return isInDropzone;
     };
 
-    // 处理放置事件
     const onDrop = (e) => {
       e.preventDefault();
-      // 放置逻辑已经在handleMouseUp中处理，这里不需要额外实现
     };
 
     // Add computed property for risk emoji
     const getRiskEmoji = computed(() => {
       const score = riskScore.value;
-      if (score < 20) return '😄'; // 大笑 - 极低风险
-      if (score < 40) return '🙂'; // 微笑 - 低风险
-      if (score < 60) return '😐'; // 平静 - 中等风险
-      if (score < 80) return '😢'; // 掉眼泪 - 高风险
-      return '😭';                 // 大哭 - 极高风险
+      if (score < 20) return '😄';
+      if (score < 40) return '🙂';
+      if (score < 60) return '😐';
+      if (score < 80) return '😢';
+      return '😭'; 
     });
 
     const getFactorName = (itemId) => {
-      // 在所有项目类型中查找匹配的项目
       const allItems = [
         ...lifestyleItems.value, 
         ...homeItems.value, 
@@ -598,7 +581,6 @@ export default {
     };
 
     const getFactorIcon = (itemId) => {
-      // 在所有项目类型中查找匹配的项目
       const allItems = [
         ...lifestyleItems.value, 
         ...homeItems.value, 
@@ -657,18 +639,18 @@ export default {
   margin-top: 0;
   margin-left: 0;
   margin-right: 0;
-    min-height: 100vh;
+  min-height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #e0dcfc;
+  background: #ffffff;
 }
 
 .overview-container {
   margin: 2.5% 2.5%;
   margin-top: 80px;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: #ffffff;
   border-radius: 12px;
   border: none;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
@@ -690,12 +672,12 @@ export default {
   flex: 0.45;
   height: 100%;
   padding: 2rem 3rem;
-  background-color: #f2d0b8; /* 更柔和、不那么明亮的浅橘色背景 */
+  background-color: #f2d0b8;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   text-align: left;
-  padding-top: 1.8rem; /* 进一步上移标题 */
+  padding-top: 1.8rem;
   position: relative;
   z-index: 2;
 }
@@ -731,7 +713,7 @@ export default {
 .overview-title {
   font-size: 2.2rem;
   font-weight: bold;
-  color: #d35400; /* 深橘色字体 */
+  color: #d35400;
   margin-bottom: 1rem;
   text-align: left;
   line-height: 1.2;
@@ -741,7 +723,7 @@ export default {
 .overview-subtitle {
   font-size: 1.15rem;
   font-weight: 400;
-  color: #e67e22; /* 稍微浅一点的橘色字体 */
+  color: #e67e22;
   text-align: left;
   line-height: 1.5;
   padding: 0;
@@ -756,7 +738,7 @@ export default {
   padding: 0;
   width: 100%;
   box-sizing: border-box;
-  background-color: rgba(255, 255, 255, 0);
+  background-color: #ffffff;
   min-height: 500px;
   display: flex;
   flex-direction: column;
@@ -795,10 +777,10 @@ export default {
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 0rem;
-  color: #1976D2; /* 医疗蓝色 */
+  color: #1976D2;
   position: relative;
   padding: 0.5rem 1rem;
-  background-color: rgba(25, 118, 210, 0.15); /* 医疗浅蓝色背景 */
+  background-color: rgba(25, 118, 210, 0.15);
   border-radius: 15px 15px 0 0;
   border-bottom: none;
 }
@@ -810,17 +792,17 @@ export default {
   left: 5%;
   width: 90%;
   height: 2px;
-  background-color: rgba(25, 118, 210, 0.6); /* 医疗蓝色线条 */
+  background-color: rgba(25, 118, 210, 0.6);
 }
 
 .factor-category.home .category-title {
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 0rem;
-  color: #00897B; /* 稍微深一点的绿松石色 */
+  color: #00897B;
   position: relative;
   padding: 0.5rem 1rem;
-  background-color: rgba(0, 137, 123, 0.15); /* 稍微深一点的背景色 */
+  background-color: rgba(0, 137, 123, 0.15);
   border-radius: 15px 15px 0 0;
   border-bottom: none;
 }
@@ -832,17 +814,17 @@ export default {
   left: 5%;
   width: 90%;
   height: 2px;
-  background-color: rgba(0, 137, 123, 0.6); /* 稍微深一点的线条颜色 */
+  background-color: rgba(0, 137, 123, 0.6);
 }
 
 .factor-category.protective .category-title {
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 0rem;
-  color: #C2185B; /* 医疗粉红色 */
+  color: #C2185B;
   position: relative;
   padding: 0.5rem 1rem;
-  background-color: rgba(194, 24, 91, 0.15); /* 医疗浅粉色背景 */
+  background-color: rgba(194, 24, 91, 0.15);
   border-radius: 15px 15px 0 0;
   border-bottom: none;
 }
@@ -854,7 +836,7 @@ export default {
   left: 5%;
   width: 90%;
   height: 2px;
-  background-color: rgba(194, 24, 91, 0.6); /* 医疗粉红色线条 */
+  background-color: rgba(194, 24, 91, 0.6);
 }
 
 /* Factors Container */
@@ -870,22 +852,22 @@ export default {
 }
 
 .factors-container.lifestyle {
-  background-color: rgba(25, 118, 210, 0.12); /* 医疗浅蓝色背景 */
-  border: 1px solid rgba(25, 118, 210, 0.3); /* 医疗蓝色边框 */
+  background-color: rgba(25, 118, 210, 0.12);
+  border: 1px solid rgba(25, 118, 210, 0.3);
   border-top: none;
   border-radius: 0 0 15px 15px;
 }
 
 .factors-container.home {
-  background-color: rgba(0, 137, 123, 0.15); /* 稍微深一点的背景色 */
-  border: 1px solid rgba(0, 137, 123, 0.28); /* 稍微深一点的边框颜色 */
+  background-color: rgba(0, 137, 123, 0.15);
+  border: 1px solid rgba(0, 137, 123, 0.28);
   border-top: none;
   border-radius: 0 0 15px 15px;
 }
 
 .factors-container.protective {
-  background-color: rgba(194, 24, 91, 0.12); /* 医疗浅粉色背景 */
-  border: 1px solid rgba(194, 24, 91, 0.3); /* 医疗粉色边框 */
+  background-color: rgba(194, 24, 91, 0.12);
+  border: 1px solid rgba(194, 24, 91, 0.3);
   border-top: none;
   border-radius: 0 0 15px 15px;
 }
@@ -1125,11 +1107,11 @@ export default {
   transform: translate(-50%, -50%);
 }
 
-.house-emoji.very-low { color: #2ECC71; } /* 鲜绿色 - 极低风险 */
-.house-emoji.low { color: #4CAF50; } /* 绿色 - 低风险 */
-.house-emoji.moderate { color: #FFC107; } /* 黄色 - 中等风险 */
-.house-emoji.high { color: #FF9800; } /* 橙色 - 高风险 */
-.house-emoji.very-high { color: #F44336; } /* 红色 - 极高风险 */
+.house-emoji.very-low { color: #2ECC71; }
+.house-emoji.low { color: #4CAF50; }
+.house-emoji.moderate { color: #FFC107; }
+.house-emoji.high { color: #FF9800; }
+.house-emoji.very-high { color: #F44336; }
 
 /* Empty state */
 .empty-dropzone {
