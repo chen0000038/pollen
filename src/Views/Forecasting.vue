@@ -1086,7 +1086,6 @@ export default {
                     const index = context.dataIndex;
                     const datasetLabel = context.chart.data.datasets[datasetIndex].label;
                     const riskLevel = context.chart.data.datasets[datasetIndex].riskLevels[index];
-                    const concentration = context.chart.data.datasets[datasetIndex].originalData[index];
                     
                     const getRiskColor = (riskText) => {
                       if (riskText === 'High') return '🟥';
@@ -1095,7 +1094,7 @@ export default {
                       return '⬜'; 
                     };
                     
-                    return `${getRiskColor(riskLevel)} ${datasetLabel}: ${riskLevel} (${concentration} grains/m³)`;
+                    return `${getRiskColor(riskLevel)} ${datasetLabel}: ${riskLevel}`;
                   }
                 },
                 titleFont: {
