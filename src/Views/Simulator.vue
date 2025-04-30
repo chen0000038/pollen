@@ -106,6 +106,9 @@
                 <button @click="calculateRisk" class="assess-btn">
                   Assess My Risk Level 📊
                 </button>
+                <button @click="resetChoices" class="reset-btn">
+                  Reset My Choice 🔄
+                </button>
               </div>
             </div>
           </div>
@@ -139,7 +142,7 @@
             <!-- Quick Recommendation -->
             <div class="quick-recommendation">
               <h3>Quick Recommendation</h3>
-              <p>{{ quickRecommendation }}</p>
+              <p v-html="quickRecommendation"></p>
             </div>
 
             <!-- Recommendations -->
@@ -159,7 +162,10 @@
                   </div>
                   <div class="recommendation-content">
                     <p class="recommendation-text">
-                      <span class="factor-source">{{ getFactorName(rec.forItems[0]) }}:</span> {{ rec.text }}
+                      <span class="factor-source">
+                        {{ getFactorName(rec.forItems[0]) }}
+                        <span class="recommendation-factor-icon">{{ getFactorIcon(rec.forItems[0]) }}</span>:
+                      </span> {{ rec.text }}
                     </p>
                     <div class="impact-badge" :class="rec.impact">
                       {{ rec.impact === 'positive' ? 'Reduces' : rec.impact === 'negative' ? 'Increases' : 'Neutral' }} risk by {{ Math.abs(rec.riskChange) }}%
@@ -390,6 +396,13 @@ export default {
       selectedItems.value = selectedItems.value.filter(i => i.id !== id);
     };
 
+    // Reset all selections
+    const resetChoices = () => {
+      selectedItems.value = [];
+      showAssessment.value = false;
+      currentRiskScore.value = 50;
+    };
+
     /* ---------- Risk calculations ---------- */
     const riskScore = computed(() => {
       return currentRiskScore.value; // 直接返回存储的风险分数
@@ -406,91 +419,103 @@ export default {
     const quickRecommendation = computed(() => {
       switch (riskLevel.value.level) {
         case 'very-low':
-          return 'Excellent! Your current risk level is very low. Continue your current practices and enjoy your environment.';
+          return '<strong>Excellent!</strong> Your current risk level is very low. Continue your current practices and enjoy your environment.';
         case 'low':
-          return 'Your current risk level is low. Continue maintaining your protective measures and monitor any changes.';
+          return 'Your current risk level is low. Continue maintaining your <strong>protective measures</strong> and monitor any changes.';
         case 'moderate':
-          return 'Consider adding more protective measures such as air filters or medication. Monitor symptoms closely.';
+          return 'Consider adding more <strong>protective measures</strong> such as air filters or medication. Monitor symptoms closely.';
         case 'high':
-          return 'Your risk level is high. Take additional protective measures and consider consulting a healthcare provider.';
+          return 'Your risk level is high. Take additional <strong>protective measures</strong> and consider consulting a healthcare provider.';
         case 'very-high':
-          return 'Immediate action recommended. Implement strict protective measures and consult your healthcare provider urgently.';
+          return 'Immediate action recommended. Implement strict <strong>protective measures</strong> and consult your healthcare provider urgently.';
         default:
-          return 'Monitor your environment and take appropriate protective measures based on your risk level.';
+          return 'Monitor your environment and take appropriate <strong>protective measures</strong> based on your risk level.';
       }
     });
 
     const recommendations = ref([
       // Lifestyle recommendations
-      { 
-        text: 'Avoid outdoor activities between 5-10 AM when pollen counts are highest',
-        impact: 'negative', 
-        riskChange: 20, 
-        forItems: ['running', 'cycling']
+      {
+        text: 'Avoid outdoor activities bewteen 5-10 AM when pollen counts are hightest',
+        impact: 'negative', // Assuming negative impact for high-risk activities
+        riskChange: 20,
+        forItems: ['running'] // Linked specifically to running
       },
-      { 
+      {
+        text: 'Avoid outdoor activities bewteen 5-10 AM when pollen counts are hightest',
+        impact: 'negative',
+        riskChange: 20,
+        forItems: ['cycling'] // Linked specifically to cycling
+      },
+      {
         text: 'Check forecasts and schedule afternoon outings when pollen levels drop',
-        impact: 'negative', 
-        riskChange: 18, 
+        impact: 'negative',
+        riskChange: 18,
         forItems: ['picnic']
       },
-      { 
+      {
         text: 'Avoid smoking on high pollen days to prevent worsening symptoms.',
-        impact: 'negative', 
-        riskChange: 10, 
+        impact: 'negative',
+        riskChange: 10,
         forItems: ['smoking']
       },
-      
+
       // Home Environment recommendations
-      { 
-        text: 'Use air purifier and vacuum twice a week',
-        impact: 'negative', 
-        riskChange: 20, 
+      {
+        text: 'Use air purifier and vacume twice a week',
+        impact: 'negative', // Pets increase risk
+        riskChange: 20,
         forItems: ['pet']
       },
-      { 
+      {
         text: 'Garden in evenings or after rain when pollen counts are lower.',
-        impact: 'negative', 
-        riskChange: 15, 
+        impact: 'negative',
+        riskChange: 15,
         forItems: ['gardening']
       },
-      { 
+      {
         text: 'Vacuuming carpets twice a day',
-        impact: 'negative', 
-        riskChange: 20, 
+        impact: 'negative', // Carpets increase risk
+        riskChange: 20,
         forItems: ['carpet']
       },
-      { 
+      {
         text: 'Helps reduce accumulated indoor pollen',
-        impact: 'positive', 
-        riskChange: -10, 
+        impact: 'positive',
+        riskChange: -10,
         forItems: ['vacuuming']
       },
-      { 
+      {
         text: 'Actively removes airborne pollen particles',
-        impact: 'positive', 
-        riskChange: -20, 
+        impact: 'positive',
+        riskChange: -20,
         forItems: ['purifier']
       },
-      
-      // Protective recommendations
-      { 
+
+      // Protective Measures recommendations
+      {
         text: 'Filters out airborne pollen when worn properly',
-        impact: 'positive', 
-        riskChange: -20, 
+        impact: 'positive',
+        riskChange: -20,
         forItems: ['mask']
       },
-      { 
+      {
         text: 'Take medicine before symptoms start',
-        impact: 'positive', 
-        riskChange: -30, 
+        impact: 'positive',
+        riskChange: -30,
         forItems: ['medicine']
       },
-      { 
+      {
         text: 'Washes pollen off skin, hair, and clothes',
-        impact: 'positive', 
-        riskChange: -8, 
-        forItems: ['shower']
+        impact: 'positive',
+        riskChange: -8,
+        forItems: ['shower'] // Map to 'Post-Activity Shower'
+      },
+      {
+        text: 'Wear glasses to avoid itching eye',
+        impact: 'positive',
+        riskChange: -7,
+        forItems: ['eyewear'] // Map to 'Protective Eyewear'
       }
     ]);
 
@@ -506,8 +531,7 @@ export default {
       // 更新推荐内容
       const selectedIds = selectedItems.value.map(item => item.id);
       currentRecommendations.value = recommendations.value
-        .filter(rec => rec.forItems.some(itemId => selectedIds.includes(itemId)))
-        .slice(0, 4);
+        .filter(rec => rec.forItems.some(itemId => selectedIds.includes(itemId)));
       
       // 更新显示的推荐
       filteredRecommendations.value = currentRecommendations.value;
@@ -573,6 +597,18 @@ export default {
       return item ? item.name : itemId;
     };
 
+    const getFactorIcon = (itemId) => {
+      // 在所有项目类型中查找匹配的项目
+      const allItems = [
+        ...lifestyleItems.value, 
+        ...homeItems.value, 
+        ...protectiveItems.value
+      ];
+      
+      const item = allItems.find(i => i.id === itemId);
+      return item ? item.icon : '';
+    };
+
     onMounted(() => {
       updateDropzoneRect();
       window.addEventListener('resize', updateDropzoneRect);
@@ -608,6 +644,8 @@ export default {
       currentRiskScore,
       getRiskEmoji,
       getFactorName,
+      getFactorIcon,
+      resetChoices,
     };
   }
 };
@@ -744,7 +782,7 @@ export default {
 .dropzone-section {
   width: 100%;
   padding: 0 2rem 0 0.8rem;
-  margin-top: 1rem;
+  margin-top: 0;
 }
 
 /* Factor Categories */
@@ -1076,12 +1114,12 @@ export default {
 }
 
 .house {
-  font-size: 8rem;
+  font-size: 12.5rem;
 }
 
 .house-emoji {
   position: absolute;
-  font-size: 3rem;
+  font-size: 3.75rem;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -1117,6 +1155,7 @@ export default {
   font-weight: 600;
   text-shadow: none;
   margin: 0 auto;
+  margin-top: -2rem; /* Move text upwards */
 }
 
 /* Drag ghost */
@@ -1159,6 +1198,7 @@ export default {
 .button-container {
   display: flex;
   justify-content: center;
+  gap: 1rem;
   width: 92%;
   margin: 0.8rem auto 1.5rem;
   padding: 0;
@@ -1195,6 +1235,33 @@ export default {
   transform: translateY(1px);
   box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
   outline: none;
+}
+
+.reset-btn {
+  background-color: rgba(255, 153, 0, 0.8);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 1rem 2.5rem;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 153, 0, 0.3);
+  min-width: 220px;
+  letter-spacing: 0.5px;
+  outline: none;
+}
+
+.reset-btn:hover {
+  background-color: rgba(255, 140, 0, 0.9);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 153, 0, 0.4);
+}
+
+.reset-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgba(255, 153, 0, 0.3);
 }
 
 /* Results section */
@@ -1722,6 +1789,13 @@ export default {
   font-weight: 700;
   color: #333;
   margin-right: 0.25rem;
+}
+
+.recommendation-factor-icon {
+  font-size: 1.25em; /* Increase size by 1.25 times */
+  vertical-align: middle; /* Adjust vertical alignment */
+  display: inline-block; /* Ensure proper spacing and alignment */
+  margin: 0 0.1em; /* Add slight horizontal spacing */
 }
 
 @media (max-width: 960px) {
