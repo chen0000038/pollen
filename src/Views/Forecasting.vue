@@ -577,7 +577,7 @@ export default {
 
                     const getRiskColor = (riskText) => {
                       if (riskText === 'High' || riskText === 'Very High') return '🟥'  
-                      if (riskText === 'Medium') return '🟧'  
+                      if (riskText === 'Medium') return '🟨'  
                       if (riskText === 'Low') return '🟩' 
                       return '⬜' 
                     }
@@ -598,7 +598,7 @@ export default {
 
                     const getRiskColor = (riskText) => {
                       if (riskText === 'High' || riskText === 'Very High') return '🟥' 
-                      if (riskText === 'Medium') return '🟧' 
+                      if (riskText === 'Medium') return '🟨' 
                       if (riskText === 'Low') return '🟩' 
                       return '⬜' 
                     }
