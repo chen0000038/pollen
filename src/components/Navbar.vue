@@ -56,6 +56,7 @@
         </div>
         
         <router-link to="/simulator" class="nav-item" active-class="active">Simulator</router-link>
+        <router-link to="/allergyTracker" class="nav-item" active-class="active">Allergy Tracker</router-link>
       </div>
     </div>
   </nav>

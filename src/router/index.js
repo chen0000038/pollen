@@ -6,7 +6,9 @@ import PollenTracker from '../Views/PollenTracker.vue'
 import Game from '../Views/Game.vue'
 import Forecasting from '../Views/Forecasting.vue'
 import Simulator from '../Views/Simulator.vue'
+import AllergyTracker from '../Views/AllergyTracker.vue'
 import PlantAdvisor from '../Views/PlantAdvisor.vue'
+
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -16,7 +18,9 @@ const routes = [
   { path: '/game', name: 'Game', component: Game},
   { path: '/forecasting', name: 'Forecasting', component: Forecasting},
   { path: '/simulator', name: 'Simulator', component: Simulator},
+  { path: '/allergytracker', name: 'AllergyTracker', component: AllergyTracker},
   { path: '/plantadvisor', name: 'PlantAdvisor', component: PlantAdvisor}
+
 ]
 
 const router = createRouter({
