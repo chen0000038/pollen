@@ -41,6 +41,20 @@
           </div>
         </div>
         
+        <!-- Protection Dropdown -->
+        <div class="dropdown-container">
+          <div 
+            class="nav-item dropdown-trigger" 
+            :class="{ 'active': isProtectionActive }"
+          >
+            Protection
+          </div>
+          <div class="dropdown-menu">
+            <router-link to="/allergytracker" class="dropdown-item">Allergy Tracker</router-link>
+            <router-link to="/plantadvisor" class="dropdown-item">Plant Advisor</router-link>
+          </div>
+        </div>
+        
         <router-link to="/simulator" class="nav-item" active-class="active">Simulator</router-link>
         <router-link to="/allergyTracker" class="nav-item" active-class="active">Allergy Tracker</router-link>
       </div>
@@ -60,6 +74,9 @@ const isEducationActive = computed(() =>
   route.path === '/personalisation' || 
   route.path === '/polleninfo' || 
   route.path === '/game'
+)
+const isProtectionActive = computed(() => 
+  route.path === '/allergytracker' || route.path === '/plantadvisor'
 )
 </script>
 
