@@ -1,20 +1,8 @@
 <template>
   <div class="pollen-info-container">
     <Navbar />
-    <div class="search-container" v-if="activeCategory">
-      <div class="search-wrapper">
-        <input 
-          type="text" 
-          v-model="searchQuery" 
-          placeholder="Search pollen..." 
-          class="search-input"
-          @input="handleSearch"
-        />
-        <p v-if="searchError" class="search-error">Currently no information available for this pollen</p>
-      </div>
-    </div>
-
     <div class="content-area">
+      <!-- Main category selection -->
       <div v-if="!activeCategory">
         <div class="hint-row">
           <p style="font-size: 24px; font-weight: bold;">
@@ -22,6 +10,7 @@
           </p>
         </div>
 
+        <!-- Category selection cards for different types of pollen -->
         <div class="category-cards">
           <div class="big-card" @click="selectCategory('grass')">
             <img src="/grass pollen.png" alt="Grass Pollen" />
@@ -45,6 +34,7 @@
           </div>
         </div>
 
+        <!-- Interactive game section to learn about pollen -->
         <div class="game-section">
           <h2>Interactive Pollen Awareness Game</h2>
           <p>
@@ -56,6 +46,7 @@
         </div>
       </div>
 
+      <!-- Detailed view when a category is selected -->
       <div class="sub-cards-area" v-else>
         <div class="hint-row">
           <p style="font-size: 30px; font-weight: bold;">
@@ -65,7 +56,7 @@
         <div class="flip-cards-grid">
           <template v-if="activeCategory === 'grass'">
             <FlipCard
-              v-for="(item, index) in filteredGrassList"
+              v-for="(item, index) in grassList"
               :key="index"
               :image="item.image"
               :title="item.title"
@@ -74,7 +65,7 @@
           </template>
           <template v-else-if="activeCategory === 'tree'">
             <FlipCard
-              v-for="(item, index) in filteredTreeList"
+              v-for="(item, index) in treeList"
               :key="index"
               :image="item.image"
               :title="item.title"
@@ -83,7 +74,7 @@
           </template>
           <template v-else-if="activeCategory === 'weed'">
             <FlipCard
-              v-for="(item, index) in filteredWeedList"
+              v-for="(item, index) in weedList"
               :key="index"
               :image="item.image"
               :title="item.title"
@@ -99,40 +90,44 @@
     </div>
     <!-- Page Recommendations in navigation order -->
     <div class="page-recommendations">
-      <h3>You may also be interested in:</h3>
-      <div class="recommendation-links">
-        <router-link to="/simulator" class="recommend-btn">Go to Pollen Buddy</router-link>
+      <div class="recommendation-links" style="display: flex; justify-content: space-between; align-items: center; padding-left: 2rem; padding-right: 2rem;">
+        <router-link to="/forecasting" class="recommend-btn">Go to Forecast</router-link>
+        <router-link to="/allergytracker" class="recommend-btn">Go to Allergy Tracker</router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, onMounted, watch, computed } from 'vue'
+// Import necessary Vue components and functions
+import { ref, onBeforeUnmount, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Navbar from '../components/Navbar.vue'
 import FlipCard from '../components/FlipCard.vue'
 
+// State management for active category
 const activeCategory = ref(null)
 const router = useRouter()
 
-const searchQuery = ref('')
-const searchError = ref(false)
-
+// Function to handle category selection
 function selectCategory(category) {
   activeCategory.value = category
 }
 
+// Function to reset category selection
 function resetCategory() {
   activeCategory.value = null
 }
 
+// Lifecycle hooks and event listeners
 onMounted(() => {
+  // Add click event listeners to navbar links
   const navLinks = document.querySelectorAll('.navbar a')
   navLinks.forEach(link => {
     link.addEventListener('click', resetCategory)
   })
   
+  // Check URL parameters for initial category selection
   const params = new URLSearchParams(window.location.search)
   const typeParam = params.get('type')
   if (typeParam && ['tree', 'grass', 'weed'].includes(typeParam)) {
@@ -141,6 +136,7 @@ onMounted(() => {
   }
 })
 
+// Cleanup event listeners before component unmount
 onBeforeUnmount(() => {
   const navLinks = document.querySelectorAll('.navbar a')
   navLinks.forEach(link => {
@@ -148,10 +144,12 @@ onBeforeUnmount(() => {
   })
 })
 
+// Watch for route changes to reset category
 watch(() => router.currentRoute.value.path, () => {
   resetCategory()
 })
 
+// Watch for query parameter changes to update category
 watch(() => router.currentRoute.value.query, (newQuery) => {
   if (newQuery.type && ['tree', 'grass', 'weed'].includes(newQuery.type)) {
     selectCategory(newQuery.type)
@@ -159,6 +157,7 @@ watch(() => router.currentRoute.value.query, (newQuery) => {
   }
 }, { immediate: true })
 
+// Data arrays for different types of pollen information
 const grassList = [
   {
     title: 'Ryegrass',
@@ -263,49 +262,22 @@ const weedList = [
     image: 'Parthenium weed.png'
   }
 ]
-
-const filteredGrassList = computed(() => {
-  if (!searchQuery.value) return grassList
-  const filtered = grassList.filter(item => 
-    item.title.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
-  searchError.value = filtered.length === 0
-  return filtered
-})
-
-const filteredTreeList = computed(() => {
-  if (!searchQuery.value) return treeList
-  const filtered = treeList.filter(item => 
-    item.title.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
-  searchError.value = filtered.length === 0
-  return filtered
-})
-
-const filteredWeedList = computed(() => {
-  if (!searchQuery.value) return weedList
-  const filtered = weedList.filter(item => 
-    item.title.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
-  searchError.value = filtered.length === 0
-  return filtered
-})
-
-function handleSearch() {
-  searchError.value = false
-}
 </script>
 
 <style scoped>
+/* Main container styles */
 .pollen-info-container {
   width: 100%;
   min-height: 100vh;
 }
+
+/* Content area layout */
 .content-area {
   margin-top: 60px;
   padding: 1rem;
 }
 
+/* Category cards grid layout */
 .category-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -313,6 +285,8 @@ function handleSearch() {
   margin-bottom: 2rem;
   text-align: center;
 }
+
+/* Individual category card styles */
 .big-card {
   background: #fff;
   border-radius: 0.75rem;
@@ -341,7 +315,7 @@ function handleSearch() {
   font-size: 0.95rem;
 }
 
-
+/* Flip card styles for detailed information */
 .flip-card {
   width: 250px;
   height: 300px;
@@ -405,6 +379,7 @@ function handleSearch() {
   cursor: pointer;
 }
 
+/* Game section styles */
 .game-section {
   background-color: #ffffff;
   border-radius: 1rem;
@@ -437,57 +412,7 @@ function handleSearch() {
   background-color: #1d4ed8;
 }
 
-@media (max-width: 992px) {
-  .flip-cards-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
-}
-
-.search-container {
-  position: fixed;
-  top: 80px;
-  left: 20px;
-  z-index: 10;
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.search-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.search-input {
-  padding: 12px 16px;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  width: 250px;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  background-color: #f8fafc;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
-}
-
-.search-input::placeholder {
-  color: #94a3b8;
-}
-
-.search-error {
-  color: #ef4444;
-  margin-top: 5px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
+/* Page recommendations styles */
 .page-recommendations {
   background-color: #ffffff;
   border-radius: 20px;
@@ -544,5 +469,57 @@ function handleSearch() {
   background-color: rgba(0, 113, 227, 0.9);
   box-shadow: 0 6px 16px rgba(0, 122, 255, 0.4),
               0 3px 8px rgba(0, 122, 255, 0.3);
+}
+
+/* Responsive design for different screen sizes */
+@media (max-width: 992px) {
+  .flip-cards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+.search-container {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.search-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.search-input {
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  width: 250px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background-color: #f8fafc;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
+}
+
+.search-error {
+  color: #ef4444;
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: 500;
 }
 </style>

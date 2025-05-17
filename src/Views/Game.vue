@@ -1,7 +1,10 @@
 <template>
+  <!-- Main game container with navigation and content -->
   <div class="game-container">
     <Navbar />
+    <!-- Decorative petals animation background -->
     <div class="petals-animation"></div>
+    <!-- Game title and introduction -->
     <div class="game-title">
       <h2>Welcome to the Pollen Quiz!</h2>
       <p class="intro-text">
@@ -9,7 +12,9 @@
       </p>
     </div>
 
+    <!-- Main game content area -->
     <div class="game-content">
+      <!-- Score and round tracker -->
       <div class="scoreboard">
         <p class="score">
           <i class="fas fa-trophy"></i>
@@ -21,13 +26,17 @@
         </p>
       </div>
 
+      <!-- Game content with transitions -->
       <transition name="fade">
+        <!-- Active game content -->
         <div v-if="!gameEnded">
+          <!-- Image selection round -->
           <div v-if="roundType === 'image'" class="round-container">
             <h1>
               Select the correct image for
               <span class="highlight">{{ targetType }}</span> pollen
             </h1>
+            <!-- Image selection grid -->
             <div class="images">
               <div 
                 v-for="(img, index) in images" 
@@ -47,6 +56,7 @@
               </div>
             </div>
 
+            <!-- Result message display -->
             <p 
               v-if="resultMessage" 
               class="result-message"
@@ -55,13 +65,16 @@
               {{ resultMessage }}
             </p>
 
+            <!-- Next round button -->
             <button v-if="answerChosen" @click="nextRound" class="next-btn">
               Next Round
             </button>
           </div>
 
+          <!-- Quiz question round -->
           <div v-else-if="roundType === 'quiz'" class="round-container">
             <h1>{{ currentQuiz.question }}</h1>
+            <!-- Quiz options -->
             <div class="options">
               <button 
                 v-for="(option, index) in currentQuiz.options" 
@@ -74,6 +87,7 @@
               </button>
             </div>
 
+            <!-- Result message and tip display -->
             <p 
               v-if="resultMessage" 
               class="result-message"
@@ -89,6 +103,7 @@
             </button>
           </div>
         </div>
+        <!-- Game over screen -->
         <div v-else class="final-score">
           <h2>Game Over</h2>
           <p>Your final score is: {{ score }}/{{ maxScore }}</p>
@@ -97,11 +112,11 @@
         </div>
       </transition>
     </div>
-    <!-- Page Recommendations in navigation order -->
+    <!-- Navigation recommendations -->
     <div class="page-recommendations">
-      <h3>You may also be interested in:</h3>
-      <div class="recommendation-links">
-        <router-link to="/personalisation" class="recommend-btn">To be continued</router-link>
+      <div class="recommendation-links" style="display: flex; justify-content: space-between; align-items: center; padding-left: 2rem; padding-right: 2rem;">
+        <router-link to="/forecasting" class="recommend-btn">Go to Forecast</router-link>
+        <router-link to="/allergytracker" class="recommend-btn">Go to Allergy Tracker</router-link>
       </div>
     </div>
   </div>
@@ -112,6 +127,7 @@ import { ref, onMounted, computed } from 'vue'
 import Navbar from '../components/Navbar.vue'
 import confetti from 'canvas-confetti'
 
+// Collection of pollen images with their types
 const pollenImages = [
   { id: 1, src: '/Ryegrass.jpg', type: 'grass' },
   { id: 2, src: '/weed pollen.png', type: 'weed' },
@@ -128,6 +144,7 @@ const pollenImages = [
   { id: 13, src: '/Other7.png', type: 'other' }
 ]
 
+// Quiz questions with options and correct answers
 const quizQuestions = [
   {
     question: "Which method is most effective in reducing indoor pollen exposure?",
@@ -153,12 +170,14 @@ const quizQuestions = [
   }
 ]
 
+// Game state variables
 const currentRound = ref(1)
 const maxRounds = 5
 const score = ref(0)
 const gameEnded = ref(false)
 const maxScore = computed(() => maxRounds * 10)
 
+// Answer state variables
 const answerChosen = ref(false)
 const isAnswerCorrect = ref(false)
 const resultMessage = ref('')
@@ -168,10 +187,12 @@ const correctImage = ref({})
 
 const currentQuiz = ref({})
 
+// Determine round type (image or quiz)
 const roundType = computed(() => {
   return currentRound.value % 2 === 1 ? 'image' : 'quiz'
 })
 
+// Calculate final evaluation based on score
 const finalEvaluation = computed(() => {
   if (score.value <= 10) {
     return "Keep learning! You might need to review the pollen knowledge."
@@ -184,6 +205,7 @@ const finalEvaluation = computed(() => {
   }
 })
 
+// Initialize round setup
 function setupRound() {
   answerChosen.value = false
   resultMessage.value = ''
@@ -196,6 +218,7 @@ function setupRound() {
   }
 }
 
+// Setup image selection round
 function setupImageRound() {
   const types = ['tree', 'grass', 'weed']
   targetType.value = types[Math.floor(Math.random() * types.length)]
@@ -210,6 +233,7 @@ function setupImageRound() {
   const randomCorrect = correctCandidates[Math.floor(Math.random() * correctCandidates.length)]
   correctImage.value = randomCorrect
 
+  // Helper function to get random items from array
   function getRandomItems(arr, count) {
     const copy = [...arr]
     const result = []
@@ -222,6 +246,7 @@ function setupImageRound() {
   }
   const randomIncorrects = getRandomItems(incorrectCandidates, 2)
 
+  // Shuffle the images
   const tempArray = [randomCorrect, ...randomIncorrects]
   for (let i = tempArray.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
@@ -230,11 +255,13 @@ function setupImageRound() {
   images.value = tempArray
 }
 
+// Setup quiz question round
 function setupQuizRound() {
   const quizIndex = currentRound.value === 2 ? 0 : currentRound.value === 4 ? 1 : 0
   currentQuiz.value = quizQuestions[quizIndex]
 }
 
+// Check image selection answer
 function checkImageAnswer(selectedImage) {
   if (answerChosen.value) return
 
@@ -250,6 +277,7 @@ function checkImageAnswer(selectedImage) {
   answerChosen.value = true
 }
 
+// Check quiz answer
 function selectQuizOption(index) {
   if (answerChosen.value) return
 
@@ -265,6 +293,7 @@ function selectQuizOption(index) {
   answerChosen.value = true
 }
 
+// Proceed to next round or end game
 function nextRound() {
   if (currentRound.value < maxRounds) {
     currentRound.value++
@@ -274,6 +303,7 @@ function nextRound() {
   }
 }
 
+// Reset game state
 function restartGame() {
   currentRound.value = 1
   score.value = 0
@@ -281,6 +311,7 @@ function restartGame() {
   setupRound()
 }
 
+// Trigger confetti animation for correct answers
 function triggerConfetti() {
   const duration = 2000
   const end = Date.now() + duration
@@ -299,6 +330,7 @@ function triggerConfetti() {
   }, 200)
 }
 
+// Initialize game on component mount
 onMounted(() => {
   setupRound()
 })

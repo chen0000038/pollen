@@ -187,9 +187,9 @@
     </div>
     <!-- Page Recommendations in navigation order -->
     <div class="page-recommendations">
-      <h3>You may also be interested in:</h3>
       <div class="recommendation-links">
-        <router-link to="/forecasting" class="recommend-btn">Go to Pollen Forecast</router-link>
+        <router-link to="/allergytracker" class="recommend-btn">Allergy Tracker</router-link>
+        <router-link to="/plantadvisor" class="recommend-btn">Plant Advisor</router-link>
       </div>
     </div>
 
@@ -1186,8 +1186,7 @@ export default {
 /* Button */
 .button-container {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
+  justify-content: space-between;
   width: 92%;
   margin: 0.8rem auto 1.5rem;
   padding: 0;
@@ -1876,7 +1875,8 @@ export default {
 .recommendation-links {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
+  width: 100%;
   gap: 1rem;
 }
 
@@ -1895,6 +1895,8 @@ export default {
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3),
               0 2px 6px rgba(0, 122, 255, 0.2);
+  min-width: 120px;
+  text-align: center;
 }
 
 .recommend-btn:hover {
@@ -1902,5 +1904,16 @@ export default {
   background-color: rgba(0, 113, 227, 0.9);
   box-shadow: 0 6px 16px rgba(0, 122, 255, 0.4),
               0 3px 8px rgba(0, 122, 255, 0.3);
+}
+
+@media (max-width: 480px) {
+  .recommendation-links {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .recommend-btn {
+    width: 100%;
+  }
 }
   </style>

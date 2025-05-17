@@ -125,13 +125,9 @@
     </div>
     <!-- Page Recommendations in navigation order -->
     <div class="page-recommendations">
-      <h3>You may also be interested in:</h3>
-      <div class="recommendation-links">
-        <router-link to="/polleninfo" class="recommend-btn">Go to Education Resource</router-link>
-        <router-link to="/simulator" class="recommend-btn">Go to Pollen Buddy</router-link>
-        <router-link to="/forecasting" class="recommend-btn">Go to Pollen Forecast</router-link>
-        <router-link to="/game" class="recommend-btn">Go to Pollen Alert</router-link>
-        <router-link to="/personalisation" class="recommend-btn">To be continued</router-link>
+      <div class="recommendation-links flex justify-between items-center px-8">
+        <router-link to="/plantadvisor" class="recommend-btn">Go to Plant Advisor</router-link>
+        <router-link to="/forecasting" class="recommend-btn">Go to Forecast</router-link>
       </div>
     </div>
   </div>
@@ -1261,9 +1257,10 @@ button:disabled .loading-spinner {
 
 .recommendation-links {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .recommend-btn {

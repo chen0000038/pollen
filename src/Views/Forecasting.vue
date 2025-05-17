@@ -249,6 +249,13 @@
       </section>
     </div>
   </div>
+  <!-- 新增底部推荐按钮 -->
+  <div class="page-recommendations">
+    <div class="recommendation-links">
+      <router-link to="/pollentracker" class="recommend-btn">Go to Pollen Tracker</router-link>
+      <router-link to="/polleninfo" class="recommend-btn">Go to Education Resource</router-link>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -2410,5 +2417,41 @@ section:hover {
 .risk-level-card.medium {
   background-color: rgba(255, 152, 0, 0.15);
   border-left: 5px solid #FF9800;
+}
+
+.page-recommendations {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 1.2rem 1.5rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--apple-border, #e5e7eb);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
+              0 4px 16px rgba(0, 122, 255, 0.1);
+  margin: 2rem 2rem 1.5rem 2rem;
+}
+.recommendation-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+.recommend-btn {
+  display: inline-block;
+  padding: 12px 32px;
+  background-color: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-shadow: 0 4px 16px rgba(59,130,246,0.13);
+}
+.recommend-btn:hover {
+  background-color: #2563eb;
+  transform: scale(1.04);
 }
 </style>

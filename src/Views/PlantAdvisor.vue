@@ -215,6 +215,14 @@
       </section>
     </div>
   </div>
+
+  <!-- Page Recommendations -->
+  <div class="page-recommendations">
+    <div class="recommendation-links">
+      <router-link to="/simulator" class="recommend-btn">Go to simulator</router-link>
+      <router-link to="/pollentracker" class="recommend-btn">Go to Pollen Tracker</router-link>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -1241,5 +1249,71 @@ transition: background-color 0.3s;
 
 .retry-button:hover {
 background-color: #dc2626;
+}
+
+/* Page Recommendations */
+.page-recommendations {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 1.2rem 1.5rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--apple-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
+              0 4px 16px rgba(0, 122, 255, 0.1);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin: 1rem 2rem;
+}
+
+.page-recommendations:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2),
+              0 6px 20px rgba(0, 122, 255, 0.15);
+}
+
+.recommendation-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
+}
+
+.recommend-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: rgba(0, 122, 255, 0.8);
+  color: white;
+  border: none;
+  border-radius: 980px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3),
+              0 2px 6px rgba(0, 122, 255, 0.2);
+  min-width: 120px;
+  text-align: center;
+}
+
+.recommend-btn:hover {
+  transform: scale(1.02);
+  background-color: rgba(0, 113, 227, 0.9);
+  box-shadow: 0 6px 16px rgba(0, 122, 255, 0.4),
+              0 3px 8px rgba(0, 122, 255, 0.3);
+}
+
+@media (max-width: 480px) {
+  .recommendation-links {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .recommend-btn {
+    width: 100%;
+  }
 }
 </style>

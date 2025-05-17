@@ -2,14 +2,17 @@
   <div class="personalisation-container">
     <Navbar />
 
+    <!--  main title -->
     <div class="banner">
       <h1 class="banner-title">
         Select the choice which fit you the most and get your personalized pollen solution
       </h1>
     </div>
 
+    <!-- Form section for user input -->
     <div class="form-section">
       <form @submit.prevent="submitForm">
+        <!-- Dropdown selection groups -->
         <div class="dropdown-container">
           <div class="dropdown-group">
             <label for="role">Your Role</label>
@@ -32,10 +35,12 @@
           </div>
         </div>
         
+        <!-- Submit button -->
         <button type="submit" class="submit-btn">
           Get Your Personalized Pollen Solution
         </button>
 
+        <!-- Emergency notice box -->
         <div class="emergency-box">
           <span class="warning-icon">❗</span>
           <span class="emergency-text">Note: In case of emergency, contact Triple Zero (000)</span>
@@ -43,12 +48,14 @@
       </form>
     </div>
 
+    <!-- Results section - shown after form submission -->
     <div class="result-section" v-if="showResults">
       <div class="result-box">
         <h2>Your Personalized Pollen Solution</h2>
         <p><strong>Role:</strong> {{ submittedRole || 'N/A' }}</p>
         <p><strong>Condition:</strong> {{ submittedCondition || 'N/A' }}</p>
 
+        <!-- Dynamic suggestions based on user selection -->
         <div class="suggestions" v-if="suggestions.length">
           <h3>Advice for You:</h3>
           <ul>
@@ -60,26 +67,29 @@
       </div>
     </div>
 
-    <!-- Page Recommendations in navigation order -->
+    <!-- Navigation recommendations -->
     <div class="page-recommendations">
-      <h3>You may also be interested in:</h3>
-      <div class="recommendation-links">
-        <router-link to="/pollentracker" class="recommend-btn">Go to Pollen Tracker</router-link>
+      <div class="recommendation-links" style="display: flex; justify-content: space-between; align-items: center; padding-left: 2rem; padding-right: 2rem;">
+        <router-link to="/forecasting" class="recommend-btn">Go to Forecast</router-link>
+        <router-link to="/allergytracker" class="recommend-btn">Go to Allergy Tracker</router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+// Import required Vue components and functions
 import { ref, computed } from 'vue'
 import Navbar from '../components/Navbar.vue'
 
+// Reactive state variables for form handling
 const selectedRole = ref('')
 const selectedCondition = ref('')
 const showResults = ref(false)
 const submittedRole = ref('')
 const submittedCondition = ref('')
 
+// Computed property that returns personalized suggestions based on user selections
 const suggestions = computed(() => {
 if (submittedRole.value === 'parent' && submittedCondition.value === 'hayfever') {
   return [
@@ -172,11 +182,13 @@ function submitForm() {
 </script>
 
 <style scoped>
+/* Main container styles */
 .personalisation-container {
   width: 100%;
   min-height: 100vh;
 }
 
+/* Banner section styles */
 .banner {
   width: 100%;
   height: 200px;
@@ -195,6 +207,7 @@ function submitForm() {
   margin-bottom: 20px;
 }
 
+/* Form section styles */
 .form-section {
   width: 100%;
   padding: 2rem 1rem;
@@ -202,6 +215,8 @@ function submitForm() {
   justify-content: center;
   align-items: center;
 }
+
+/* Form styles */
 form {
   background-color: #ffffff;
   padding: 2rem;
@@ -212,6 +227,7 @@ form {
   box-sizing: border-box;
 }
 
+/* Dropdown container styles */
 .dropdown-container {
   display: flex;
   gap: 1rem;
@@ -220,6 +236,7 @@ form {
   margin-bottom: 1.5rem;
 }
 
+/* Dropdown group styles */
 .dropdown-group {
   display: flex;
   flex-direction: column;
@@ -253,6 +270,7 @@ form {
   background-color: #1d4ed8;
 }
 
+/* Results section styles */
 .result-section {
   width: 100%;
   padding: 2rem 1rem;
@@ -294,6 +312,7 @@ form {
   line-height: 1.5;
 }
 
+/* Emergency box styles */
 .emergency-box {
   background-color: transparent;
   color: #666;
@@ -322,6 +341,7 @@ form {
   font-weight: 600;
 }
 
+/* Navigation recommendations styles */
 .page-recommendations {
   background-color: #ffffff;
   border-radius: 20px;
