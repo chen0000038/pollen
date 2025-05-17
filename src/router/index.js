@@ -28,7 +28,6 @@ const router = createRouter({
   routes,
 })
 
-
 router.beforeEach((to, from, next) => {
 
   window.scrollTo(0, 0)
