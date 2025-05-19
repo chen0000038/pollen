@@ -17,8 +17,8 @@
             <router-link to="/pollentracker">
               <button class="primary-btn">Check Today's Pollen Level</button>
             </router-link>
-            <router-link to="/simulator">
-              <button class="secondary-btn">Get Personalized Advice</button>
+            <router-link to="/forecasting">
+              <button class="secondary-btn">Forecasting</button>
             </router-link>
           </div>
         </div>

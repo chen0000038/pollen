@@ -116,7 +116,7 @@
         <!-- Part 5: Allergy Resources -->
         <section class="part5-allergy-resources">
           <h2>Allergy Resources</h2>
-          <p>Undersanding Pollen Allergen</p>
+          <p>Understanding Pollen Allergen</p>
           <router-link to="/polleninfo" class="learn-more-btn">
             Learn More
           </router-link>
