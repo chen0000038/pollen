@@ -211,9 +211,9 @@ const treeList = [
     image: '/Plane.png'
   },
   {
-    title: 'Oak',
+    title: 'She Oak',
     description:
-      'Shedding substantial amounts of pollen that spreads via wind, oaks are commonly allergenic and may cause severe reactions.',
+      'She-oak (Casuarina/Allocasuarina spp.) is a slender, evergreen tree characterized by drooping, needle-like branchlets and inconspicuous, catkin-like male flowers. In Melbourne it begins to shed fine, powdery pollen in late winter, with flowering and pollen release running roughly from August through October, and airborne counts typically peak in September and early October. The tiny (20–30 µm) wind-borne grains can travel long distances—especially from populations along riverbanks and coastal edges—and frequently trigger sneezing, nasal congestion, itchy or watery eyes, throat irritation, and may exacerbate asthma in sensitive individuals.',
     image: '/Oak.jpg'
   },
   {
